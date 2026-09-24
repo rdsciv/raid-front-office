@@ -11,9 +11,11 @@ import {
   HelpCircle,
   Briefcase,
   Flame,
-  ArrowRight
+  ArrowRight,
+  Check,
+  RefreshCw
 } from 'lucide-react';
-import { Client, GMProfile, ContractOffer, TacticalMove } from '../types/game';
+import { Client, GMProfile, ContractOffer, TacticalMove, GMMood } from '../types/game';
 import { TACTICAL_MOVES } from '../engine/gameData';
 import { evaluateContractOffer, calculateAcceptanceScore } from '../engine/negotiationEngine';
 import { audio } from '../engine/audioEngine';
@@ -40,10 +42,19 @@ export const NegotiationRoom: React.FC<NegotiationRoomProps> = ({
   onDealCompleted,
   onUpdateClientTrust
 }) => {
+  // Determine Client Situation Tier
+  const isJourneyman = client.tier === 'JOURNEYMAN' || client.contractType === 'PROVE_IT' || client.age >= 29;
+  const isRookie = client.tier === 'ROOKIE' || client.contractType === 'ROOKIE_SCALE';
+  const isStar = !isJourneyman && !isRookie;
+
+  const targetAsk = client.warRoom.targetAsk;
+
   // Negotiation state
   const [currentGM, setCurrentGM] = useState<GMProfile>({ ...gm });
   const [patience, setPatience] = useState<number>(gm.patience);
   const [acceptanceScore, setAcceptanceScore] = useState<number>(gm.acceptanceScore);
+  const [lastGMCounter, setLastGMCounter] = useState<ContractOffer | null>(null);
+
   const [dialogue, setDialogue] = useState<DialogueEntry[]>([
     {
       id: 'init-gm',
@@ -55,28 +66,65 @@ export const NegotiationRoom: React.FC<NegotiationRoomProps> = ({
   const [dealSuccess, setDealSuccess] = useState<boolean>(false);
   const [impasseOccurred, setImpasseOccurred] = useState<boolean>(false);
 
+  // Dynamic Slider Bounds Calculations
+  const minTerm = isJourneyman ? 1 : isRookie ? 4 : 3;
+  const maxTerm = isJourneyman ? 2 : isRookie ? 4 : 5;
+
+  const minAAV = isRookie
+    ? Math.max(1, Math.round((targetAsk.aav - 0.5) * 10) / 10)
+    : isJourneyman
+    ? Math.max(1.0, Math.round(targetAsk.aav * 0.4 * 10) / 10)
+    : Math.round(targetAsk.aav * 0.6 * 10) / 10;
+
+  const maxAAV = isRookie
+    ? Math.round((targetAsk.aav + 0.5) * 10) / 10
+    : isJourneyman
+    ? Math.round(targetAsk.aav * 1.4 * 10) / 10
+    : Math.round(targetAsk.aav * 1.35 * 10) / 10;
+
+  const stepAAV = targetAsk.aav < 5 ? 0.1 : 0.25;
+
   // Contract builder state initialized to Target Ask
-  const [term, setTerm] = useState<number>(client.warRoom.targetAsk.term);
-  const [aav, setAav] = useState<number>(client.warRoom.targetAsk.aav);
-  const [practicalGuarantees, setPracticalGuarantees] = useState<number>(client.warRoom.targetAsk.practicalGuarantees);
-  const [cashFlowPct, setCashFlowPct] = useState<number>(client.warRoom.targetAsk.firstYearCashFlowPct);
+  const [term, setTerm] = useState<number>(targetAsk.term);
+  const [aav, setAav] = useState<number>(targetAsk.aav);
+  const [practicalGuarantees, setPracticalGuarantees] = useState<number>(targetAsk.practicalGuarantees);
+  const [cashFlowPct, setCashFlowPct] = useState<number>(
+    targetAsk.term === 1 ? 100 : targetAsk.firstYearCashFlowPct
+  );
   const [escapeHatch, setEscapeHatch] = useState<boolean>(false);
   const [escalators, setEscalators] = useState<boolean>(true);
 
   const dialogueEndRef = useRef<HTMLDivElement>(null);
 
-  // Calculated contract terms
+  // Calculated contract terms with safety clamps
   const totalValue = Math.round(term * aav * 10) / 10;
-  const guaranteeRatio = Math.round((practicalGuarantees / (totalValue || 1)) * 100);
-  const agencyCommission = Math.round(practicalGuarantees * 0.03 * 100) / 100;
 
-  // Live estimated acceptance chance
+  const minGtd = Math.max(0.5, Math.round(totalValue * (isRookie ? 0.8 : 0.2) * 10) / 10);
+  const maxGtd = Math.max(minGtd + 0.5, totalValue);
+  const stepGtd = totalValue <= 12 ? 0.25 : 1;
+
+  const safeGuarantees = Math.min(Math.max(practicalGuarantees, minGtd), maxGtd);
+  const safeCashFlowPct = term === 1 ? 100 : cashFlowPct;
+  const guaranteeRatio = Math.round((safeGuarantees / (totalValue || 1)) * 100);
+  const agencyCommission = Math.round(safeGuarantees * 0.03 * 100) / 100;
+
+  // Helper to synchronize GM Mood with realistic thresholds
+  const calculateGMMood = (currPatience: number, currAcceptance: number): GMMood => {
+    if (currPatience <= 25) return 'Walkout Risk';
+    if (currAcceptance >= 68 && currPatience > 35) return 'Ready to Sign';
+    if (currPatience <= 45) return 'Defensive';
+    if (currAcceptance >= 55) return 'Intrigued';
+    if (currAcceptance >= 40) return 'Cornered';
+    return 'Skeptical';
+  };
+
+  // Live estimated contract offer
   const currentOffer: ContractOffer = {
     term,
     aav,
     totalValue,
-    practicalGuarantees,
-    year1CashFlowPct: cashFlowPct,
+    practicalGuarantees: safeGuarantees,
+    year1CashFlowPct: safeCashFlowPct,
     lateYearEscapeHatch: escapeHatch,
     incentiveEscalators: escalators
   };
@@ -103,14 +151,10 @@ export const NegotiationRoom: React.FC<NegotiationRoomProps> = ({
     setPatience(newPatience);
     setAcceptanceScore(newAcceptance);
 
-    // Update GM Mood
-    let newMood = currentGM.currentMood;
-    if (newPatience <= 25) newMood = 'Walkout Risk';
-    else if (newAcceptance >= 75) newMood = 'Ready to Sign';
-    else if (newAcceptance >= 55) newMood = 'Cornered';
-    else if (newAcceptance >= 40) newMood = 'Intrigued';
+    // Update GM Mood synchronously
+    const newMood = calculateGMMood(newPatience, newAcceptance);
 
-    const updatedGM = {
+    const updatedGM: GMProfile = {
       ...currentGM,
       patience: newPatience,
       acceptanceScore: newAcceptance,
@@ -125,7 +169,7 @@ export const NegotiationRoom: React.FC<NegotiationRoomProps> = ({
       {
         id: `player-${Date.now()}`,
         sender: 'PLAYER',
-        text: `[RAID ${move.category} DEFENSE]: ${move.description}`,
+        text: `[RAID ${move.category} STRATEGY]: ${move.description}`,
         timestamp: 'Just now'
       },
       {
@@ -152,17 +196,35 @@ export const NegotiationRoom: React.FC<NegotiationRoomProps> = ({
     }
   };
 
+  // Quick Action: Snap contract sliders to match GM's active counter-offer
+  const handleMatchGMCounter = (counter: ContractOffer) => {
+    audio.playClick();
+    setTerm(counter.term);
+    setAav(counter.aav);
+    setPracticalGuarantees(counter.practicalGuarantees);
+    if (counter.term > 1) {
+      setCashFlowPct(counter.year1CashFlowPct);
+    }
+    setEscapeHatch(counter.lateYearEscapeHatch);
+    setEscalators(counter.incentiveEscalators);
+  };
+
   // Handle Submitting a Formal Contract Proposal
   const handleSubmitProposal = () => {
     if (patience <= 0 || dealSuccess) return;
 
     audio.playClick();
 
-    const evaluation = evaluateContractOffer(currentOffer, client, {
-      ...currentGM,
-      patience,
-      acceptanceScore
-    });
+    const evaluation = evaluateContractOffer(
+      currentOffer,
+      client,
+      {
+        ...currentGM,
+        patience,
+        acceptanceScore
+      },
+      lastGMCounter || undefined
+    );
 
     const newPatience = Math.max(0, Math.min(100, patience + evaluation.patienceDelta));
     setPatience(newPatience);
@@ -172,12 +234,19 @@ export const NegotiationRoom: React.FC<NegotiationRoomProps> = ({
     if (evaluation.accepted) {
       audio.playDealSigned();
       setDealSuccess(true);
+      setCurrentGM(prev => ({
+        ...prev,
+        patience: newPatience,
+        acceptanceScore: 100,
+        currentMood: 'Ready to Sign'
+      }));
+
       setDialogue(prev => [
         ...prev,
         {
           id: `player-offer-${Date.now()}`,
           sender: 'PLAYER',
-          text: `[SUBMITTED FORMAL PROPOSAL]: ${term} Years, $${totalValue}M Total ($${aav}M AAV), $${practicalGuarantees}M Guaranteed (${guaranteeRatio}%), ${cashFlowPct}% Year 1 Cash Flow.`,
+          text: `[FORMAL OFFER SUBMITTED]: ${term} Years, $${totalValue}M Total ($${aav}M AAV), $${safeGuarantees}M Guaranteed (${guaranteeRatio}%), ${safeCashFlowPct}% Year 1 Cash Flow.`,
           timestamp: 'Just now'
         },
         {
@@ -200,12 +269,28 @@ export const NegotiationRoom: React.FC<NegotiationRoomProps> = ({
 
     } else {
       audio.playTensionAlert();
+      const newAcceptance = Math.min(95, Math.max(acceptanceScore, evaluation.score));
+      setAcceptanceScore(newAcceptance);
+
+      if (evaluation.counterOffer) {
+        setLastGMCounter(evaluation.counterOffer);
+      }
+
+      // Synchronize GM Mood with updated state
+      const newMood = calculateGMMood(newPatience, newAcceptance);
+      setCurrentGM(prev => ({
+        ...prev,
+        patience: newPatience,
+        acceptanceScore: newAcceptance,
+        currentMood: newMood
+      }));
+
       setDialogue(prev => [
         ...prev,
         {
           id: `player-offer-${Date.now()}`,
           sender: 'PLAYER',
-          text: `[SUBMITTED PROPOSAL]: ${term} Yrs / $${aav}M AAV / $${practicalGuarantees}M Gtd.`,
+          text: `[SUBMITTED PROPOSAL]: ${term} Yrs / $${aav}M AAV / $${safeGuarantees}M Gtd.`,
           timestamp: 'Just now'
         },
         {
@@ -215,11 +300,6 @@ export const NegotiationRoom: React.FC<NegotiationRoomProps> = ({
           timestamp: 'Just now'
         }
       ]);
-
-      if (evaluation.counterOffer) {
-        // Adjust acceptance slightly closer
-        setAcceptanceScore(prev => Math.min(95, prev + 8));
-      }
 
       if (newPatience <= 0) {
         setImpasseOccurred(true);
@@ -258,6 +338,10 @@ export const NegotiationRoom: React.FC<NegotiationRoomProps> = ({
                 {client.headshotUrl && <img src={client.headshotUrl} alt="" className="w-4 h-4 rounded-full object-cover" />}
                 <span>Target: <span className="text-cyan-400 font-bold">{client.name} ({client.position})</span></span>
               </span>
+              <span>•</span>
+              <span className="px-1.5 py-0.2 rounded bg-slate-800 text-[10px] font-mono text-cyan-300 uppercase">
+                {isJourneyman ? 'Prove-It Free Agent' : isRookie ? 'Slotted Rookie' : 'Star Extension'}
+              </span>
             </p>
           </div>
         </div>
@@ -268,9 +352,9 @@ export const NegotiationRoom: React.FC<NegotiationRoomProps> = ({
           <div className="px-3 py-1.5 rounded-lg bg-[#101a2e] border border-[#223554] text-center">
             <div className="text-[10px] text-slate-400 uppercase">GM Disposition</div>
             <div className={`font-bold text-xs ${
-              currentGM.currentMood === 'Ready to Sign' ? 'text-emerald-400' :
+              currentGM.currentMood === 'Ready to Sign' ? 'text-emerald-400 font-extrabold' :
               currentGM.currentMood === 'Cornered' || currentGM.currentMood === 'Pressured' ? 'text-amber-400' :
-              currentGM.currentMood === 'Walkout Risk' ? 'text-rose-400 animate-pulse' :
+              currentGM.currentMood === 'Walkout Risk' ? 'text-rose-400 animate-pulse font-extrabold' :
               'text-cyan-300'
             }`}>
               {currentGM.currentMood}
@@ -281,12 +365,12 @@ export const NegotiationRoom: React.FC<NegotiationRoomProps> = ({
           <div className="w-36 sm:w-44">
             <div className="flex justify-between text-[10px] text-slate-400 mb-1">
               <span>GM PATIENCE</span>
-              <span className={`font-bold ${patience < 30 ? 'text-rose-400' : 'text-slate-200'}`}>{patience}%</span>
+              <span className={`font-bold ${patience <= 25 ? 'text-rose-400 font-extrabold' : 'text-slate-200'}`}>{patience}%</span>
             </div>
             <div className="h-2 w-full bg-[#162138] rounded-full overflow-hidden border border-[#233554]">
               <div 
                 className={`h-full transition-all duration-500 rounded-full ${
-                  patience < 25 ? 'bg-rose-500' : patience < 50 ? 'bg-amber-500' : 'bg-cyan-500'
+                  patience <= 25 ? 'bg-rose-500' : patience < 50 ? 'bg-amber-500' : 'bg-cyan-500'
                 }`}
                 style={{ width: `${patience}%` }}
               />
@@ -371,7 +455,7 @@ export const NegotiationRoom: React.FC<NegotiationRoomProps> = ({
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>RAID TACTICAL COUNTER DECK</span>
               </span>
-              <span className="text-[10px] text-slate-400 font-mono">Deploy arguments to weaken GM leverage</span>
+              <span className="text-[10px] text-slate-400 font-mono">Deploy arguments to shift GM leverage</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -397,43 +481,86 @@ export const NegotiationRoom: React.FC<NegotiationRoomProps> = ({
           </div>
         </div>
 
-        {/* Right Column: Real-Time Contract Architecture Builder (5 cols) */}
-        <div className="lg:col-span-5 flex flex-col bg-[#0c1222] overflow-y-auto p-5 space-y-5">
+        {/* Right Column: Dynamic Real-Time Contract Architecture Builder (5 cols) */}
+        <div className="lg:col-span-5 flex flex-col bg-[#0c1222] overflow-y-auto p-5 space-y-4">
           <div className="flex items-center justify-between border-b border-[#1b2b48] pb-3">
             <div>
               <h3 className="font-display font-bold text-white text-base">CONTRACT ARCHITECTURE</h3>
-              <p className="text-[11px] text-slate-400">Design term, guarantees, and cash flow</p>
+              <p className="text-[11px] text-slate-400">
+                {isJourneyman ? '1-Year Prove-It / Camp Structure' : isRookie ? '4-Year CBA Slotted Rookie Scale' : 'Multi-Year Premier Veteran Extension'}
+              </p>
             </div>
             <div className="px-2 py-0.5 rounded bg-emerald-950 border border-emerald-700/60 text-emerald-400 font-mono text-xs font-bold">
               3% COMM: ${agencyCommission}M
             </div>
           </div>
 
+          {/* Active GM Counter-Offer Quick Match Banner */}
+          {lastGMCounter && !dealSuccess && (
+            <div className="p-3 rounded-lg bg-[#11203b] border border-cyan-500/40 flex items-center justify-between gap-3 text-xs">
+              <div>
+                <span className="text-[10px] font-mono text-cyan-400 uppercase font-bold block">GM Counter On Table</span>
+                <span className="text-white font-mono font-bold">
+                  {lastGMCounter.term} Yr{lastGMCounter.term > 1 ? 's' : ''} / ${lastGMCounter.aav}M AAV / ${lastGMCounter.practicalGuarantees}M Gtd
+                </span>
+              </div>
+              <button
+                onClick={() => handleMatchGMCounter(lastGMCounter)}
+                className="px-2.5 py-1.5 rounded bg-cyan-500 hover:bg-cyan-400 text-black font-semibold font-mono text-xs flex items-center gap-1 shadow transition-all active:scale-95 shrink-0"
+              >
+                <Check className="w-3.5 h-3.5" />
+                <span>Match GM Offer</span>
+              </button>
+            </div>
+          )}
+
           {/* Sliders Suite */}
           <div className="space-y-4 text-xs">
-            {/* Term Slider */}
+            {/* Term Slider / Fixed Display */}
             <div className="space-y-1.5">
               <div className="flex justify-between font-mono">
                 <span className="text-slate-400">TERM (YEARS):</span>
-                <span className="text-white font-bold">{term} Years</span>
+                <span className="text-white font-bold">
+                  {isRookie ? '4 Years (CBA Slotted Rookie Scale)' : `${term} Year${term > 1 ? 's' : ''}`}
+                </span>
               </div>
-              <input
-                type="range"
-                min="1"
-                max="5"
-                step="1"
-                value={term}
-                onChange={(e) => {
-                  setTerm(Number(e.target.value));
-                  audio.playClick();
-                }}
-                disabled={dealSuccess}
-                className="w-full h-1.5 bg-[#17233c] rounded-lg appearance-none cursor-pointer accent-cyan-400"
-              />
+              {isRookie ? (
+                <div className="h-2 w-full bg-[#162138] rounded-full overflow-hidden border border-[#233554]">
+                  <div className="h-full bg-cyan-400 rounded-full w-full" />
+                </div>
+              ) : (
+                <input
+                  type="range"
+                  min={minTerm}
+                  max={maxTerm}
+                  step="1"
+                  value={term}
+                  onChange={(e) => {
+                    setTerm(Number(e.target.value));
+                    audio.playClick();
+                  }}
+                  disabled={dealSuccess}
+                  className="w-full h-1.5 bg-[#17233c] rounded-lg appearance-none cursor-pointer accent-cyan-400"
+                />
+              )}
               <div className="flex justify-between text-[10px] text-slate-500 font-mono">
-                <span>1 Year (Tag Range)</span>
-                <span>3-4 Yrs (Prime Window)</span>
-                <span>5 Yrs (Franchise Anchor)</span>
+                {isJourneyman ? (
+                  <>
+                    <span>1 Year (Prove-It / Camp Signing)</span>
+                    <span>2 Years (Option Structure)</span>
+                  </>
+                ) : isRookie ? (
+                  <>
+                    <span>Slotted 4-Year Fixed Term</span>
+                    <span>5th-Year Club Option (Rd 1)</span>
+                  </>
+                ) : (
+                  <>
+                    <span>3 Yrs (High Cap Turn)</span>
+                    <span>4 Yrs (Market Standard)</span>
+                    <span>5 Yrs (Franchise Anchor)</span>
+                  </>
+                )}
               </div>
             </div>
 
@@ -445,9 +572,9 @@ export const NegotiationRoom: React.FC<NegotiationRoomProps> = ({
               </div>
               <input
                 type="range"
-                min="8"
-                max="34"
-                step="0.5"
+                min={minAAV}
+                max={maxAAV}
+                step={stepAAV}
                 value={aav}
                 onChange={(e) => {
                   setAav(Number(e.target.value));
@@ -457,9 +584,9 @@ export const NegotiationRoom: React.FC<NegotiationRoomProps> = ({
                 className="w-full h-1.5 bg-[#17233c] rounded-lg appearance-none cursor-pointer accent-cyan-400"
               />
               <div className="flex justify-between text-[10px] text-slate-500 font-mono">
-                <span>$8M (Discount)</span>
-                <span>Target: ${client.warRoom.targetAsk.aav}M</span>
-                <span>$34M (Record Reset)</span>
+                <span>${minAAV}M (Discount)</span>
+                <span className="text-cyan-400 font-semibold">Target: ${targetAsk.aav}M</span>
+                <span>${maxAAV}M (Top Range)</span>
               </div>
             </div>
 
@@ -467,14 +594,14 @@ export const NegotiationRoom: React.FC<NegotiationRoomProps> = ({
             <div className="space-y-1.5">
               <div className="flex justify-between font-mono">
                 <span className="text-slate-400">PRACTICAL GUARANTEES:</span>
-                <span className="text-emerald-400 font-bold">${practicalGuarantees}M ({guaranteeRatio}%)</span>
+                <span className="text-emerald-400 font-bold">${safeGuarantees}M ({guaranteeRatio}%)</span>
               </div>
               <input
                 type="range"
-                min="10"
-                max={Math.min(100, Math.round(totalValue * 0.95))}
-                step="1"
-                value={Math.min(practicalGuarantees, Math.round(totalValue * 0.95))}
+                min={minGtd}
+                max={maxGtd}
+                step={stepGtd}
+                value={safeGuarantees}
                 onChange={(e) => {
                   setPracticalGuarantees(Number(e.target.value));
                   audio.playClick();
@@ -483,72 +610,150 @@ export const NegotiationRoom: React.FC<NegotiationRoomProps> = ({
                 className="w-full h-1.5 bg-[#17233c] rounded-lg appearance-none cursor-pointer accent-emerald-400"
               />
               <div className="flex justify-between text-[10px] text-slate-500 font-mono">
-                <span>$10M (Cap Friendly)</span>
-                <span>Target: ${client.warRoom.targetAsk.practicalGuarantees}M</span>
-                <span>Max Security</span>
+                <span>${minGtd}M (Base Floor)</span>
+                <span className="text-emerald-400 font-semibold">Target: ${targetAsk.practicalGuarantees}M</span>
+                <span>${maxGtd}M (Full Security)</span>
               </div>
             </div>
 
-            {/* Year 1 Cash Flow % Slider */}
+            {/* Year 1 Cash Flow % Slider (or 100% fixed for 1-year deals) */}
             <div className="space-y-1.5">
               <div className="flex justify-between font-mono">
                 <span className="text-slate-400">YEAR 1 CASH FLOW PAYOUT:</span>
-                <span className="text-amber-400 font-bold">{cashFlowPct}%</span>
+                <span className="text-amber-400 font-bold">
+                  {term === 1 ? '100% (Single-Season Payout)' : `${cashFlowPct}%`}
+                </span>
               </div>
-              <input
-                type="range"
-                min="20"
-                max="55"
-                step="1"
-                value={cashFlowPct}
-                onChange={(e) => {
-                  setCashFlowPct(Number(e.target.value));
-                  audio.playClick();
-                }}
-                disabled={dealSuccess}
-                className="w-full h-1.5 bg-[#17233c] rounded-lg appearance-none cursor-pointer accent-amber-400"
-              />
+              {term === 1 ? (
+                <div className="h-2 w-full bg-[#162138] rounded-full overflow-hidden border border-[#233554]">
+                  <div className="h-full bg-amber-400 rounded-full w-full" />
+                </div>
+              ) : (
+                <input
+                  type="range"
+                  min="20"
+                  max="60"
+                  step="1"
+                  value={cashFlowPct}
+                  onChange={(e) => {
+                    setCashFlowPct(Number(e.target.value));
+                    audio.playClick();
+                  }}
+                  disabled={dealSuccess}
+                  className="w-full h-1.5 bg-[#17233c] rounded-lg appearance-none cursor-pointer accent-amber-400"
+                />
+              )}
               <div className="flex justify-between text-[10px] text-slate-500 font-mono">
-                <span>20% (Deferred Cap)</span>
-                <span>Target: {client.warRoom.targetAsk.firstYearCashFlowPct}%</span>
-                <span>55% (Upfront Heavy)</span>
+                {term === 1 ? (
+                  <span>Base salary and signing incentives fully paid in 2024</span>
+                ) : (
+                  <>
+                    <span>20% (Deferred Cap)</span>
+                    <span className="text-amber-400 font-semibold">Target: {targetAsk.firstYearCashFlowPct}%</span>
+                    <span>60% (Upfront Heavy)</span>
+                  </>
+                )}
               </div>
             </div>
 
-            {/* Structural Toggles */}
+            {/* Contextual Tier-Specific Clauses */}
             <div className="pt-2 space-y-2.5 border-t border-[#1b2b48]">
-              <label className="flex items-center gap-2 cursor-pointer text-xs text-slate-300">
-                <input
-                  type="checkbox"
-                  checked={escapeHatch}
-                  onChange={(e) => {
-                    setEscapeHatch(e.target.checked);
-                    audio.playClick();
-                  }}
-                  disabled={dealSuccess}
-                  className="rounded bg-[#162138] border-[#223554] text-cyan-500 focus:ring-0"
-                />
-                <span>Include Year 4 Club Escape Hatch (+Acceptance with Cap GM)</span>
-              </label>
+              {isJourneyman ? (
+                <>
+                  <label className="flex items-center gap-2 cursor-pointer text-xs text-slate-300">
+                    <input
+                      type="checkbox"
+                      checked={escapeHatch}
+                      onChange={(e) => {
+                        setEscapeHatch(e.target.checked);
+                        audio.playClick();
+                      }}
+                      disabled={dealSuccess}
+                      className="rounded bg-[#162138] border-[#223554] text-cyan-500 focus:ring-0"
+                    />
+                    <span>Per-Game Active Roster Bonuses ($1.5M split) (+GM Injury Protection)</span>
+                  </label>
 
-              <label className="flex items-center gap-2 cursor-pointer text-xs text-slate-300">
-                <input
-                  type="checkbox"
-                  checked={escalators}
-                  onChange={(e) => {
-                    setEscalators(e.target.checked);
-                    audio.playClick();
-                  }}
-                  disabled={dealSuccess}
-                  className="rounded bg-[#162138] border-[#223554] text-cyan-500 focus:ring-0"
-                />
-                <span>Add $3M Pro Bowl / Playoff Escalators (+Client Trust)</span>
-              </label>
+                  <label className="flex items-center gap-2 cursor-pointer text-xs text-slate-300">
+                    <input
+                      type="checkbox"
+                      checked={escalators}
+                      onChange={(e) => {
+                        setEscalators(e.target.checked);
+                        audio.playClick();
+                      }}
+                      disabled={dealSuccess}
+                      className="rounded bg-[#162138] border-[#223554] text-cyan-500 focus:ring-0"
+                    />
+                    <span>Add $1.5M Playoff / Pro Bowl Escalators (+Client Trust & Upside)</span>
+                  </label>
+                </>
+              ) : isRookie ? (
+                <>
+                  <label className="flex items-center gap-2 cursor-pointer text-xs text-slate-300">
+                    <input
+                      type="checkbox"
+                      checked={escapeHatch}
+                      onChange={(e) => {
+                        setEscapeHatch(e.target.checked);
+                        audio.playClick();
+                      }}
+                      disabled={dealSuccess}
+                      className="rounded bg-[#162138] border-[#223554] text-cyan-500 focus:ring-0"
+                    />
+                    <span>100% Upfront Signing Bonus Payout in 2024 (+Client Trust, -Cap GM)</span>
+                  </label>
+
+                  <label className="flex items-center gap-2 cursor-pointer text-xs text-slate-300">
+                    <input
+                      type="checkbox"
+                      checked={escalators}
+                      onChange={(e) => {
+                        setEscalators(e.target.checked);
+                        audio.playClick();
+                      }}
+                      disabled={dealSuccess}
+                      className="rounded bg-[#162138] border-[#223554] text-cyan-500 focus:ring-0"
+                    />
+                    <span>Zero Club Offset Language (+Elite Agent Precedent & Security)</span>
+                  </label>
+                </>
+              ) : (
+                <>
+                  <label className="flex items-center gap-2 cursor-pointer text-xs text-slate-300">
+                    <input
+                      type="checkbox"
+                      checked={escapeHatch}
+                      onChange={(e) => {
+                        setEscapeHatch(e.target.checked);
+                        audio.playClick();
+                      }}
+                      disabled={dealSuccess}
+                      className="rounded bg-[#162138] border-[#223554] text-cyan-500 focus:ring-0"
+                    />
+                    <span>Include Year 4 Club Escape Hatch (+Acceptance with Cap GM)</span>
+                  </label>
+
+                  <label className="flex items-center gap-2 cursor-pointer text-xs text-slate-300">
+                    <input
+                      type="checkbox"
+                      checked={escalators}
+                      onChange={(e) => {
+                        setEscalators(e.target.checked);
+                        audio.playClick();
+                      }}
+                      disabled={dealSuccess}
+                      className="rounded bg-[#162138] border-[#223554] text-cyan-500 focus:ring-0"
+                    />
+                    <span>Add $3M Pro Bowl / Playoff Escalators (+Client Trust & Motivation)</span>
+                  </label>
+                </>
+              )}
             </div>
           </div>
 
           {/* Proposal Summary Card */}
-          <div className="p-4 rounded-xl bg-[#0f172a] border border-[#213150] space-y-2 text-xs">
+          <div className="p-3.5 rounded-xl bg-[#0f172a] border border-[#213150] space-y-1.5 text-xs">
             <div className="text-[10px] font-mono uppercase text-slate-400 font-bold">TOTAL CONTRACT PACKAGE</div>
             <div className="flex justify-between font-mono text-sm">
               <span className="text-slate-300">Total Value:</span>
@@ -556,11 +761,13 @@ export const NegotiationRoom: React.FC<NegotiationRoomProps> = ({
             </div>
             <div className="flex justify-between font-mono text-sm">
               <span className="text-slate-300">Year 1 Cash:</span>
-              <span className="font-bold text-amber-400">${Math.round(totalValue * (cashFlowPct / 100) * 10) / 10}M</span>
+              <span className="font-bold text-amber-400">
+                ${Math.round(totalValue * (safeCashFlowPct / 100) * 10) / 10}M
+              </span>
             </div>
             <div className="flex justify-between font-mono text-sm">
               <span className="text-slate-300">Guaranteed Money:</span>
-              <span className="font-bold text-emerald-400">${practicalGuarantees}M</span>
+              <span className="font-bold text-emerald-400">${safeGuarantees}M</span>
             </div>
           </div>
 

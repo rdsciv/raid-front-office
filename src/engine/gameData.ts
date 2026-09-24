@@ -307,55 +307,58 @@ export const TACTICAL_MOVES: TacticalMove[] = [
     acceptanceImpact: +18,
     dialoguePrompt: 'Walk the GM through the opportunity cost of drafting a replacement instead of retaining your client.',
     gmResponse: (gm, client) => {
+      const lastName = client.name.split(' ').pop() || client.name;
       if (gm.archetype === 'Analytics/Value GM') {
-        return `Henderson adjusts his glasses and frowns at his board. "You're not wrong that Pick ${client.warRoom.replacementCost.pickWasted} is our only chance at an elite Edge rusher. Burning it on an offensive tackle leaves our defense compromised... Fine. We can improve the guarantee floor."`;
+        return `${gm.name} adjusts his glasses and frowns at his depth chart. "You're not wrong that burning high draft capital or signing a replacement off the street carries massive variance. ${lastName}'s baseline production is quantifiable... Fine. We can improve the guarantee floor."`;
       }
-      return `${gm.name} nods slowly. "You make a fair point about draft capital opportunity cost. We can't afford a rookie taking two years to develop when our window is right now."`;
+      return `${gm.name} nods slowly. "You make a fair point about replacement cost. We can't afford a rookie or a street free agent taking 8 weeks to get up to speed when our season is on the line."`;
     }
   },
   {
     id: 'evidence-qb-continuity',
-    title: 'Continuity & QB Protection Insurance',
+    title: 'Continuity & Scheme Insurance',
     category: 'CONTINUITY',
-    description: 'Demonstrate that losing your client increases franchise QB pressure rates and risks costly injury derailment.',
+    description: 'Demonstrate that retaining your client prevents catastrophic blown assignments and protects core team chemistry.',
     patienceImpact: -5,
     acceptanceImpact: +15,
-    dialoguePrompt: 'Frame client retention as mandatory insurance on their $150M franchise quarterback.',
+    dialoguePrompt: 'Frame client retention as mandatory insurance against blown assignments and scheme breakdown.',
     gmResponse: (gm, client) => {
+      const lastName = client.name.split(' ').pop() || client.name;
       if (gm.archetype === 'Win-Now Aggressor') {
-        return `${gm.name} leans forward, visibly stressed. "If our quarterback goes down in Week 4 because a rookie blown blitz pickup happened, my head is on the chopping block. We will protect the pocket."`;
+        return `${gm.name} leans forward, visibly stressed. "If our coordinator loses sleep in Week 3 because a backup blew a critical coverage or missed a blitz pickup, my job is on the line. We need ${lastName} locked in."`;
       }
-      return `${gm.name} grunts. "Every GM worries about QB health, but that doesn't mean we write blank checks. Still... 1 sack allowed in 600 snaps is hard to dismiss."`;
+      return `${gm.name} grunts. "Every front office values continuity, but that doesn't mean we write blank checks. Still... having ${lastName}'s veteran communication on the field is hard to dismiss."`;
     }
   },
   {
     id: 'structure-cashflow',
     title: 'Architectural Cash Flow Concession',
     category: 'STRUCTURE',
-    description: 'Offer rolling vesting dates or a lower Year 1 cap hit in exchange for higher practical guarantees.',
+    description: 'Offer rolling vesting dates or structured roster bonuses to grant the front office immediate cap breathing room.',
     patienceImpact: +12,
     acceptanceImpact: +12,
-    dialoguePrompt: 'Restructure the signing bonus distribution to grant the team immediate cap breathing room.',
-    gmResponse: (gm) => {
+    dialoguePrompt: 'Restructure the cash flow distribution to grant the team immediate cap breathing room.',
+    gmResponse: (gm, client) => {
       if (gm.archetype === 'Cap Conservative') {
-        return `${gm.name}'s eyes light up. "Now you're speaking our language. If you move $12M of base into a Year 2 March roster bonus, we can fit this into our 3-year cash flow model without cutting our veteran safety."`;
+        return `${gm.name}'s eyes light up. "Now you're speaking our language. If we shift the cap hit into structured roster bonuses, we can fit ${client.name} into our cash flow model without compromising our in-season emergency reserves."`;
       }
-      return `${gm.name} smiles. "The cap flexibility helps us substantially. We can add another $6M in guarantees if you lock in that cash flow spread."`;
+      return `${gm.name} smiles. "The cap flexibility helps us substantially. We can sweeten the guaranteed total if you lock in that cash flow spread."`;
     }
   },
   {
     id: 'leverage-threaten-auction',
     title: 'Leverage Shock: Threaten Open Market Auction',
     category: 'LEVERAGE_CLOCK',
-    description: 'Inform the GM that contract talks will pause until legal tampering opens, where AFC contenders await.',
+    description: 'Inform the GM that contract talks will pause and you are preparing to field offers from rival contenders.',
     patienceImpact: -25,
     acceptanceImpact: +24,
-    dialoguePrompt: 'Tell the front office you will test unrestricted free agency where $70M cap room teams are bidding.',
+    dialoguePrompt: 'Tell the front office you are prepared to test the open market where rival contenders are waiting.',
     gmResponse: (gm, client) => {
+      const firstName = client.name.split(' ')[0];
       if (gm.patience < 35) {
-        return `${gm.name} stands up, slamming his notebook shut. "Don't threaten this organization! If you want to play games in free agency, Marcus can pack his bags. We will tag him or let him walk!"`;
+        return `${gm.name} stands up, slamming his notebook shut. "Don't threaten this front office! If you want to play games on the open market, ${firstName} can test the waters. We will not be extorted!"`;
       }
-      return `${gm.name} winces. He knows two rival teams have $60M in cap room. "Let's not get reckless here. Neither of us wants this hitting an open bidding war. Let's look at the numbers again."`;
+      return `${gm.name} winces. He knows rival contenders have cap space and glaring needs at ${client.position}. "Let's not get reckless here. Neither of us wants this hitting an open bidding war. Let's look at the numbers again."`;
     }
   },
   {
@@ -367,7 +370,8 @@ export const TACTICAL_MOVES: TacticalMove[] = [
     acceptanceImpact: +14,
     dialoguePrompt: 'Show the GM how replacing your client breaks the head coach\'s core blocking or coverage scheme.',
     gmResponse: (gm, client) => {
-      return `${gm.name} sighs. "Our offensive coordinator won't stop texting me about this. He claims without ${client.name.split(' ')[1]}, the entire outside zone package gets cut in half. That holds weight with me."`;
+      const lastName = client.name.split(' ').pop() || client.name;
+      return `${gm.name} sighs. "Our coordinator won't stop texting me about this. He insists without ${lastName}, our core package gets cut in half. That holds substantial weight with our staff."`;
     }
   }
 ];
