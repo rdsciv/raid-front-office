@@ -1,85 +1,113 @@
 # 🏈 RAID: Front Office
-### High-Leverage NFL Sports Representation & Contract Negotiation Simulation
+### High-Leverage NFL Agency & Contract Negotiation Strategy Game
 
-[![Deploy to GitHub Pages](https://github.com/rdsciv/raid-front-office/actions/workflows/deploy.yml/badge.svg)](https://github.com/rdsciv/raid-front-office/actions/workflows/deploy.yml)
-[![Live Demo](https://img.shields.io/badge/Play%20Online-GitHub%20Pages-blue?style=flat&logo=github)](https://rdsciv.github.io/raid-front-office/)
+<div align="center">
 
-**RAID: Front Office** is a tactical sports agency simulation game. Players step into the role of Lead Strategist at **RAID**—a high-stakes sports agency specializing in evidence-based player valuation, roster continuity modeling, and market-resetting NFL contract negotiations against real NFL General Managers.
+[![Play Online](https://img.shields.io/badge/PLAY%20ONLINE%20NOW-GitHub%20Pages-00f0ff?style=for-the-badge&logo=googlechrome&logoColor=black)](https://rdsciv.github.io/raid-front-office/)
+[![Status](https://img.shields.io/badge/LIVE%20DEPLOYMENT-Passing-10b981?style=for-the-badge&logo=githubactions&logoColor=white)](https://rdsciv.github.io/raid-front-office/)
 
----
+### 🎮 **[👉 Click Here to Play the Game in Your Browser 👈](https://rdsciv.github.io/raid-front-office/)**
+*Zero installation required. Runs instantly on desktop and mobile browsers.*
 
-## 🎮 Play the Game Online
-👉 **[Launch RAID: Front Office on GitHub Pages](https://rdsciv.github.io/raid-front-office/)**
-
----
-
-## ⚡ The RAID Methodology
-
-1. **The Leverage Clock**: Timing is non-negotiable. Track external catalysts (cap spikes, franchise tag deadlines, rival player deals) to close before third-party rooms set the player's market floor.
-2. **Replacement Cost & Option Value**: Price contract extensions against the team's opportunity cost of drafting a replacement (e.g. consuming premium first-round picks that must address scarce positions like Edge rusher or CB).
-3. **Continuity Insurance**: Frame retention as championship-window preservation, scheme efficiency, and avoided rookie variance (e.g. rookie tackle variance increasing franchise QB sack rates by 42%).
-4. **Contract Architecture Over Sticker AAV**: Optimize term, practical guarantees, rolling roster bonus vesting, and Year 1 cash flow rather than hollow headline numbers.
+</div>
 
 ---
 
-## 🌟 Real NFL Superstars & GM Battles
+## 🎯 About the Game
 
-Powered by **Spotrac** and **nflverse** data, the game features official player headshots, team branding, and realistic GM psychological models:
+**RAID: Front Office** puts you in the hot seat as Lead Strategist at **RAID**—an elite, research-driven sports agency. 
 
-* **Micah Parsons** *(Dallas Cowboys)* vs. **Jerry Jones & Will McClay** *(Win-Now Aggressor)*  
-  *Battle to shatter the non-QB market ceiling at $35.5M+ AAV against Dallas' vanity and cap constraints.*
-* **Ja'Marr Chase** *(Cincinnati Bengals)* vs. **Duke Tobin** *(Cap Conservative)*  
-  *Test Cincinnati's strict cash-in-escrow policy to top Justin Jefferson's record extension.*
-* **Tristan Wirfs** *(Tampa Bay Buccaneers)* vs. **Jason Licht** *(Protection GM)*  
-  *Reset the blindside offensive tackle market beyond Penei Sewell to protect Baker Mayfield.*
-* **Kyle Hamilton** *(Baltimore Ravens)* vs. **Eric DeCosta** *(Analytics / Comp-Pick Master)*  
-  *Challenge the safety ceiling for an irreplaceable disguise defensive chess piece.*
-* **Sauce Gardner** *(New York Jets)* vs. **Joe Douglas** *(Discipline Value GM)*  
-  *Lockdown perimeter cornerback seeking to surpass Patrick Surtain II's benchmark.*
-* **Breece Hall** *(New York Jets)* vs. **Joe Douglas** *(Cap Conservative)*  
-  *Fight for front-loaded practical guarantees before the physical cliff.*
+Your mission: Represent premier NFL superstars, protect your clients' career earnings, exploit front-office vulnerabilities, and negotiate market-shattering contracts against real NFL General Managers inside an authentic offseason calendar.
 
----
-
-## 🛠️ Key Systems & Features
-
-* **Evidence War Room Dossiers**: Interactive sheets breaking down thesis statements, leverage catalyst timelines, replacement cost models, and historical Spotrac market comparables.
-* **Turn-Based GM Negotiation Arena**: Dynamic battle screen with GM psychological meters (Patience / Walkout Risk, Acceptance Probability, Emotion States), live dialogue feed, and RAID tactical action deck.
-* **Interactive Contract Architecture Suite**: Real-time sliders for Term (1–5 yrs), AAV ($8M–$35M), Practical Guarantees, and Year 1 Cash Flow % with instant validation.
-* **Procedural Sound Engine**: Synthesized audio effects via browser Web Audio API (UI clicks, tension alarms, deal completion fanfares). Zero external audio assets required.
-* **Offseason Calendar & News Ticker**: Advance through 6 phases (NFL Combine, Tag Window, Legal Tampering, Free Agency Wave 1, Pre-Draft, Draft Weekend).
-* **Talent Scouting Board**: Recruit collegiate phenoms (e.g. Travis Hunter) and disgruntled trade targets (e.g. Trey Hendrickson).
-
----
-
-## 💻 Local Development
-
-```bash
-# Clone the repository
-git clone https://github.com/rdsciv/raid-front-office.git
-cd raid-front-office
-
-# Install dependencies
-npm install
-
-# Start local development server
-npm run dev
-
-# Build for production
-npm run build
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  OFFSEASON CALENDAR:  Combine  →  Tag Deadline  →  Tampering  →  Draft      │
+│  WAR ROOM:            Replacement Cost  •  Leverage Clock  •  Cash Flow     │
+│  GM ARENA:            Jerry Jones  •  Eric DeCosta  •  Duke Tobin           │
+│  LIVE DATA:           Connected to Spotrac & nflverse                       │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 📊 Live Data Sync
+## 🕹️ Quick Start: How to Play
 
-To re-fetch and synchronize live NFL player rosters, official headshots, and team logos from **nflverse** and contract benchmarks from **Spotrac**:
+1. **[Launch the Web App](https://rdsciv.github.io/raid-front-office/)** in your browser.
+2. **Review Your Client Portfolio**: Select from elite NFL superstars like **Micah Parsons**, **Ja'Marr Chase**, **Tristan Wirfs**, **Kyle Hamilton**, **Sauce Gardner**, and **Breece Hall**.
+3. **Inspect the Evidence War Room**: Unpack your client's thesis statement, draft capital replacement costs, and upcoming leverage clock catalysts.
+4. **Enter the Negotiation Arena**: Face off against real GMs with distinct psychological archetypes (*Win-Now Aggressors*, *Analytics GMs*, *Cap Conservatives*).
+5. **Deploy RAID Tactical Strikes**: Counter GM objections with:
+   * **Replacement Cost & Option Value**: Prove that drafting a replacement burns scarce blue-chip draft picks.
+   * **Continuity & QB Protection**: Demonstrate the catastrophic pass-rush or scheme breakdown if your client walks.
+   * **Cash Flow Restructures**: Concede Year 1 cap flexibility in exchange for monster guaranteed payouts.
+   * **Leverage Shocks**: Threaten the open market auction where AFC contenders with $60M+ in cap space are waiting.
+6. **Architect the Contract**: Tune real-time sliders for **Term (1–5 yrs)**, **AAV ($8M–$35M)**, **Practical Guarantees**, and **Year 1 Cash Flow %**.
+7. **Close the Deal**: Seal the contract before the GM's patience hits zero, bank your 3% agency commission, and advance the offseason calendar!
 
+---
+
+## 🌟 Real NFL Superstars & Front Office Battles
+
+The game is connected directly to **nflverse** (for official NFL headshots, logos, and rosters) and **Spotrac** (for authentic salary cap and contract benchmarks):
+
+| Client | Franchise | Real Front Office | GM Archetype | The Stakes |
+| :--- | :--- | :--- | :--- | :--- |
+| **Micah Parsons** | Dallas Cowboys | **Jerry Jones & Will McClay** | *Win-Now Aggressor* | Seek \$35.5M+ AAV to become the highest-paid non-QB in NFL history after Dak & CeeDee's deals. |
+| **Ja'Marr Chase** | Cincinnati Bengals | **Duke Tobin** | *Cap Conservative* | Challenge Cincinnati's strict cash-in-escrow policy to surpass Justin Jefferson's \$35M AAV benchmark. |
+| **Tristan Wirfs** | Tampa Bay Buccaneers | **Jason Licht** | *Protection GM* | Reset the offensive tackle market beyond Penei Sewell to safeguard Baker Mayfield's blindside. |
+| **Kyle Hamilton** | Baltimore Ravens | **Eric DeCosta** | *Analytics / Comp-Pick Master* | Shatter the safety ceiling (\$22M AAV) for an irreplaceable defensive disguise weapon. |
+| **Sauce Gardner** | New York Jets | **Joe Douglas** | *Analytics / Value GM* | Lockdown perimeter cornerback seeking top-of-market security beyond Patrick Surtain II. |
+| **Breece Hall** | New York Jets | **Joe Douglas** | *Cap Conservative* | Three-down dual-threat weapon fighting for front-loaded guarantees before the physical cliff. |
+
+---
+
+## 🔊 Audio & Visual Experience
+
+* **Interactive War Room HUD**: Sleek dark terminal styling with dynamic radar telemetry, live patience meters, and deal probability gauges.
+* **Procedural Sound Engine**: Synthesized in real-time via the browser's native **Web Audio API**—feel the tactical clicks, high-stakes GM tension alarms, and triumphant contract victory fanfares.
+* **Talent Scouting Board**: Scout and sign collegiate prospects like two-way phenom **Travis Hunter** or disgruntled trade targets like **Trey Hendrickson**.
+
+---
+
+<div align="center">
+
+### 🏆 Ready to reset the NFL market?
+
+### **[▶ PLAY RAID: FRONT OFFICE NOW](https://rdsciv.github.io/raid-front-office/)**
+
+</div>
+
+---
+
+<details>
+<summary>🛠️ <b>Developer & Source Code Information (Click to Expand)</b></summary>
+
+### Tech Stack
+* **Frontend**: React 18, TypeScript, Vite, Tailwind CSS, Lucide Icons
+* **Audio**: Procedural Web Audio API Sound Synthesizer
+* **Data Sources**: nflverse (`weekly_rosters`, `teams_colors_logos`), Spotrac Free Agent Tracker
+* **Deployment**: GitHub Pages via GitHub Actions CI/CD
+
+### Local Setup
+```bash
+# Clone and install
+git clone https://github.com/rdsciv/raid-front-office.git
+cd raid-front-office
+npm install
+
+# Start local dev server
+npm run dev
+
+# Build production bundle
+npm run build
+```
+
+### Data Pipeline Sync
+To refresh the dataset with live nflverse and Spotrac metrics:
 ```bash
 python3 scripts/sync_nfl_data.py
 ```
 
----
-
-## 📜 License
-MIT License. Built for sports strategy enthusiasts, contract strategists, and football fans.
+### License
+MIT License. Created for sports strategy enthusiasts, contract analysts, and football fans.
+</details>
