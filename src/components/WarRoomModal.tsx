@@ -70,10 +70,22 @@ export const WarRoomModal: React.FC<WarRoomModalProps> = ({
                     {client.teamLogoUrl && <img src={client.teamLogoUrl} alt={client.team} className="w-3.5 h-3.5 object-contain" />}
                     <span>{client.team}</span>
                   </span>
+                  <span className={`text-[10px] px-2 py-0.5 rounded font-mono font-bold border ${
+                    client.tier === 'STAR' ? 'bg-amber-950/80 text-amber-300 border-amber-700/60' :
+                    client.tier === 'JOURNEYMAN' ? 'bg-cyan-950/80 text-cyan-300 border-cyan-700/60' :
+                    'bg-emerald-950/80 text-emerald-300 border-emerald-700/60'
+                  }`}>
+                    {client.tier === 'STAR' ? '⭐ STAR' : client.tier === 'JOURNEYMAN' ? '🛠️ JOURNEYMAN' : '⚡ ROOKIE'}
+                  </span>
                   <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-400 font-mono border border-emerald-700">
                     SPOTRAC VERIFIED
                   </span>
                 </div>
+                {client.situationalTag && (
+                  <div className="mt-1 text-[11px] font-mono text-amber-300 bg-[#0a1120] px-2 py-0.5 rounded border border-[#1d2d4d] inline-block">
+                    ⚡ {client.situationalTag}
+                  </div>
+                )}
                 <p className="text-xs text-slate-400 mt-1">
                   {client.positionFull} • Scheme: <span className="text-cyan-400 font-semibold">{client.schemeType}</span> (Fit: {client.schemeFitScore}/100)
                   {client.college && <span> • College: <span className="text-slate-300">{client.college}</span></span>}

@@ -76,6 +76,9 @@ export interface Client {
   teamColor?: string;
   college?: string;
   dataSource?: 'spotrac' | 'nflverse' | 'hybrid';
+  tier?: 'STAR' | 'JOURNEYMAN' | 'ROOKIE';
+  situationalTag?: string;
+  contractType?: 'MEGA_EXTENSION' | 'PROVE_IT' | 'ROOKIE_SCALE';
   healthDurability: number; // 0-100
   schemeFitScore: number; // 0-100
   schemeType: SchemeType;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Volume2, VolumeX, ShieldAlert, Award, DollarSign, Calendar, Users, ChevronRight } from 'lucide-react';
+import { Volume2, VolumeX, ShieldAlert, Award, DollarSign, Calendar, Users, ChevronRight, HelpCircle } from 'lucide-react';
 import { AgencyStats, OffseasonPhase } from '../types/game';
 import { audio } from '../engine/audioEngine';
 
@@ -11,6 +11,7 @@ interface HeaderProps {
   onToggleMute: () => void;
   onAdvancePhase: () => void;
   onOpenRecruitment: () => void;
+  onOpenBriefing: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -20,7 +21,8 @@ export const Header: React.FC<HeaderProps> = ({
   isMuted,
   onToggleMute,
   onAdvancePhase,
-  onOpenRecruitment
+  onOpenRecruitment,
+  onOpenBriefing
 }) => {
   return (
     <header className="border-b border-[#1f2b45] bg-[#0c1220]/95 backdrop-blur sticky top-0 z-40">
@@ -93,6 +95,19 @@ export const Header: React.FC<HeaderProps> = ({
             <Calendar className="w-3.5 h-3.5" />
             <span>Advance Week</span>
             <ChevronRight className="w-3.5 h-3.5" />
+          </button>
+
+          {/* Agency Briefing Tutorial Button */}
+          <button
+            onClick={() => {
+              audio.playClick();
+              onOpenBriefing();
+            }}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#17223b] hover:bg-[#1f2e4f] border border-cyan-500/40 text-cyan-300 text-xs font-semibold rounded-md transition-colors shadow-sm"
+            title="Open Agency Briefing & Goals"
+          >
+            <HelpCircle className="w-3.5 h-3.5 text-cyan-400" />
+            <span className="hidden sm:inline">Agency Briefing</span>
           </button>
 
           {/* Recruit Talent Button */}

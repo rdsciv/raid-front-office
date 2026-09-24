@@ -6,6 +6,7 @@ import { WarRoomModal } from './components/WarRoomModal';
 import { NegotiationRoom } from './components/NegotiationRoom';
 import { RecruitmentModal } from './components/RecruitmentModal';
 import { OffseasonSummaryModal } from './components/OffseasonSummaryModal';
+import { OnboardingModal } from './components/OnboardingModal';
 import { 
   OFFSEASON_PHASES, 
   NEWS_BY_PHASE 
@@ -33,6 +34,7 @@ export const App: React.FC = () => {
   const [activeNegotiationClient, setActiveNegotiationClient] = useState<Client | null>(null);
   const [isRecruitmentOpen, setIsRecruitmentOpen] = useState<boolean>(false);
   const [isSummaryOpen, setIsSummaryOpen] = useState<boolean>(false);
+  const [isOnboardingOpen, setIsOnboardingOpen] = useState<boolean>(true);
   const [isMuted, setIsMuted] = useState<boolean>(false);
 
   const currentPhase = OFFSEASON_PHASES[phaseIndex];
@@ -164,6 +166,7 @@ export const App: React.FC = () => {
         onToggleMute={handleToggleMute}
         onAdvancePhase={handleAdvancePhase}
         onOpenRecruitment={() => setIsRecruitmentOpen(true)}
+        onOpenBriefing={() => setIsOnboardingOpen(true)}
       />
 
       {/* Breaking News Ticker */}
@@ -178,6 +181,12 @@ export const App: React.FC = () => {
           onOpenRecruitment={() => setIsRecruitmentOpen(true)}
         />
       </main>
+
+      {/* Interactive Agency Onboarding Briefing Modal */}
+      <OnboardingModal
+        isOpen={isOnboardingOpen}
+        onClose={() => setIsOnboardingOpen(false)}
+      />
 
       {/* Evidence War Room Modal */}
       {activeWarRoomClient && (

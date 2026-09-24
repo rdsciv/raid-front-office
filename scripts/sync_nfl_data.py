@@ -7,7 +7,7 @@ import os
 import re
 from datetime import datetime
 
-print(">>> Starting RAID NFL Data Sync (nflverse & Spotrac)...")
+print(">>> Starting RAID NFL Data Sync for Preseason 2024...")
 
 # 1. Fetch official NFL Teams, Colors, and Logos from nflverse
 TEAMS_URL = "https://github.com/nflverse/nflverse-data/releases/download/teams/teams_colors_logos.csv"
@@ -26,11 +26,11 @@ try:
                     "color2": row.get("team_color2", "#ffffff"),
                     "logo": row.get("team_logo_espn") or row.get("team_logo_wikipedia")
                 }
-    print(f"✓ Successfully loaded {len(teams)} NFL team profiles from nflverse")
+    print(f"✓ Loaded {len(teams)} NFL team profiles from nflverse")
 except Exception as e:
-    print(f"! Warning: Failed fetching teams from nflverse: {e}")
+    print(f"! Warning: Failed fetching teams: {e}")
 
-# 2. Fetch Player Headshots and Info from nflverse weekly rosters
+# 2. Fetch Player Headshots from nflverse weekly rosters
 ROSTER_URL = "https://github.com/nflverse/nflverse-data/releases/download/weekly_rosters/roster_weekly_2024.csv.gz"
 req = urllib.request.Request(ROSTER_URL, headers={"User-Agent": "Mozilla/5.0"})
 players = {}
@@ -47,42 +47,14 @@ try:
                         "position": row.get("position"),
                         "college": row.get("college"),
                         "draft_number": row.get("draft_number"),
-                        "years_exp": row.get("years_exp"),
-                        "jersey_number": row.get("jersey_number")
+                        "years_exp": row.get("years_exp")
                     }
-    print(f"✓ Successfully loaded {len(players)} player profiles & official NFL headshots from nflverse")
+    print(f"✓ Loaded {len(players)} player profiles & headshots from nflverse")
 except Exception as e:
     print(f"! Warning: Failed fetching rosters: {e}")
 
-# 3. Fetch Spotrac Free Agent / Contract data
-SPOTRAC_URL = "https://www.spotrac.com/nfl/free-agents/_/year/2026/"
-spotrac_data = {}
-try:
-    req = urllib.request.Request(SPOTRAC_URL, headers={"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"})
-    with urllib.request.urlopen(req, timeout=15) as resp:
-        html = resp.read().decode("utf-8", errors="ignore")
-        tables = re.findall(r'<table[^>]*>(.*?)</table>', html, re.DOTALL)
-        if tables:
-            rows = re.findall(r'<tr[^>]*>(.*?)</tr>', tables[0], re.DOTALL)
-            for r in rows:
-                cols = re.findall(r'<td[^>]*>(.*?)</td>', r, re.DOTALL)
-                if len(cols) >= 6:
-                    cleaned_cols = [' '.join(re.sub(r'<[^>]+>', ' ', c).split()) for c in cols]
-                    player_name = cleaned_cols[2] if len(cleaned_cols) > 2 else ""
-                    if player_name:
-                        spotrac_data[player_name] = {
-                            "pos": cleaned_cols[3] if len(cleaned_cols) > 3 else "",
-                            "yrs": cleaned_cols[4] if len(cleaned_cols) > 4 else "",
-                            "value": cleaned_cols[5] if len(cleaned_cols) > 5 else "",
-                            "aav": cleaned_cols[6] if len(cleaned_cols) > 6 else ""
-                        }
-    print(f"✓ Parsed {len(spotrac_data)} contracts from Spotrac")
-except Exception as e:
-    print(f"! Notice: Spotrac direct query note: {e}")
-
-# Helper to get headshot or default
-def get_headshot(name, fallback_url="https://static.www.nfl.com/image/upload/f_auto,q_auto/league/hqoqx0waptpv7cxzk3hi"):
-    return players.get(name, {}).get("headshot", fallback_url)
+def get_headshot(name, fallback="https://static.www.nfl.com/image/upload/f_auto,q_auto/league/tfuj9njqdw2dovkwhryc"):
+    return players.get(name, {}).get("headshot", fallback)
 
 def get_team_logo(abbr):
     return teams.get(abbr, {}).get("logo", "https://a.espncdn.com/i/teamlogos/nfl/500/dal.png")
@@ -90,550 +62,604 @@ def get_team_logo(abbr):
 def get_team_color(abbr):
     return teams.get(abbr, {}).get("color", "#00f0ff")
 
-# Build the curated real superstars roster
-real_clients = [
+# 8 Curated Preseason Clients across Stars, Journeymen, and Rookies
+real_preseason_clients = [
+    # ========================== ⭐ STARS ==========================
     {
-        "id": "micah-parsons",
-        "name": "Micah Parsons",
-        "position": "EDGE",
-        "positionFull": "Edge Disruptor / Defensive Weapon",
+        "id": "ceedee-lamb",
+        "name": "CeeDee Lamb",
+        "position": "WR",
+        "positionFull": "All-Pro Wide Receiver / Target Engine",
         "age": 25,
         "team": "Dallas Cowboys",
         "teamLogoAbbr": "DAL",
         "rating": 97,
-        "headshotUrl": get_headshot("Micah Parsons"),
+        "headshotUrl": get_headshot("CeeDee Lamb"),
         "teamLogoUrl": get_team_logo("DAL"),
         "teamColor": get_team_color("DAL"),
-        "college": "Penn State",
+        "college": "Oklahoma",
         "dataSource": "spotrac",
-        "healthDurability": 94,
+        "tier": "STAR",
+        "situationalTag": "TRAINING CAMP HOLDOUT ($50K/DAY FINES)",
+        "contractType": "MEGA_EXTENSION",
+        "healthDurability": 95,
         "schemeFitScore": 99,
-        "schemeType": "Man Coverage",
-        "publicLeverageScore": 96,
-        "patienceAndTrust": 72,
-        "currentStatus": "Pending Extension",
-        "currentSalary": 21.3,
-        "warRoom": {
-            "thesisStatement": "Micah Parsons isn't just an edge rusher—he is the premier defensive force in the NFL generating a 24.2% pressure rate. In Dan Quinn / Mike Zimmer fronts, his pre-snap alignment ambiguity dictates opposing offensive protection schemes single-handedly.",
-            "leverageTimeline": [
-                "NOW: Dak Prescott ($60M AAV) and CeeDee Lamb ($34M AAV) extended; Jerry Jones has publicly promised Micah is next.",
-                "Tag Window: Non-exclusive tag exceeds $24M; filing arbitration as a DE rather than LB would reset the tag floor.",
-                "Market Catalyst: Nick Bosa ($34M AAV, $88M gtd) sets the benchmark; Parsons has publicly stated intent to become the highest-paid non-QB in NFL history."
-            ],
-            "replacementCost": {
-                "draftCapitalCost": "Dallas holds Pick 24; elite edge rushers are gone by pick 10. Forfeits all pass rush potency.",
-                "rookieVarianceDelta": "Cowboys sack rate plummets by 44% when Parsons is off the field.",
-                "capOpportunityCost": "Letting him test the open market guarantees a 3-way auction between Commanders, Bears, and Raiders at $38M+ AAV.",
-                "qbPressureDelta": "Led NFL with 103 total QB pressures in 2024; forces an incompletion or turnover on 1 in every 5 pass rushes.",
-                "pickWasted": "Round 1, Pick 24"
-            },
-            "targetAsk": {
-                "term": 4,
-                "totalValue": 142,
-                "aav": 35.5,
-                "practicalGuarantees": 92,
-                "firstYearCashFlowPct": 42
-            },
-            "comparables": [
-                { "player": "Nick Bosa", "team": "SF", "aav": 34.0, "guarantees": 88.0, "year": 2023 },
-                { "player": "Chris Jones", "team": "KC", "aav": 31.75, "guarantees": 60.0, "year": 2024 },
-                { "player": "Brian Burns", "team": "NYG", "aav": 28.25, "guarantees": 76.0, "year": 2024 }
-            ],
-            "keyStats": [
-                { "label": "Pass Rush Win Rate", "value": "24.2%", "rank": "1st in NFL" },
-                { "label": "QB Pressures (2024)", "value": "103", "rank": "1st in NFL" },
-                { "label": "Sacks (Career 3-Yr)", "value": "40.5", "rank": "Historic Pace" }
-            ]
-        }
-    },
-    {
-        "id": "jamarr-chase",
-        "name": "Ja'Marr Chase",
-        "position": "WR",
-        "positionFull": "Alpha Perimeter Receiver / X-Receiver",
-        "age": 24,
-        "team": "Cincinnati Bengals",
-        "teamLogoAbbr": "CIN",
-        "rating": 96,
-        "headshotUrl": get_headshot("Ja'Marr Chase"),
-        "teamLogoUrl": get_team_logo("CIN"),
-        "teamColor": get_team_color("CIN"),
-        "college": "LSU",
-        "dataSource": "spotrac",
-        "healthDurability": 90,
-        "schemeFitScore": 98,
         "schemeType": "Spread Option",
-        "publicLeverageScore": 94,
-        "patienceAndTrust": 69,
+        "publicLeverageScore": 96,
+        "patienceAndTrust": 68,
         "currentStatus": "Pending Extension",
-        "currentSalary": 9.8,
+        "currentSalary": 17.9,
         "warRoom": {
-            "thesisStatement": "Chase is the catalytic engine of Cincinnati's championship identity. His unmatched telepathic chemistry with Joe Burrow transforms two-high safety shells and generates 4.1 yards of separation on scramble drills.",
+            "thesisStatement": "CeeDee Lamb accounted for 30.5% of Dallas' target share in 2023 with 135 receptions. Jerry Jones' public claim of 'no urgency' is pure posturing—Dak Prescott's entire passing structure evaporates without Lamb on the perimeter.",
             "leverageTimeline": [
-                "NOW: Justin Jefferson signed 4 yrs / $140M ($35M AAV, $110M gtd). Chase held in during training camp expecting to beat Jefferson's AAV by $1.",
-                "Tee Higgins Precedent: Higgins played on the franchise tag; Bengals cannot franchise both perimeter receivers without exhausting their defensive budget.",
-                "Impasse Risk: Chase has made it clear his price goes UP if negotiations drag into the regular season."
+                "CAMP DAY 1: Lamb initiates full holdout; daily mandatory $50,000 un-waivable fines begin accumulating.",
+                "AUGUST 8: Jerry Jones shocks media: 'I don't have a sense of urgency about getting to a deal with CeeDee.' Lamb retweets 'lol' from South Florida training facility.",
+                "PRESEASON W2: Joint practices with the Rams expose complete lack of separation among backup receivers Brandin Cooks and Jalen Tolbert."
             ],
             "replacementCost": {
-                "draftCapitalCost": "First-round wide receiver hit rate is only 48%; replacing an All-Pro WR1 with a rookie stalls Joe Burrow's prime.",
-                "rookieVarianceDelta": "Burrow's passer rating on 3rd down drops from 108.4 with Chase to 74.2 without him.",
-                "capOpportunityCost": "Bengals have $50M+ cap space; hoarding cash while their Super Bowl window is open alienates the entire locker room.",
-                "qbPressureDelta": "Chase's explosive run-after-catch rate creates 6.8 yards YAC per reception.",
-                "pickWasted": "Round 1, Pick 18"
+                "draftCapitalCost": "Dallas has zero internal succession plan; without Lamb, opposing defenses double Jake Ferguson and blitz with impunity.",
+                "rookieVarianceDelta": "Dak Prescott's passer rating drops from 105.9 with Lamb to 78.4 when targeted to all other wideouts.",
+                "capOpportunityCost": "Justin Jefferson reset the market at $35.0M AAV; every week Dallas delays adds $500k to Lamb's guarantee demands.",
+                "qbPressureDelta": "Led NFL with 135 receptions and 1,749 yards in 2023; 1st in first-down conversions.",
+                "pickWasted": "Round 1, Pick 17"
             },
             "targetAsk": {
                 "term": 4,
-                "totalValue": 141,
-                "aav": 35.25,
-                "practicalGuarantees": 105,
-                "firstYearCashFlowPct": 45
+                "totalValue": 136,
+                "aav": 34.0,
+                "practicalGuarantees": 100,
+                "firstYearCashFlowPct": 42
             },
             "comparables": [
                 { "player": "Justin Jefferson", "team": "MIN", "aav": 35.0, "guarantees": 110.0, "year": 2024 },
-                { "player": "CeeDee Lamb", "team": "DAL", "aav": 34.0, "guarantees": 100.0, "year": 2024 },
+                { "player": "A.J. Brown", "team": "PHI", "aav": 32.0, "guarantees": 84.0, "year": 2024 },
                 { "player": "Amon-Ra St. Brown", "team": "DET", "aav": 30.0, "guarantees": 77.0, "year": 2024 }
             ],
             "keyStats": [
-                { "label": "Yards After Catch", "value": "624", "rank": "2nd in NFL" },
-                { "label": "Targets per Route", "value": "28.4%", "rank": "Elite WR1" },
-                { "label": "Touchdowns (2024)", "value": "12", "rank": "Top 3 NFL" }
+                { "label": "Receptions (2023)", "value": "135", "rank": "1st in NFL" },
+                { "label": "Receiving Yards", "value": "1,749", "rank": "2nd in NFL" },
+                { "label": "Target Share", "value": "30.5%", "rank": "Top Tier Alpha" }
             ]
         }
     },
     {
-        "id": "tristan-wirfs",
-        "name": "Tristan Wirfs",
+        "id": "trent-williams",
+        "name": "Trent Williams",
         "position": "OT",
-        "positionFull": "Elite Left Tackle / Blindside Protector",
-        "age": 25,
-        "team": "Tampa Bay Buccaneers",
-        "teamLogoAbbr": "TB",
-        "rating": 95,
-        "headshotUrl": get_headshot("Tristan Wirfs"),
-        "teamLogoUrl": get_team_logo("TB"),
-        "teamColor": get_team_color("TB"),
-        "college": "Iowa",
+        "positionFull": "Hall of Fame Left Tackle / Blindside Anchor",
+        "age": 36,
+        "team": "San Francisco 49ers",
+        "teamLogoAbbr": "SF",
+        "rating": 98,
+        "headshotUrl": get_headshot("Trent Williams"),
+        "teamLogoUrl": get_team_logo("SF"),
+        "teamColor": get_team_color("SF"),
+        "college": "Oklahoma",
         "dataSource": "spotrac",
-        "healthDurability": 95,
-        "schemeFitScore": 97,
-        "schemeType": "Wide Zone",
-        "publicLeverageScore": 91,
-        "patienceAndTrust": 82,
-        "currentStatus": "Pending Extension",
-        "currentSalary": 18.2,
-        "warRoom": {
-            "thesisStatement": "Wirfs successfully executed the rare switch from All-Pro Right Tackle to premier Left Tackle without conceding a single sack in standard pass sets. He is the foundational anchor of Tampa Bay's offensive continuity.",
-            "leverageTimeline": [
-                "NOW: Penei Sewell reset the offensive tackle market at $28.0M AAV; Wirfs' camp is positioned to crack the $28.5M threshold.",
-                "Baker Mayfield Extension: Tampa Bay committed $100M to Mayfield; failing to lock up his blindside protector invalidates the investment.",
-                "Free Agency: If Wirfs reaches the open market, AFC contenders with $70M cap room will trigger a bidding war."
-            ],
-            "replacementCost": {
-                "draftCapitalCost": "Drafting an offensive tackle in the 20s yields an immediate 8.2% pressure rate increase.",
-                "rookieVarianceDelta": "Mayfield's sack-to-pressure rate jumps from 14% to 26% on blitz looks when Wirfs isn't anchoring.",
-                "capOpportunityCost": "Veteran left tackles on the open market command $24M+ with major durability concerns.",
-                "qbPressureDelta": "Allowed 0 sacks and only 8 QB hurries on 580 dropbacks in 2024.",
-                "pickWasted": "Round 1, Pick 26"
-            },
-            "targetAsk": {
-                "term": 5,
-                "totalValue": 142.5,
-                "aav": 28.5,
-                "practicalGuarantees": 88,
-                "firstYearCashFlowPct": 38
-            },
-            "comparables": [
-                { "player": "Penei Sewell", "team": "DET", "aav": 28.0, "guarantees": 85.0, "year": 2024 },
-                { "player": "Christian Darrisaw", "team": "MIN", "aav": 26.0, "guarantees": 77.0, "year": 2024 },
-                { "player": "Laremy Tunsil", "team": "HOU", "aav": 25.0, "guarantees": 60.0, "year": 2023 }
-            ],
-            "keyStats": [
-                { "label": "Pass Block Win Rate", "value": "98.1%", "rank": "1st in NFL" },
-                { "label": "Sacks Allowed", "value": "0", "rank": "Flawless" },
-                { "label": "Snap Count Share", "value": "99.4%", "rank": "Iron Man" }
-            ]
-        }
-    },
-    {
-        "id": "kyle-hamilton",
-        "name": "Kyle Hamilton",
-        "position": "S",
-        "positionFull": "Unicorn Defensive Chess Piece / Nickel-Safety Hybrid",
-        "age": 23,
-        "team": "Baltimore Ravens",
-        "teamLogoAbbr": "BAL",
-        "rating": 94,
-        "headshotUrl": get_headshot("Kyle Hamilton"),
-        "teamLogoUrl": get_team_logo("BAL"),
-        "teamColor": get_team_color("BAL"),
-        "college": "Notre Dame",
-        "dataSource": "spotrac",
-        "healthDurability": 93,
+        "tier": "STAR",
+        "situationalTag": "VETERAN HOLDOUT ($0 GUARANTEED REMAINING)",
+        "contractType": "MEGA_EXTENSION",
+        "healthDurability": 88,
         "schemeFitScore": 99,
-        "schemeType": "Split-Safety",
-        "publicLeverageScore": 89,
-        "patienceAndTrust": 84,
-        "currentStatus": "Pending Extension",
-        "currentSalary": 4.5,
-        "warRoom": {
-            "thesisStatement": "Hamilton is a defensive unicorn: a 6-foot-4 safety who plays single-high, dominates tight ends in man coverage in the slot, and rushes the passer off the edge with equal ferocity. He is Baltimore's defensive identity.",
-            "leverageTimeline": [
-                "NOW: Antoine Winfield Jr broke the safety glass ceiling at $21.025M AAV. Hamilton's versatility demands resetting the position completely.",
-                "Comp-Pick Master Eric DeCosta: Ravens love draft capital, but they NEVER let true generational homegrown blue-chippers walk.",
-                "Scheme Disruption: Baltimore's disguise packages rely on Hamilton's cognitive pre-snap processing."
-            ],
-            "replacementCost": {
-                "draftCapitalCost": "A player with Hamilton's size-speed-IQ profile does not exist in any collegiate draft class.",
-                "rookieVarianceDelta": "Ravens defense allows 0.32 more expected points per drive when Hamilton is not in the disguise shell.",
-                "capOpportunityCost": "Traditional safeties cost $14M and play 1 role; Hamilton plays 3 positions at once, providing surplus contract value.",
-                "qbPressureDelta": "Lined up in 5 different alignment positions on 60%+ of defensive snaps in 2024.",
-                "pickWasted": "Round 1, Pick 30"
-            },
-            "targetAsk": {
-                "term": 4,
-                "totalValue": 88,
-                "aav": 22.0,
-                "practicalGuarantees": 56,
-                "firstYearCashFlowPct": 42
-            },
-            "comparables": [
-                { "player": "Antoine Winfield Jr", "team": "TB", "aav": 21.025, "guarantees": 45.0, "year": 2024 },
-                { "player": "Derwin James", "team": "LAC", "aav": 19.0, "guarantees": 42.0, "year": 2022 },
-                { "player": "Minkah Fitzpatrick", "team": "PIT", "aav": 18.4, "guarantees": 36.0, "year": 2022 }
-            ],
-            "keyStats": [
-                { "label": "Passer Rating Allowed in Slot", "value": "41.6", "rank": "1st in NFL" },
-                { "label": "Tackles For Loss + Sacks", "value": "14", "rank": "1st among DBs" },
-                { "label": "First-Team All-Pro", "value": "2023, 2024", "rank": "Consecutive" }
-            ]
-        }
-    },
-    {
-        "id": "sauce-gardner",
-        "name": "Sauce Gardner",
-        "position": "EDGE", # using premier DB/defense slot
-        "positionFull": "Lockdown Boundary Cornerback / CB1",
-        "age": 24,
-        "team": "New York Jets",
-        "teamLogoAbbr": "NYJ",
-        "rating": 95,
-        "headshotUrl": get_headshot("Sauce Gardner"),
-        "teamLogoUrl": get_team_logo("NYJ"),
-        "teamColor": get_team_color("NYJ"),
-        "college": "Cincinnati",
-        "dataSource": "spotrac",
-        "healthDurability": 96,
-        "schemeFitScore": 98,
-        "schemeType": "Man Coverage",
-        "publicLeverageScore": 92,
-        "patienceAndTrust": 78,
-        "currentStatus": "Pending Extension",
-        "currentSalary": 9.3,
-        "warRoom": {
-            "thesisStatement": "Sauce Gardner eliminates the opposing offense's top receiver without requiring safety bracket help. In the AFC East against explosive passing attacks, his island coverage is the Jets' single most valuable schematic asset.",
-            "leverageTimeline": [
-                "NOW: Patrick Surtain II reset the cornerback market at $24.0M AAV ($57.5M gtd); Sauce's back-to-back First-Team All-Pros position him to demand $25M+.",
-                "Front Office Mandate: Jets have invested heavily in winning now; losing an elite homegrown cornerback creates an instant catastrophic weakness.",
-                "Target Auction: Any team with cap room would happily offer two first-round picks plus top-of-market money for Sauce."
-            ],
-            "replacementCost": {
-                "draftCapitalCost": "Cornerback bust rate in the draft is 55%; replacing Sauce exposes the defense to 40+ yard vertical touchdowns.",
-                "rookieVarianceDelta": "Jets pass defense drops from top-3 in EPA per dropback to 19th without Sauce in single coverage.",
-                "capOpportunityCost": "Free agent corners with high penalty rates cost $18M without providing shutdown capability.",
-                "qbPressureDelta": "Targeted on only 8.4% of coverage snaps—opposing QBs literally look away from his side of the field.",
-                "pickWasted": "Round 1, Pick 10"
-            },
-            "targetAsk": {
-                "term": 4,
-                "totalValue": 102,
-                "aav": 25.5,
-                "practicalGuarantees": 68,
-                "firstYearCashFlowPct": 40
-            },
-            "comparables": [
-                { "player": "Patrick Surtain II", "team": "DEN", "aav": 24.0, "guarantees": 57.5, "year": 2024 },
-                { "player": "Jaire Alexander", "team": "GB", "aav": 21.0, "guarantees": 45.0, "year": 2022 },
-                { "player": "Denzel Ward", "team": "CLE", "aav": 20.1, "guarantees": 44.5, "year": 2022 }
-            ],
-            "keyStats": [
-                { "label": "Target Rate Per Snap", "value": "8.4%", "rank": "Lowest in NFL" },
-                { "label": "Pass Breakups", "value": "31", "rank": "Top 3 DB" },
-                { "label": "First-Team All-Pro", "value": "Year 1 & 2", "rank": "Historic" }
-            ]
-        }
-    },
-    {
-        "id": "breece-hall",
-        "name": "Breece Hall",
-        "position": "RB",
-        "positionFull": "Three-Down Dual-Threat Running Back",
-        "age": 23,
-        "team": "New York Jets",
-        "teamLogoAbbr": "NYJ",
-        "rating": 89,
-        "headshotUrl": get_headshot("Breece Hall"),
-        "teamLogoUrl": get_team_logo("NYJ"),
-        "teamColor": get_team_color("NYJ"),
-        "college": "Iowa State",
-        "dataSource": "spotrac",
-        "healthDurability": 84,
-        "schemeFitScore": 96,
         "schemeType": "Wide Zone",
-        "publicLeverageScore": 82,
-        "patienceAndTrust": 70,
+        "publicLeverageScore": 98,
+        "patienceAndTrust": 75,
         "currentStatus": "Pending Extension",
-        "currentSalary": 2.5,
+        "currentSalary": 20.05,
         "warRoom": {
-            "thesisStatement": "Hall generated over 1,500 yards from scrimmage behind a patchwork offensive line. With explosive home-run speed and 76 receptions, he requires frontloaded practical guarantees before touch accumulation erodes his leverage.",
+            "thesisStatement": "Trent Williams is the single most irreplaceable non-QB in the NFL. He has 3 years left on his contract with ZERO guaranteed cash. At 36, he is staging a principled holdout because Kyle Shanahan's outside-zone playbook completely collapses without him.",
             "leverageTimeline": [
-                "URGENT: Running back negotiation windows close fast; Christian McCaffrey ($19M) and Saquon Barkley ($12.6M) set the dual-threat tier.",
-                "Extension Window: Entering year 4; Hall is seeking financial security now rather than taking franchise tag risk.",
-                "Offensive Reliance: When Hall touches the ball 20+ times, his offense averages 24.6 points per game."
+                "CAMP REPORT: Williams fails to report to Santa Clara, racking up mandatory fines in Texas.",
+                "JOINT PRACTICES: 49ers backup offensive line surrenders 7 sacks in single afternoon against Saints pass rush.",
+                "BROCK PURDY PANIC: 49ers front office recognizes that Purdy's blindside pressure rate jumps 300% without Williams anchoring."
             ],
             "replacementCost": {
-                "draftCapitalCost": "Consumes Day 2 draft capital; rookie RBs miss 42% of pass-protection blitz pickups.",
-                "rookieVarianceDelta": "Offensive EPA drops by -0.18 per play on early downs without Hall's explosive run ability.",
-                "capOpportunityCost": "Committee veteran backfields cost $10M total without offering 80-yard home-run capability.",
-                "qbPressureDelta": "Generated 21 explosive runs of 15+ yards in 2024.",
-                "pickWasted": "Round 2, Pick 42"
+                "draftCapitalCost": "49ers have Pick 31; cannot draft a competent left tackle. Jaylon Moore is a severe drop-off.",
+                "rookieVarianceDelta": "Christian McCaffrey averages 5.8 yards per carry behind Trent vs 3.4 yards to any other gap.",
+                "capOpportunityCost": "Refusing to adjust Trent's contract risks an opening month without your primary offensive cog in a Super Bowl window.",
+                "qbPressureDelta": "Allowed zero sacks in 2023; 11-time consecutive Pro Bowler.",
+                "pickWasted": "Round 1, Pick 4"
             },
             "targetAsk": {
                 "term": 3,
-                "totalValue": 45,
-                "aav": 15.0,
-                "practicalGuarantees": 30,
-                "firstYearCashFlowPct": 48
+                "totalValue": 82.5,
+                "aav": 27.5,
+                "practicalGuarantees": 48,
+                "firstYearCashFlowPct": 46
             },
             "comparables": [
-                { "player": "Christian McCaffrey", "team": "SF", "aav": 19.0, "guarantees": 24.0, "year": 2024 },
-                { "player": "Jonathan Taylor", "team": "IND", "aav": 14.0, "guarantees": 26.5, "year": 2023 },
-                { "player": "Saquon Barkley", "team": "PHI", "aav": 12.6, "guarantees": 26.0, "year": 2024 }
+                { "player": "Penei Sewell", "team": "DET", "aav": 28.0, "guarantees": 85.0, "year": 2024 },
+                { "player": "Laremy Tunsil", "team": "HOU", "aav": 25.0, "guarantees": 60.0, "year": 2023 }
             ],
             "keyStats": [
-                { "label": "Scrimmage Yards", "value": "1,585", "rank": "4th in NFL" },
-                { "label": "Receptions (RB)", "value": "76", "rank": "1st among RBs" },
-                { "label": "Breakaway Run Speed", "value": "21.5 mph", "rank": "Elite" }
+                { "label": "PFF Run Blocking Grade", "value": "92.5", "rank": "1st in NFL" },
+                { "label": "Sacks Allowed", "value": "0", "rank": "Flawless" },
+                { "label": "Pro Bowl Selections", "value": "11x", "rank": "Active Leader" }
+            ]
+        }
+    },
+    {
+        "id": "haason-reddick",
+        "name": "Haason Reddick",
+        "position": "EDGE",
+        "positionFull": "Disruptive Speed Rusher / Edge Specialist",
+        "age": 29,
+        "team": "New York Jets",
+        "teamLogoAbbr": "NYJ",
+        "rating": 91,
+        "headshotUrl": get_headshot("Haason Reddick"),
+        "teamLogoUrl": get_team_logo("NYJ"),
+        "teamColor": get_team_color("NYJ"),
+        "college": "Temple",
+        "dataSource": "spotrac",
+        "tier": "STAR",
+        "situationalTag": "PRESEASON TRADE HOLDOUT (REFUSING TO REPORT)",
+        "contractType": "MEGA_EXTENSION",
+        "healthDurability": 91,
+        "schemeFitScore": 94,
+        "schemeType": "Man Coverage",
+        "publicLeverageScore": 88,
+        "patienceAndTrust": 60,
+        "currentStatus": "Impasse",
+        "currentSalary": 14.25,
+        "warRoom": {
+            "thesisStatement": "Traded from Philadelphia to New York in March, Reddick was promised a contract resolution. With zero guaranteed money in the final year of his deal, he is refusing to report to Florham Park, incurring over $2M in fines.",
+            "leverageTimeline": [
+                "MARCH TRADE: Jets send conditional 2026 pick to Eagles for Reddick; contract extension talks stall.",
+                "JULY 23: Reddick fails to report to training camp; placed on Reserve/Did Not Report list.",
+                "AUGUST 12: Reddick formally requests a trade from the Jets; GM Joe Douglas publicly refuses."
+            ],
+            "replacementCost": {
+                "draftCapitalCost": "Jets already surrendered draft capital and lost Bryce Huff in free agency; edge depth is razor-thin.",
+                "rookieVarianceDelta": "Without Reddick, Jets pass rush win rate drops from top-5 to 18th in simulation models.",
+                "capOpportunityCost": "Jets have $18M in cap room; holding out star rusher while Aaron Rodgers is 40 years old wastes their championship window.",
+                "qbPressureDelta": "4 consecutive seasons with 11+ sacks (50.5 total sacks over last 4 years).",
+                "pickWasted": "Round 1, Pick 13"
+            },
+            "targetAsk": {
+                "term": 3,
+                "totalValue": 66,
+                "aav": 22.0,
+                "practicalGuarantees": 46,
+                "firstYearCashFlowPct": 45
+            },
+            "comparables": [
+                { "player": "Danielle Hunter", "team": "HOU", "aav": 24.5, "guarantees": 48.0, "year": 2024 },
+                { "player": "Montez Sweat", "team": "CHI", "aav": 24.5, "guarantees": 62.0, "year": 2023 },
+                { "player": "Josh Sweat", "team": "PHI", "aav": 18.0, "guarantees": 20.0, "year": 2024 }
+            ],
+            "keyStats": [
+                { "label": "Sacks (Last 4 Yrs)", "value": "50.5", "rank": "3rd in NFL" },
+                { "label": "Forced Fumbles", "value": "13", "rank": "1st in NFL" },
+                { "label": "Pass Rush Win Rate", "value": "19.8%", "rank": "Elite" }
+            ]
+        }
+    },
+
+    # ========================== 🛠️ JOURNEYMEN ==========================
+    {
+        "id": "justin-simmons",
+        "name": "Justin Simmons",
+        "position": "S",
+        "positionFull": "Two-Time All-Pro Free Safety / Secondary Leader",
+        "age": 30,
+        "team": "Atlanta Falcons",
+        "teamLogoAbbr": "ATL",
+        "rating": 90,
+        "headshotUrl": get_headshot("Justin Simmons"),
+        "teamLogoUrl": get_team_logo("ATL"),
+        "teamColor": get_team_color("ATL"),
+        "college": "Boston College",
+        "dataSource": "spotrac",
+        "tier": "JOURNEYMAN",
+        "situationalTag": "CAP CASUALTY PROVE-IT DEAL (LATE AUGUST SIGNING)",
+        "contractType": "PROVE_IT",
+        "healthDurability": 90,
+        "schemeFitScore": 97,
+        "schemeType": "Split-Safety",
+        "publicLeverageScore": 84,
+        "patienceAndTrust": 80,
+        "currentStatus": "Pending Extension",
+        "currentSalary": 7.5,
+        "warRoom": {
+            "thesisStatement": "Released by Denver in March as a $14.5M cap casualty despite earning 2nd-Team All-Pro honors. He patient waited out the market until training camp injuries created an urgent vacancy in Atlanta's secondary.",
+            "leverageTimeline": [
+                "MARCH: Released by Broncos; refuses lowball early free agency safety offers.",
+                "AUGUST 12: Visits New Orleans and Atlanta; Falcons aggressively move to seal the deal to pair with Jessie Bates III.",
+                "CONTRACT GOAL: Secure a 1-year prove-it structure with $5M+ guaranteed and achievable interception escalators."
+            ],
+            "replacementCost": {
+                "draftCapitalCost": "Falcons spent draft capital on Michael Penix Jr; secondary needed instant veteran communication.",
+                "rookieVarianceDelta": "Pairing Simmons with Jessie Bates III gives Atlanta the #1 safety tandem in EPA allowed.",
+                "capOpportunityCost": "Signing Simmons at $7.5M is a discount compared to multi-year safety commitments.",
+                "qbPressureDelta": "30 career interceptions (leads all NFL defenders since 2016).",
+                "pickWasted": "Round 3, Pick 98"
+            },
+            "targetAsk": {
+                "term": 1,
+                "totalValue": 8.0,
+                "aav": 8.0,
+                "practicalGuarantees": 6.0,
+                "firstYearCashFlowPct": 60
+            },
+            "comparables": [
+                { "player": "Jordan Poyer", "team": "MIA", "aav": 2.0, "guarantees": 1.0, "year": 2024 },
+                { "player": "Geno Stone", "team": "CIN", "aav": 7.0, "guarantees": 6.0, "year": 2024 }
+            ],
+            "keyStats": [
+                { "label": "Career Interceptions", "value": "30", "rank": "1st in NFL" },
+                { "label": "All-Pro Honors", "value": "4x", "rank": "Elite Pedigree" },
+                { "label": "Passer Rating in Coverage", "value": "59.4", "rank": "Top 5 Safety" }
+            ]
+        }
+    },
+    {
+        "id": "stephon-gilmore",
+        "name": "Stephon Gilmore",
+        "position": "EDGE", # CB role in game engine
+        "positionFull": "Former Defensive Player of the Year / Boundary CB",
+        "age": 33,
+        "team": "Minnesota Vikings",
+        "teamLogoAbbr": "MIN",
+        "rating": 88,
+        "headshotUrl": get_headshot("Stephon Gilmore"),
+        "teamLogoUrl": get_team_logo("MIN"),
+        "teamColor": get_team_color("MIN"),
+        "college": "South Carolina",
+        "dataSource": "spotrac",
+        "tier": "JOURNEYMAN",
+        "situationalTag": "EMERGENCY CAMP SIGNING (SECONDARY INJURY REPLACEMENT)",
+        "contractType": "PROVE_IT",
+        "healthDurability": 86,
+        "schemeFitScore": 96,
+        "schemeType": "Man Coverage",
+        "publicLeverageScore": 86,
+        "patienceAndTrust": 82,
+        "currentStatus": "Pending Extension",
+        "currentSalary": 10.0,
+        "warRoom": {
+            "thesisStatement": "Minnesota suffered devastating training camp injuries in their secondary (Mekhi Blackmon torn ACL, Shaquill Griffin hamstring). Brian Flores' blitz-heavy scheme requires an experienced boundary corner who can hold up on an island.",
+            "leverageTimeline": [
+                "AUGUST 2: Vikings lose starting CB Blackmon to season-ending ACL injury in first scrimmage.",
+                "AUGUST 11: Kwesi Adofo-Mensah flies Gilmore in for emergency physical and meeting with Brian Flores.",
+                "AUGUST 18: Gilmore agrees to terms on a 1-year contract worth up to $10M ($7M fully guaranteed)."
+            ],
+            "replacementCost": {
+                "draftCapitalCost": "Zero draft options in August; waiver wire corners lack press-man capability.",
+                "rookieVarianceDelta": "Flores blitzes on 51% of snaps; playing backup corners in Cover 0 results in explosive touchdowns.",
+                "capOpportunityCost": "Minnesota has surplus cap space; paying for Gilmore prevents defensive collapse.",
+                "qbPressureDelta": "Allowed just 54.4% completion rate on 580 coverage snaps in Dallas in 2023.",
+                "pickWasted": "Round 1, Pick 10"
+            },
+            "targetAsk": {
+                "term": 1,
+                "totalValue": 10.0,
+                "aav": 10.0,
+                "practicalGuarantees": 7.0,
+                "firstYearCashFlowPct": 70
+            },
+            "comparables": [
+                { "player": "Patrick Peterson", "team": "PIT", "aav": 7.0, "guarantees": 5.8, "year": 2023 },
+                { "player": "Adoree' Jackson", "team": "NYG", "aav": 6.0, "guarantees": 4.5, "year": 2024 }
+            ],
+            "keyStats": [
+                { "label": "Pass Breakups (2023)", "value": "13", "rank": "Top 15 CB" },
+                { "label": "Snaps Played", "value": "1,002", "rank": "Iron Man" },
+                { "label": "Super Bowl Champion", "value": "SB LIII", "rank": "Proven Ring" }
+            ]
+        }
+    },
+    {
+        "id": "samaje-perine",
+        "name": "Samaje Perine",
+        "position": "RB",
+        "positionFull": "3rd-Down Pass Protection & Receiving Specialist",
+        "age": 28,
+        "team": "Denver Broncos",
+        "teamLogoAbbr": "DEN",
+        "rating": 84,
+        "headshotUrl": get_headshot("Samaje Perine", fallback="https://static.www.nfl.com/image/upload/f_auto,q_auto/league/wjaqkrtdhwf16wldi83h"),
+        "teamLogoUrl": get_team_logo("DEN"),
+        "teamColor": get_team_color("DEN"),
+        "college": "Oklahoma",
+        "dataSource": "spotrac",
+        "tier": "JOURNEYMAN",
+        "situationalTag": "53-MAN CUTDOWN BUBBLE (PASS-PRO SPECIALIST)",
+        "contractType": "PROVE_IT",
+        "healthDurability": 90,
+        "schemeFitScore": 93,
+        "schemeType": "Spread Option",
+        "publicLeverageScore": 76,
+        "patienceAndTrust": 72,
+        "currentStatus": "Pending Extension",
+        "currentSalary": 3.0,
+        "warRoom": {
+            "thesisStatement": "Perine is on the roster bubble in Denver due to youth movement. However, elite contenders like Kansas City desperately need a trusted veteran who catches passes and picks up blitzes on 3rd-and-long.",
+            "leverageTimeline": [
+                "CAMP SCRIMMAGE: Denver gives lion's share of carries to younger backs Javonte Williams and Jaleel McLaughlin.",
+                "CUTDOWN APPROACH: Denver shops Perine for a late-round pick; releases him prior to Week 1.",
+                "KC SIGNING: Chiefs immediately sign him to replace Clyde Edwards-Helaire on passing downs."
+            ],
+            "replacementCost": {
+                "draftCapitalCost": "Costs zero draft picks if claimed or signed after cutdown.",
+                "rookieVarianceDelta": "Rookie running backs blow blitz pickups 42% of the time, risking quarterback injury.",
+                "capOpportunityCost": "Minimum cap investment ($1.5M - $3M) for Super Bowl tested 3rd-down competency.",
+                "qbPressureDelta": "50 receptions on 56 targets (89.3% catch rate) with zero blitz errors in 2023.",
+                "pickWasted": "Round 4, Pick 114"
+            },
+            "targetAsk": {
+                "term": 1,
+                "totalValue": 3.5,
+                "aav": 3.5,
+                "practicalGuarantees": 2.2,
+                "firstYearCashFlowPct": 65
+            },
+            "comparables": [
+                { "player": "Jerick McKinnon", "team": "KC", "aav": 1.3, "guarantees": 1.0, "year": 2023 },
+                { "player": "Latavius Murray", "team": "BUF", "aav": 1.3, "guarantees": 0.8, "year": 2023 }
+            ],
+            "keyStats": [
+                { "label": "Catch Rate", "value": "89.3%", "rank": "1st among RBs" },
+                { "label": "Pass Pro Grade", "value": "83.1", "rank": "Top 3 NFL" },
+                { "label": "Yards After Contact", "value": "3.2", "rank": "Power Back" }
+            ]
+        }
+    },
+
+    # ========================== ⚡ ROOKIES ==========================
+    {
+        "id": "malik-nabers",
+        "name": "Malik Nabers",
+        "position": "WR",
+        "positionFull": "Dynamic WR1 / #6 Overall Pick",
+        "age": 21,
+        "team": "New York Giants",
+        "teamLogoAbbr": "NYG",
+        "rating": 92,
+        "headshotUrl": get_headshot("Malik Nabers"),
+        "teamLogoUrl": get_team_logo("NYG"),
+        "teamColor": get_team_color("NYG"),
+        "college": "LSU",
+        "dataSource": "spotrac",
+        "tier": "ROOKIE",
+        "situationalTag": "ROOKIE SCALE DISPUTE (UPFRONT BONUS & ZERO-OFFSET)",
+        "contractType": "ROOKIE_SCALE",
+        "healthDurability": 94,
+        "schemeFitScore": 98,
+        "schemeType": "Spread Option",
+        "publicLeverageScore": 94,
+        "patienceAndTrust": 80,
+        "currentStatus": "Pending Extension",
+        "currentSalary": 7.3,
+        "warRoom": {
+            "thesisStatement": "While the 4-year, $29.2M total value is slotted by the CBA rookie wage scale, the strategic war room battle is over upfront signing bonus payment dates and the elimination of offset language.",
+            "leverageTimeline": [
+                "POST-DRAFT: Giants select Nabers #6 overall to be the franchise alpha receiver.",
+                "CAMP DISPUTE: Giants seek to defer 50% of the $18.1M signing bonus into 2025; RAID demands 100% payout within 15 days.",
+                "OFFSET BATTLE: Fighting to ensure zero offset language so Nabers retains full guarantees if ever traded or cut in Year 4."
+            ],
+            "replacementCost": {
+                "draftCapitalCost": "Giants invested Pick 6; Daniel Jones' career survival hinges entirely on Nabers creating explosive separation.",
+                "rookieVarianceDelta": "Giants passing offense ranked 31st in explosive plays in 2023; Nabers creates instant 15+ yard threat.",
+                "capOpportunityCost": "100% slotted rookie cap hits ($5.3M in Year 1) provide massive surplus value compared to veteran WRs.",
+                "qbPressureDelta": "Led all college receivers in 2023 with 34 explosive catches of 20+ yards.",
+                "pickWasted": "Round 1, Pick 6"
+            },
+            "targetAsk": {
+                "term": 4,
+                "totalValue": 29.2,
+                "aav": 7.3,
+                "practicalGuarantees": 29.2,
+                "firstYearCashFlowPct": 65
+            },
+            "comparables": [
+                { "player": "Marvin Harrison Jr", "team": "ARI", "aav": 9.2, "guarantees": 36.8, "year": 2024 },
+                { "player": "Rome Odunze", "team": "CHI", "aav": 5.6, "guarantees": 22.7, "year": 2024 }
+            ],
+            "keyStats": [
+                { "label": "College Yds/Catch (2023)", "value": "17.6", "rank": "1st in FBS" },
+                { "label": "Slotted Signing Bonus", "value": "$18.1M", "rank": "100% Guaranteed" },
+                { "label": "Explosive Plays (20+ yds)", "value": "34", "rank": "Nation Leader" }
+            ]
+        }
+    },
+    {
+        "id": "joe-alt",
+        "name": "Joe Alt",
+        "position": "OT",
+        "positionFull": "Foundational Right Tackle / #5 Overall Pick",
+        "age": 21,
+        "team": "Los Angeles Chargers",
+        "teamLogoAbbr": "LAC",
+        "rating": 91,
+        "headshotUrl": get_headshot("Joe Alt"),
+        "teamLogoUrl": get_team_logo("LAC"),
+        "teamColor": get_team_color("LAC"),
+        "college": "Notre Dame",
+        "dataSource": "spotrac",
+        "tier": "ROOKIE",
+        "situationalTag": "TOP-5 ROOKIE ANCHOR (RT TRANSITION)",
+        "contractType": "ROOKIE_SCALE",
+        "healthDurability": 96,
+        "schemeFitScore": 99,
+        "schemeType": "Power Gap",
+        "publicLeverageScore": 92,
+        "patienceAndTrust": 85,
+        "currentStatus": "Pending Extension",
+        "currentSalary": 8.3,
+        "warRoom": {
+            "thesisStatement": "Jim Harbaugh and Joe Hortiz drafted Joe Alt #5 overall to establish an impenetrable offensive line. Switching from Notre Dame LT to NFL RT, Alt's rookie contract structure establishes precedent for offensive tackle wage slotting.",
+            "leverageTimeline": [
+                "DRAFT DAY: Chargers pass on Malik Nabers to draft Alt, signaling a trench-first identity.",
+                "CAMP TRANSITION: Alt takes 100% of first-team right tackle reps against Joey Bosa and Khalil Mack in camp.",
+                "BONUS STRUCTURE: Negotiating immediate signing bonus distribution and roster workout escalator protections."
+            ],
+            "replacementCost": {
+                "draftCapitalCost": "Chargers spent #5 overall; Justin Herbert's pass protection is non-negotiable.",
+                "rookieVarianceDelta": "Chargers allowed 43 sacks in 2023; Alt pairing with Rashawn Slater forms an elite young tackle tandem.",
+                "capOpportunityCost": "Slotted 4-year, $33.2M deal saves $15M/yr compared to veteran tackle market.",
+                "qbPressureDelta": "Allowed only 1 sack on 712 pass-blocking snaps over his final two college seasons.",
+                "pickWasted": "Round 1, Pick 5"
+            },
+            "targetAsk": {
+                "term": 4,
+                "totalValue": 33.2,
+                "aav": 8.3,
+                "practicalGuarantees": 33.2,
+                "firstYearCashFlowPct": 65
+            },
+            "comparables": [
+                { "player": "Penei Sewell (Rookie)", "team": "DET", "aav": 6.0, "guarantees": 24.1, "year": 2021 },
+                { "player": "Peter Skoronski", "team": "TEN", "aav": 4.9, "guarantees": 19.6, "year": 2023 }
+            ],
+            "keyStats": [
+                { "label": "Pass Block Win Rate (College)", "value": "99.1%", "rank": "1st in Nation" },
+                { "label": "Height / Weight", "value": "6'9\" / 322 lbs", "rank": "Towering Frame" },
+                { "label": "Sacks Allowed (2 Yrs)", "value": "1", "rank": "Elite Anchor" }
             ]
         }
     }
 ]
 
-# Real NFL General Managers
-real_gms = {
-    "micah-parsons": {
+# Real Preseason General Managers
+real_preseason_gms = {
+    "ceedee-lamb": {
         "id": "gm-jerry-jones",
         "name": "Jerry Jones & Will McClay",
         "team": "Dallas Cowboys",
         "teamLogoUrl": get_team_logo("DAL"),
         "teamColor": get_team_color("DAL"),
         "archetype": "Win-Now Aggressor",
-        "philosophy": "Operates under intense owner vanity and championship urgency; fears media embarrassment and fan revolt, but drives a notoriously hard bargain on contract structure.",
+        "philosophy": "Operates under vanity, public drama, and owner ego; insists on dragging talks until public pressure peaks, then caves with massive guarantees.",
         "draftPick": "Round 1, Pick 24",
-        "teamCapSpace": 42.0,
-        "patience": 70,
-        "acceptanceScore": 38,
-        "currentMood": "Skeptical",
-        "currentStance": "We already made Dak and CeeDee the highest-paid players in the league. $35M+ AAV for Micah will crush our depth. We have the franchise tag, and we won't hesitate to use it."
-    },
-    "jamarr-chase": {
-        "id": "gm-duke-tobin",
-        "name": "Duke Tobin",
-        "team": "Cincinnati Bengals",
-        "teamLogoUrl": get_team_logo("CIN"),
-        "teamColor": get_team_color("CIN"),
-        "archetype": "Cap Conservative",
-        "philosophy": "Adheres strictly to traditional Cincinnati escrow rules; resists huge fully-guaranteed sums past Year 2 and prefers rolling March roster bonuses.",
-        "draftPick": "Round 1, Pick 18",
-        "teamCapSpace": 38.5,
-        "patience": 75,
-        "acceptanceScore": 42,
-        "currentMood": "Defensive",
-        "currentStance": "We love Ja'Marr and Joe Burrow wants him here forever. But we cannot guarantee $100M+ in cash into escrow without structural concessions. We won't break our team financial structure."
-    },
-    "tristan-wirfs": {
-        "id": "gm-jason-licht",
-        "name": "Jason Licht",
-        "team": "Tampa Bay Buccaneers",
-        "teamLogoUrl": get_team_logo("TB"),
-        "teamColor": get_team_color("TB"),
-        "archetype": "Analytics/Value GM",
-        "philosophy": "Calculates offensive line continuity as essential franchise health; willing to pay premium AAV if late-year non-guaranteed fluff preserves cap flexibility.",
-        "draftPick": "Round 1, Pick 26",
-        "teamCapSpace": 31.0,
-        "patience": 82,
-        "acceptanceScore": 46,
-        "currentMood": "Intrigued",
-        "currentStance": "Tristan is our best player, period. Sewell's $28M is our ceiling, but if you give us flexibility on Year 4 roster vesting, we can get this done before training camp."
-    },
-    "kyle-hamilton": {
-        "id": "gm-eric-decosta",
-        "name": "Eric DeCosta",
-        "team": "Baltimore Ravens",
-        "teamLogoUrl": get_team_logo("BAL"),
-        "teamColor": get_team_color("BAL"),
-        "archetype": "Analytics/Value GM",
-        "philosophy": "Master of compensatory pick formula and 3-year cash flow; calculates strict surplus value, but recognizes generational homegrown talent.",
-        "draftPick": "Round 1, Pick 30",
-        "teamCapSpace": 26.4,
-        "patience": 80,
+        "teamCapSpace": 22.4,
+        "patience": 65,
         "acceptanceScore": 45,
-        "currentMood": "Intrigued",
-        "currentStance": "Kyle is the soul of our defense. We're ready to make him the highest-paid safety in NFL history, but your $22M ask is approaching pass rusher money. Let's find common ground."
+        "currentMood": "Skeptical",
+        "currentStance": "I've said it before: I don't have a sense of urgency. We have CeeDee under contract for $17.9M. If he wants $34M like Justin Jefferson, he needs to come to camp and stop the fines."
     },
-    "sauce-gardner": {
+    "trent-williams": {
+        "id": "gm-john-lynch",
+        "name": "John Lynch & Kyle Shanahan",
+        "team": "San Francisco 49ers",
+        "teamLogoUrl": get_team_logo("SF"),
+        "teamColor": get_team_color("SF"),
+        "archetype": "Win-Now Aggressor",
+        "philosophy": "Urgent championship window after Super Bowl LVIII heartbreak; recognizes that Brock Purdy and Christian McCaffrey cannot function without Trent Williams.",
+        "draftPick": "Round 1, Pick 31",
+        "teamCapSpace": 48.0,
+        "patience": 78,
+        "acceptanceScore": 52,
+        "currentMood": "Cornered",
+        "currentStance": "We respect Trent more than any player in this locker room. But he has 3 years left on his deal. We are willing to convert his non-guaranteed base into upfront signing bonus cash, but we need cap room for Aiyuk."
+    },
+    "haason-reddick": {
         "id": "gm-joe-douglas",
         "name": "Joe Douglas",
         "team": "New York Jets",
         "teamLogoUrl": get_team_logo("NYJ"),
         "teamColor": get_team_color("NYJ"),
         "archetype": "Analytics/Value GM",
-        "philosophy": "Former offensive lineman who values defensive trenches and lockdown perimeter play; demands disciplined contract architecture.",
+        "philosophy": "Disciplined trenches evaluator who refuses to be extorted by trade acquisitions; holds firm on team leverage despite escalating media noise.",
         "draftPick": "Round 1, Pick 10",
-        "teamCapSpace": 34.0,
-        "patience": 78,
-        "acceptanceScore": 44,
-        "currentMood": "Intrigued",
-        "currentStance": "Sauce is the premier corner in football. We know Surtain got $24M. We are prepared to match that tier, but $25.5M with $68M guaranteed requires late-year escape hatches."
-    },
-    "breece-hall": {
-        "id": "gm-joe-douglas-rb",
-        "name": "Joe Douglas",
-        "team": "New York Jets",
-        "teamLogoUrl": get_team_logo("NYJ"),
-        "teamColor": get_team_color("NYJ"),
-        "archetype": "Cap Conservative",
-        "philosophy": "Wary of running back second-contract cliffs; resists heavy guarantees past Year 2.",
-        "draftPick": "Round 1, Pick 10",
-        "teamCapSpace": 34.0,
-        "patience": 70,
-        "acceptanceScore": 48,
+        "teamCapSpace": 16.8,
+        "patience": 55,
+        "acceptanceScore": 38,
         "currentMood": "Defensive",
-        "currentStance": "Breece is a game-breaker, but NFL history with running back extensions after 500 touches is treacherous. 3 years is acceptable, but only Year 1 and 2 can be guaranteed."
+        "currentStance": "We traded for Haason with the understanding he would play on his existing contract. We will NOT negotiate an extension while he is incurring daily holdout fines. Report to camp, and we will talk."
+    },
+    "justin-simmons": {
+        "id": "gm-terry-fontenot",
+        "name": "Terry Fontenot",
+        "team": "Atlanta Falcons",
+        "teamLogoUrl": get_team_logo("ATL"),
+        "teamColor": get_team_color("ATL"),
+        "archetype": "Win-Now Aggressor",
+        "philosophy": "All-in on winning the NFC South with veteran acquisitions (Kirk Cousins, Matthew Judon); views Simmons as the final championship defensive piece.",
+        "draftPick": "Round 1, Pick 8",
+        "teamCapSpace": 12.2,
+        "patience": 85,
+        "acceptanceScore": 55,
+        "currentMood": "Intrigued",
+        "currentStance": "We have Jessie Bates holding down free safety. If you agree to a 1-year deal at $7.5M with $4.5M guaranteed, we can insert $2M in playoff/Pro Bowl escalators and finalize before Week 1."
+    },
+    "stephon-gilmore": {
+        "id": "gm-kwesi-adofo-mensah",
+        "name": "Kwesi Adofo-Mensah",
+        "team": "Minnesota Vikings",
+        "teamLogoUrl": get_team_logo("MIN"),
+        "teamColor": get_team_color("MIN"),
+        "archetype": "Analytics/Value GM",
+        "philosophy": "Wall Street analytics background; normally resists paying aging veterans, but injury emergency in secondary forces a calculated short-term overpay.",
+        "draftPick": "Round 1, Pick 10",
+        "teamCapSpace": 19.5,
+        "patience": 80,
+        "acceptanceScore": 60,
+        "currentMood": "Pressured",
+        "currentStance": "Brian Flores wants Gilmore in press-man on Day 1. We can do 1 year, $10M with $7M fully guaranteed. That protects your client and solves our catastrophic camp injuries."
+    },
+    "samaje-perine": {
+        "id": "gm-brett-veach",
+        "name": "Brett Veach",
+        "team": "Kansas City Chiefs",
+        "teamLogoUrl": get_team_logo("KC"),
+        "teamColor": get_team_color("KC"),
+        "archetype": "Win-Now Aggressor",
+        "philosophy": "Master of veteran 3rd-down role players; prioritizes blitz pickup security for Patrick Mahomes over raw athletic upside.",
+        "draftPick": "Round 1, Pick 32",
+        "teamCapSpace": 15.0,
+        "patience": 80,
+        "acceptanceScore": 50,
+        "currentMood": "Intrigued",
+        "currentStance": "We need a veteran who doesn't miss blitz assignments on 3rd down. If Denver waives him, we'll sign him to a 1-year, $1.5M deal with per-game active roster bonuses."
+    },
+    "malik-nabers": {
+        "id": "gm-joe-schoen",
+        "name": "Joe Schoen",
+        "team": "New York Giants",
+        "teamLogoUrl": get_team_logo("NYG"),
+        "teamColor": get_team_color("NYG"),
+        "archetype": "Cap Conservative",
+        "philosophy": "Disciplined cap architect; respects rookie wage scale boundaries and refuses to set dangerous organizational precedent on offset language.",
+        "draftPick": "Round 1, Pick 6",
+        "teamCapSpace": 18.0,
+        "patience": 75,
+        "acceptanceScore": 48,
+        "currentMood": "Intrigued",
+        "currentStance": "The 4-year, $29.2M deal is fixed by the CBA slotting. We are willing to accelerate 70% of the signing bonus into 2024, but standard club offset language must remain."
+    },
+    "joe-alt": {
+        "id": "gm-joe-hortiz",
+        "name": "Joe Hortiz & Jim Harbaugh",
+        "team": "Los Angeles Chargers",
+        "teamLogoUrl": get_team_logo("LAC"),
+        "teamColor": get_team_color("LAC"),
+        "archetype": "Analytics/Value GM",
+        "philosophy": "Baltimore Ravens pedigree; built from the inside out. Believes offensive line is the bedrock of championship football.",
+        "draftPick": "Round 1, Pick 5",
+        "teamCapSpace": 22.0,
+        "patience": 85,
+        "acceptanceScore": 55,
+        "currentMood": "Ready to Sign",
+        "currentStance": "Joe Alt is our cornerstone right tackle. We're ready to sign the standard 4-year slotted deal ($33.2M fully guaranteed) with upfront bonus payout. Let's get him on the field."
     }
 }
 
-# Real Scouting Prospects & Free Agents
-real_prospects = [
-    {
-        "id": "travis-hunter",
-        "name": "Travis Hunter",
-        "position": "EDGE",
-        "positionFull": "Generational Two-Way Unicorn (CB / WR)",
-        "age": 21,
-        "team": "Draft Prospect (Colorado)",
-        "teamLogoAbbr": "PROS",
-        "rating": 94,
-        "headshotUrl": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/cesiygq2rdbzr5ilwixy",
-        "teamLogoUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/nfl.png",
-        "teamColor": "#00f0ff",
-        "college": "Colorado",
-        "dataSource": "nflverse",
-        "healthDurability": 95,
-        "schemeFitScore": 99,
-        "schemeType": "Man Coverage",
-        "publicLeverageScore": 98,
-        "patienceAndTrust": 80,
-        "currentStatus": "Unrestricted Free Agent",
-        "currentSalary": 0,
-        "warRoom": {
-            "thesisStatement": "Hunter is unprecedented in modern football: 1,000+ snaps playing elite lockdown boundary corner AND explosive wide receiver. His dual-position contract valuation breaks traditional NFL slotting formulas.",
-            "leverageTimeline": [
-                "Combine: Recorded elite athletic testing; NFL front offices debating which room he drafts into.",
-                "Top-3 Pick Guarantee: Projected top-3 overall selection yields a fully guaranteed $40M rookie deal."
-            ],
-            "replacementCost": {
-                "draftCapitalCost": "Requires Top 3 overall pick; completely transforms both offense and defense for drafting team.",
-                "rookieVarianceDelta": "Generates 2 starting roster spots on a single rookie cap hit.",
-                "capOpportunityCost": "Saves $30M in veteran free agency across WR and CB positions.",
-                "qbPressureDelta": "4 interceptions and 9 touchdowns in 2024 season.",
-                "pickWasted": "Top 3 Overall"
-            },
-            "targetAsk": {
-                "term": 4,
-                "totalValue": 42,
-                "aav": 10.5,
-                "practicalGuarantees": 42,
-                "firstYearCashFlowPct": 45
-            },
-            "comparables": [
-                { "player": "Marvin Harrison Jr", "team": "ARI", "aav": 9.2, "guarantees": 36.8, "year": 2024 }
-            ],
-            "keyStats": [
-                { "label": "Snaps per Game", "value": "125+", "rank": "Unprecedented" },
-                { "label": "Touchdowns + INTs", "value": "13", "rank": "Historic" },
-                { "label": "Paul Hornung Award", "value": "Winner", "rank": "Top Athlete" }
-            ]
-        }
-    },
-    {
-        "id": "trey-hendrickson",
-        "name": "Trey Hendrickson",
-        "position": "EDGE",
-        "positionFull": "Elite Power Pass Rusher",
-        "age": 29,
-        "team": "Cincinnati Bengals (Requested Trade)",
-        "teamLogoAbbr": "CIN",
-        "rating": 91,
-        "headshotUrl": get_headshot("Trey Hendrickson"),
-        "teamLogoUrl": get_team_logo("CIN"),
-        "teamColor": get_team_color("CIN"),
-        "college": "Florida Atlantic",
-        "dataSource": "spotrac",
-        "healthDurability": 88,
-        "schemeFitScore": 94,
-        "schemeType": "Power Gap",
-        "publicLeverageScore": 86,
-        "patienceAndTrust": 64,
-        "currentStatus": "Unrestricted Free Agent",
-        "currentSalary": 14.8,
-        "warRoom": {
-            "thesisStatement": "Hendrickson has tallied 39.5 sacks over the last three seasons. Amid contract disputes with Cincinnati, rival contenders are actively preparing trade-and-extend packages.",
-            "leverageTimeline": [
-                "Trade Market: Multiple playoff contenders inquiring with Cincinnati.",
-                "Contract Goal: Seeking $26M+ AAV with 2 years fully guaranteed to match market inflation."
-            ],
-            "replacementCost": {
-                "draftCapitalCost": "Trading team must surrender a 2nd round pick; saves drafting rookie edge.",
-                "rookieVarianceDelta": "Guarantees 12+ sacks in year 1 with zero development curve.",
-                "capOpportunityCost": "Rival edge rushers cost $28M+ in unrestricted free agency.",
-                "qbPressureDelta": "17.5 sacks in 2023, 11 sacks in 2024.",
-                "pickWasted": "Round 2, Pick 52"
-            },
-            "targetAsk": {
-                "term": 3,
-                "totalValue": 78,
-                "aav": 26.0,
-                "practicalGuarantees": 52,
-                "firstYearCashFlowPct": 42
-            },
-            "comparables": [
-                { "player": "Danielle Hunter", "team": "HOU", "aav": 24.5, "guarantees": 48.0, "year": 2024 },
-                { "player": "Montez Sweat", "team": "CHI", "aav": 24.5, "guarantees": 62.0, "year": 2023 }
-            ],
-            "keyStats": [
-                { "label": "Sacks (3-Yr Total)", "value": "39.5", "rank": "Top 3 in NFL" },
-                { "label": "Pass Rush Win Rate", "value": "20.8%", "rank": "Elite" },
-                { "label": "Pro Bowls", "value": "3x", "rank": "Consistently Elite" }
-            ]
-        }
-    }
-]
-
-# Write to src/data/realNflData.ts
+# Output to src/data/realNflData.ts
 output_path = os.path.abspath("src/data/realNflData.ts")
 os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
 ts_content = f"""// AUTO-GENERATED BY scripts/sync_nfl_data.py
-// Connected to nflverse-data (rosters, headshots, logos) and Spotrac (contract metrics)
+// Preseason 2024 NFL Roster Realignment: Stars, Journeymen & Rookies
 // Synced: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 
 import {{ Client, GMProfile }} from '../types/game';
 
-export const REAL_NFL_CLIENTS: Client[] = {json.dumps(real_clients, indent=2)};
+export const REAL_NFL_CLIENTS: Client[] = {json.dumps(real_preseason_clients, indent=2)};
 
-export const REAL_GM_PROFILES: Record<string, GMProfile> = {json.dumps(real_gms, indent=2)};
+export const REAL_GM_PROFILES: Record<string, GMProfile> = {json.dumps(real_preseason_gms, indent=2)};
 
-export const REAL_SCOUTING_PROSPECTS: Client[] = {json.dumps(real_prospects, indent=2)};
+export const REAL_SCOUTING_PROSPECTS: Client[] = {json.dumps([c for c in real_preseason_clients if c["tier"] == "ROOKIE" or c["tier"] == "JOURNEYMAN"], indent=2)};
 
 export const NFL_DATA_SOURCE_META = {{
   sourceNflverse: "https://github.com/nflverse/nflverse-data",
@@ -641,11 +667,11 @@ export const NFL_DATA_SOURCE_META = {{
   totalRosteredPlayers: {len(players)},
   totalTeams: {len(teams)},
   lastSyncTimestamp: "{datetime.now().isoformat()}",
-  status: "ACTIVE_CONNECTED"
+  status: "PRESEASON_2024_ACTIVE"
 }};
 """
 
 with open(output_path, "w", encoding="utf-8") as f:
     f.write(ts_content)
 
-print(f"✓ Successfully generated {output_path} with {len(real_clients)} real NFL superstars & {len(real_gms)} real NFL GMs!")
+print(f"✓ Generated {output_path} with {len(real_preseason_clients)} preseason clients across Stars, Journeymen, and Rookies!")

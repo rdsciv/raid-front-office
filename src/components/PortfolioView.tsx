@@ -30,10 +30,12 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({
   onOpenNegotiation,
   onOpenRecruitment
 }) => {
-  const [filter, setFilter] = useState<'ALL' | 'PENDING' | 'SIGNED'>('ALL');
+  const [filter, setFilter] = useState<'ALL' | 'STAR' | 'JOURNEYMAN' | 'ROOKIE' | 'SIGNED'>('ALL');
 
   const filteredClients = clients.filter(c => {
-    if (filter === 'PENDING') return c.currentStatus === 'Pending Extension' || c.currentStatus === 'Impasse';
+    if (filter === 'STAR') return c.tier === 'STAR';
+    if (filter === 'JOURNEYMAN') return c.tier === 'JOURNEYMAN';
+    if (filter === 'ROOKIE') return c.tier === 'ROOKIE';
     if (filter === 'SIGNED') return c.currentStatus === 'Signed';
     return true;
   });
@@ -50,23 +52,23 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({
           <h1 className="text-2xl sm:text-3xl font-display font-bold text-white tracking-wide flex items-center gap-3">
             <span>CLIENT PORTFOLIO</span>
             <span className="text-xs px-2.5 py-1 rounded bg-cyan-950/80 border border-cyan-700/60 text-cyan-400 font-mono">
-              RAID STRATEGY ROSTER
+              PRESEASON 2024
             </span>
           </h1>
           <p className="text-sm text-slate-400 mt-1">
-            High-leverage NFL contract strategy, scheme continuity valuation, and GM negotiations.
+            Navigate training camp holdouts, prove-it veteran signings, and rookie wage scale battles.
           </p>
         </div>
 
         {/* Filter Tabs & Scout CTA */}
-        <div className="flex items-center gap-3">
-          <div className="flex items-center p-1 rounded-lg bg-[#0e1628] border border-[#203150] text-xs font-mono">
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+          <div className="flex items-center p-1 rounded-lg bg-[#0e1628] border border-[#203150] text-xs font-mono flex-wrap">
             <button
               onClick={() => {
                 audio.playClick();
                 setFilter('ALL');
               }}
-              className={`px-3 py-1.5 rounded-md transition-all ${
+              className={`px-2.5 py-1.5 rounded-md transition-all ${
                 filter === 'ALL' ? 'bg-cyan-500 text-black font-bold shadow' : 'text-slate-400 hover:text-white'
               }`}
             >
@@ -75,21 +77,43 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({
             <button
               onClick={() => {
                 audio.playClick();
-                setFilter('PENDING');
+                setFilter('STAR');
               }}
-              className={`px-3 py-1.5 rounded-md transition-all ${
-                filter === 'PENDING' ? 'bg-cyan-500 text-black font-bold shadow' : 'text-slate-400 hover:text-white'
+              className={`px-2.5 py-1.5 rounded-md transition-all ${
+                filter === 'STAR' ? 'bg-amber-500 text-black font-bold shadow' : 'text-slate-400 hover:text-white'
               }`}
             >
-              ACTIVE DEALS ({clients.filter(c => c.currentStatus !== 'Signed').length})
+              ⭐ STARS ({clients.filter(c => c.tier === 'STAR').length})
+            </button>
+            <button
+              onClick={() => {
+                audio.playClick();
+                setFilter('JOURNEYMAN');
+              }}
+              className={`px-2.5 py-1.5 rounded-md transition-all ${
+                filter === 'JOURNEYMAN' ? 'bg-cyan-400 text-black font-bold shadow' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              🛠️ JOURNEYMEN ({clients.filter(c => c.tier === 'JOURNEYMAN').length})
+            </button>
+            <button
+              onClick={() => {
+                audio.playClick();
+                setFilter('ROOKIE');
+              }}
+              className={`px-2.5 py-1.5 rounded-md transition-all ${
+                filter === 'ROOKIE' ? 'bg-emerald-400 text-black font-bold shadow' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              ⚡ ROOKIES ({clients.filter(c => c.tier === 'ROOKIE').length})
             </button>
             <button
               onClick={() => {
                 audio.playClick();
                 setFilter('SIGNED');
               }}
-              className={`px-3 py-1.5 rounded-md transition-all ${
-                filter === 'SIGNED' ? 'bg-cyan-500 text-black font-bold shadow' : 'text-slate-400 hover:text-white'
+              className={`px-2.5 py-1.5 rounded-md transition-all ${
+                filter === 'SIGNED' ? 'bg-purple-500 text-white font-bold shadow' : 'text-slate-400 hover:text-white'
               }`}
             >
               SIGNED ({clients.filter(c => c.currentStatus === 'Signed').length})
@@ -196,8 +220,24 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({
                   </div>
                 </div>
 
+                {/* Tier Badge & Situational Tag */}
+                <div className="mt-3 flex items-center gap-2 flex-wrap">
+                  <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${
+                    client.tier === 'STAR' ? 'bg-amber-950/80 text-amber-300 border-amber-700/60' :
+                    client.tier === 'JOURNEYMAN' ? 'bg-cyan-950/80 text-cyan-300 border-cyan-700/60' :
+                    'bg-emerald-950/80 text-emerald-300 border-emerald-700/60'
+                  }`}>
+                    {client.tier === 'STAR' ? '⭐ STAR' : client.tier === 'JOURNEYMAN' ? '🛠️ JOURNEYMAN' : '⚡ ROOKIE'}
+                  </span>
+                  {client.situationalTag && (
+                    <span className="text-[10px] font-mono text-slate-300 bg-[#090f1d] px-2 py-0.5 rounded border border-[#1b2b48]">
+                      {client.situationalTag}
+                    </span>
+                  )}
+                </div>
+
                 {/* Thesis Preview */}
-                <div className="mt-3 text-xs text-slate-300 bg-[#090f1d] p-2.5 rounded-lg border border-[#1a2844] italic">
+                <div className="mt-2 text-xs text-slate-300 bg-[#090f1d] p-2.5 rounded-lg border border-[#1a2844] italic">
                   "{client.warRoom.thesisStatement}"
                 </div>
               </div>

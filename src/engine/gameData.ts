@@ -3,51 +3,43 @@ import { Client, GMProfile, OffseasonPhase, NewsItem, TacticalMove } from '../ty
 export const OFFSEASON_PHASES: OffseasonPhase[] = [
   {
     id: 0,
-    name: 'NFL Combine (Indianapolis)',
-    shortName: 'COMBINE',
-    description: 'Exclusive team extension windows; GMs float initial test balloons over steak dinners.',
+    name: 'August Training Camp Opening (Holdout & Hold-in Sagas)',
+    shortName: 'CAMP OPEN',
+    description: 'Vested veterans report. Unhappy superstars stage hold-ins while daily mandatory fines accumulate.',
     daysRemaining: 14,
     isDraft: false
   },
   {
     id: 1,
-    name: 'Pre-Free Agency & Tag Window',
-    shortName: 'TAG WINDOW',
-    description: 'Franchise tag deadline looms. Teams must commit capital or prepare for open auctions.',
-    daysRemaining: 10,
+    name: 'Preseason Week 1 & Joint Practices',
+    shortName: 'PRESEASON W1',
+    description: 'First live scrimmage snaps against rival teams. Backup vulnerabilities and scheme breakdowns surface.',
+    daysRemaining: 7,
     isDraft: false
   },
   {
     id: 2,
-    name: 'Legal Tampering Window',
-    shortName: 'TAMPERING',
-    description: 'Outside suitors backchannel offers. Maximum leverage clock pressure on incumbent teams.',
-    daysRemaining: 3,
+    name: 'Preseason Week 2 & Injury Wire',
+    shortName: 'PRESEASON W2',
+    description: 'Camp attrition hits. Front offices scramble for veteran free agent insurance and contract resolutions.',
+    daysRemaining: 7,
     isDraft: false
   },
   {
     id: 3,
-    name: 'Free Agency Wave 1',
-    shortName: 'FREE AGENCY',
-    description: 'Massive cap dollars deploy within 48 hours. Rival signings reset positional floors.',
-    daysRemaining: 14,
+    name: 'The 53-Man Cutdown Deadline',
+    shortName: 'CUTDOWN DAY',
+    description: 'Rosters slashed from 90 to 53 players. Vested veteran guarantees crystallize; bubble players test waivers.',
+    daysRemaining: 5,
     isDraft: false
   },
   {
     id: 4,
-    name: 'Pre-Draft War Room',
-    shortName: 'PRE-DRAFT',
-    description: 'Draft boards lock. Teams choose between rookie gamble or proven veteran continuity.',
-    daysRemaining: 21,
+    name: 'NFL Week 1 Season Kickoff',
+    shortName: 'SEASON KICKOFF',
+    description: 'Opening kickoff countdown. Final deadline to avoid Week 1 game-check forfeiture and holdout penalties.',
+    daysRemaining: 1,
     isDraft: false
-  },
-  {
-    id: 5,
-    name: 'NFL Draft Weekend',
-    shortName: 'NFL DRAFT',
-    description: 'Picks are executed on the clock. Option values crystallize; final contract windows.',
-    daysRemaining: 3,
-    isDraft: true
   }
 ];
 
@@ -385,55 +377,55 @@ export const NEWS_BY_PHASE: Record<number, NewsItem[]> = {
     {
       id: 'news-0-1',
       phaseId: 0,
-      tag: 'CAP',
-      headline: 'NFL Sets 2026 Salary Cap at Record $255.4M',
-      detail: 'A surprise $30M cap surge injects massive cash reserves into all 32 front offices.'
+      tag: 'LEAK',
+      headline: 'Jerry Jones on CeeDee Lamb Holdout: "I Don\'t Have Any Sense of Urgency"',
+      detail: 'Cowboys owner causes public firestorm; Lamb responds with cryptic social media post as $50k daily fines pile up.'
     },
     {
       id: 'news-0-2',
       phaseId: 0,
       tag: 'MARKET',
-      headline: 'Detroit Lions Reset Tackle Market with $21M/yr Extension',
-      detail: 'Penei Sewell\'s new deal establishes an aggressive new baseline for all elite linemen.'
+      headline: 'Trent Williams Preseason Holdout Stalls 49ers Offense',
+      detail: 'Kyle Shanahan confirms offense struggling in red zone during joint practice reps without Trent anchoring left tackle.'
     },
     {
       id: 'news-0-3',
       phaseId: 0,
-      tag: 'LEAK',
-      headline: 'Carolina Panthers Rumored to Covet Edge Rushers at Pick 8',
-      detail: 'Scouts confirm the draft drop-off after the top two edge rushers is steep.'
+      tag: 'CONTRACT',
+      headline: 'Haason Reddick Refuses Jets Training Camp Report Date',
+      detail: 'Acquired via trade from Philadelphia, Reddick demands a multi-year extension before taking a single snap.'
     }
   ],
   1: [
     {
       id: 'news-1-1',
       phaseId: 1,
-      tag: 'CONTRACT',
-      headline: 'Kansas City Franchises Star Defender for $18.8M',
-      detail: 'Tag triggers salary floor shockwave across AFC contenders.'
+      tag: 'MARKET',
+      headline: 'Vikings Suffer Crushing Cornerback Camp Injuries in Scrimmage',
+      detail: 'Minnesota secondary in emergency scramble; GM Kwesi Adofo-Mensah actively calling veteran free agents.'
     },
     {
       id: 'news-1-2',
       phaseId: 1,
-      tag: 'MARKET',
-      headline: 'Veteran OT Suffers Achilles Rupture in Training',
-      detail: 'Market demand for healthy, proven pass protectors spikes by 35% overnight.'
+      tag: 'LEAK',
+      headline: 'Malik Nabers Dominates Joint Practices with Lions Secondary',
+      detail: 'Giants rookie receiver records 3 touchdown catches; front office anxious to finalize contract details.'
     }
   ],
   2: [
     {
       id: 'news-2-1',
       phaseId: 2,
-      tag: 'LEAK',
-      headline: 'Tampering Window Explodes: Las Vegas Prepares $100M Cap Spree',
-      detail: 'Multiple teams aggressively contacting player representation under the table.'
+      tag: 'CONTRACT',
+      headline: 'Atlanta Falcons Sign All-Pro Safety Justin Simmons to 1-Year Deal',
+      detail: 'Terry Fontenot bolsters defense with a late preseason free agent splash to chase the NFC South title.'
     },
     {
       id: 'news-2-2',
       phaseId: 2,
       tag: 'MARKET',
-      headline: 'Safety Market Heats Up as Buffalo Signs Veteran to $16M AAV Deal',
-      detail: 'Second-tier defensive backs setting unexpectedly high salary floors.'
+      headline: 'Rookie Tackle Joe Alt Shuts Down Premier Pass Rushers in Preseason Game',
+      detail: 'Chargers right tackle allows zero pressures on 22 pass-blocking snaps against starters.'
     }
   ],
   3: [
@@ -441,40 +433,24 @@ export const NEWS_BY_PHASE: Record<number, NewsItem[]> = {
       id: 'news-3-1',
       phaseId: 3,
       tag: 'MARKET',
-      headline: 'Day 1 Free Agency Frenzy: Over $1.2 Billion Committed',
-      detail: 'Front offices panic-buy remaining top-tier talent as cap space burns rapidly.'
+      headline: 'NFL 53-Man Cutdown Frenzy: Over 1,100 Players Waived Across 32 Teams',
+      detail: 'Vested veterans hit the market with zero waiver restrictions; contenders hunt for backup running backs and edge rushers.'
     },
     {
       id: 'news-3-2',
       phaseId: 3,
       tag: 'CAP',
-      headline: 'Miami Dolphins Clear $22M with Restructures for Championship Push',
-      detail: 'Dolphins aggressively positioning themselves to retain homegrown superstars.'
+      headline: 'Roster Vesting Deadline: Vested Veteran Base Salaries Guarantee on Week 1',
+      detail: 'Front offices face 4:00 PM deadline to restructure bubble veterans or risk full-season salary guarantees.'
     }
   ],
   4: [
     {
       id: 'news-4-1',
       phaseId: 4,
-      tag: 'DRAFT',
-      headline: 'NFL Draft Buzz: Top 3 QB Run Expected Early in Round 1',
-      detail: 'Tackles and edge defenders will slide down the board, altering draft option math.'
-    },
-    {
-      id: 'news-4-2',
-      phaseId: 4,
-      tag: 'LEAK',
-      headline: 'Anonymous Scout: "Rookie Tackle Class Has Serious Anchor Issues"',
-      detail: 'Concerns mount over the ability of rookie offensive linemen to withstand bull-rushes.'
-    }
-  ],
-  5: [
-    {
-      id: 'news-5-1',
-      phaseId: 5,
-      tag: 'DRAFT',
-      headline: 'Draft Night Commences: High Stakes Trades Rock Round 1',
-      detail: 'Final hour for teams to solve roster vacancies before draft picks are spent.'
+      tag: 'CONTRACT',
+      headline: 'Week 1 Season Kickoff: Blockbuster Extensions Finalized at the 11th Hour',
+      detail: 'Star holdouts report as front offices cave to avoid losing starters for opening weekend.'
     }
   ]
 };
