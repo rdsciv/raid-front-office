@@ -1,5 +1,5 @@
 {
-  "name": "raid-front-office",
+  "name": "nfl-card-grading-arbitrage",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -9,10 +9,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/react-table": "^8.21.3",
     "clsx": "^2.1.1",
     "lucide-react": "^0.475.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "recharts": "^3.10.1",
     "tailwind-merge": "^2.6.0"
   },
   "devDependencies": {

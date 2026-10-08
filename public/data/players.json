@@ -1,0 +1,767 @@
+[
+  {
+    "player_id": "00-0039163",
+    "name": "Marvin Harrison Jr.",
+    "position": "WR",
+    "team": "ARI",
+    "rookie_year": 2024,
+    "usage": {
+      "snap_pct": 0.86,
+      "route_participation_pct": 0.89,
+      "target_share": 0.24,
+      "air_yards_share": 0.38,
+      "wopr": 0.626,
+      "yprr": 2.15,
+      "rolling_3wk_wopr_delta": 0.043,
+      "weekly_history": [
+        {
+          "week": 1,
+          "targets": 3,
+          "target_share": 0.1,
+          "wopr": 0.22,
+          "epa": -0.05,
+          "raw_price": 50.0,
+          "psa10_price": 180.0
+        },
+        {
+          "week": 2,
+          "targets": 8,
+          "target_share": 0.36,
+          "wopr": 0.82,
+          "epa": 0.62,
+          "raw_price": 58.0,
+          "psa10_price": 210.0
+        },
+        {
+          "week": 3,
+          "targets": 11,
+          "target_share": 0.32,
+          "wopr": 0.74,
+          "epa": 0.44,
+          "raw_price": 52.0,
+          "psa10_price": 195.0
+        },
+        {
+          "week": 4,
+          "targets": 6,
+          "target_share": 0.21,
+          "wopr": 0.54,
+          "epa": 0.18,
+          "raw_price": 46.0,
+          "psa10_price": 170.0
+        },
+        {
+          "week": 5,
+          "targets": 7,
+          "target_share": 0.23,
+          "wopr": 0.59,
+          "epa": 0.25,
+          "raw_price": 45.0,
+          "psa10_price": 165.0
+        }
+      ]
+    }
+  },
+  {
+    "player_id": "00-0039344",
+    "name": "Malik Nabers",
+    "position": "WR",
+    "team": "NYG",
+    "rookie_year": 2024,
+    "usage": {
+      "snap_pct": 0.89,
+      "route_participation_pct": 0.94,
+      "target_share": 0.34,
+      "air_yards_share": 0.46,
+      "wopr": 0.832,
+      "yprr": 2.76,
+      "rolling_3wk_wopr_delta": 0.097,
+      "weekly_history": [
+        {
+          "week": 1,
+          "targets": 7,
+          "target_share": 0.25,
+          "wopr": 0.62,
+          "epa": 0.12,
+          "raw_price": 55.0,
+          "psa10_price": 190.0
+        },
+        {
+          "week": 2,
+          "targets": 18,
+          "target_share": 0.44,
+          "wopr": 1.05,
+          "epa": 0.78,
+          "raw_price": 75.0,
+          "psa10_price": 270.0
+        },
+        {
+          "week": 3,
+          "targets": 12,
+          "target_share": 0.35,
+          "wopr": 0.86,
+          "epa": 0.55,
+          "raw_price": 82.0,
+          "psa10_price": 310.0
+        },
+        {
+          "week": 4,
+          "targets": 15,
+          "target_share": 0.38,
+          "wopr": 0.91,
+          "epa": 0.64,
+          "raw_price": 80.0,
+          "psa10_price": 320.0
+        }
+      ]
+    }
+  },
+  {
+    "player_id": "00-0039910",
+    "name": "Jayden Daniels",
+    "position": "QB",
+    "team": "WAS",
+    "rookie_year": 2024,
+    "usage": {
+      "snap_pct": 0.98,
+      "route_participation_pct": 0.0,
+      "target_share": 0.0,
+      "air_yards_share": 0.0,
+      "wopr": 0.0,
+      "yprr": 0.0,
+      "rolling_3wk_wopr_delta": 0.0,
+      "weekly_history": [
+        {
+          "week": 1,
+          "targets": 0,
+          "target_share": 0.0,
+          "wopr": 0.0,
+          "epa": 0.18,
+          "raw_price": 95.0,
+          "psa10_price": 380.0
+        },
+        {
+          "week": 2,
+          "targets": 0,
+          "target_share": 0.0,
+          "wopr": 0.0,
+          "epa": 0.28,
+          "raw_price": 120.0,
+          "psa10_price": 490.0
+        },
+        {
+          "week": 3,
+          "targets": 0,
+          "target_share": 0.0,
+          "wopr": 0.0,
+          "epa": 0.58,
+          "raw_price": 160.0,
+          "psa10_price": 680.0
+        },
+        {
+          "week": 4,
+          "targets": 0,
+          "target_share": 0.0,
+          "wopr": 0.0,
+          "epa": 0.42,
+          "raw_price": 155.0,
+          "psa10_price": 650.0
+        }
+      ]
+    }
+  },
+  {
+    "player_id": "00-0039884",
+    "name": "Brian Thomas Jr.",
+    "position": "WR",
+    "team": "JAX",
+    "rookie_year": 2024,
+    "usage": {
+      "snap_pct": 0.81,
+      "route_participation_pct": 0.85,
+      "target_share": 0.22,
+      "air_yards_share": 0.35,
+      "wopr": 0.575,
+      "yprr": 2.45,
+      "rolling_3wk_wopr_delta": 0.09,
+      "weekly_history": [
+        {
+          "week": 1,
+          "targets": 4,
+          "target_share": 0.18,
+          "wopr": 0.44,
+          "epa": 0.35,
+          "raw_price": 22.0,
+          "psa10_price": 85.0
+        },
+        {
+          "week": 2,
+          "targets": 4,
+          "target_share": 0.17,
+          "wopr": 0.42,
+          "epa": 0.22,
+          "raw_price": 24.0,
+          "psa10_price": 90.0
+        },
+        {
+          "week": 3,
+          "targets": 9,
+          "target_share": 0.28,
+          "wopr": 0.69,
+          "epa": 0.48,
+          "raw_price": 32.0,
+          "psa10_price": 125.0
+        },
+        {
+          "week": 4,
+          "targets": 8,
+          "target_share": 0.27,
+          "wopr": 0.71,
+          "epa": 0.58,
+          "raw_price": 35.0,
+          "psa10_price": 140.0
+        }
+      ]
+    }
+  },
+  {
+    "player_id": "00-0039912",
+    "name": "Brock Bowers",
+    "position": "TE",
+    "team": "LV",
+    "rookie_year": 2024,
+    "usage": {
+      "snap_pct": 0.74,
+      "route_participation_pct": 0.79,
+      "target_share": 0.25,
+      "air_yards_share": 0.28,
+      "wopr": 0.571,
+      "yprr": 2.32,
+      "rolling_3wk_wopr_delta": 0.027,
+      "weekly_history": [
+        {
+          "week": 1,
+          "targets": 8,
+          "target_share": 0.26,
+          "wopr": 0.58,
+          "epa": 0.32,
+          "raw_price": 25.0,
+          "psa10_price": 105.0
+        },
+        {
+          "week": 2,
+          "targets": 9,
+          "target_share": 0.28,
+          "wopr": 0.63,
+          "epa": 0.45,
+          "raw_price": 32.0,
+          "psa10_price": 130.0
+        },
+        {
+          "week": 3,
+          "targets": 4,
+          "target_share": 0.14,
+          "wopr": 0.35,
+          "epa": -0.1,
+          "raw_price": 28.0,
+          "psa10_price": 115.0
+        },
+        {
+          "week": 4,
+          "targets": 8,
+          "target_share": 0.29,
+          "wopr": 0.66,
+          "epa": 0.38,
+          "raw_price": 30.0,
+          "psa10_price": 125.0
+        }
+      ]
+    }
+  },
+  {
+    "player_id": "00-0039915",
+    "name": "Caleb Williams",
+    "position": "QB",
+    "team": "CHI",
+    "rookie_year": 2024,
+    "usage": {
+      "snap_pct": 1.0,
+      "route_participation_pct": 0.0,
+      "target_share": 0.0,
+      "air_yards_share": 0.0,
+      "wopr": 0.0,
+      "yprr": 0.0,
+      "rolling_3wk_wopr_delta": 0.0,
+      "weekly_history": [
+        {
+          "week": 1,
+          "targets": 0,
+          "target_share": 0.0,
+          "wopr": 0.0,
+          "epa": -0.15,
+          "raw_price": 85.0,
+          "psa10_price": 320.0
+        },
+        {
+          "week": 2,
+          "targets": 0,
+          "target_share": 0.0,
+          "wopr": 0.0,
+          "epa": -0.22,
+          "raw_price": 70.0,
+          "psa10_price": 260.0
+        },
+        {
+          "week": 3,
+          "targets": 0,
+          "target_share": 0.0,
+          "wopr": 0.0,
+          "epa": 0.08,
+          "raw_price": 75.0,
+          "psa10_price": 280.0
+        },
+        {
+          "week": 4,
+          "targets": 0,
+          "target_share": 0.0,
+          "wopr": 0.0,
+          "epa": 0.22,
+          "raw_price": 82.0,
+          "psa10_price": 310.0
+        }
+      ]
+    }
+  },
+  {
+    "player_id": "00-0039890",
+    "name": "Xavier Worthy",
+    "position": "WR",
+    "team": "KC",
+    "rookie_year": 2024,
+    "usage": {
+      "snap_pct": 0.68,
+      "route_participation_pct": 0.72,
+      "target_share": 0.17,
+      "air_yards_share": 0.31,
+      "wopr": 0.472,
+      "yprr": 1.82,
+      "rolling_3wk_wopr_delta": 0.077,
+      "weekly_history": [
+        {
+          "week": 1,
+          "targets": 3,
+          "target_share": 0.12,
+          "wopr": 0.35,
+          "epa": 0.52,
+          "raw_price": 38.0,
+          "psa10_price": 160.0
+        },
+        {
+          "week": 2,
+          "targets": 4,
+          "target_share": 0.16,
+          "wopr": 0.44,
+          "epa": 0.1,
+          "raw_price": 35.0,
+          "psa10_price": 140.0
+        },
+        {
+          "week": 3,
+          "targets": 4,
+          "target_share": 0.15,
+          "wopr": 0.41,
+          "epa": 0.05,
+          "raw_price": 32.0,
+          "psa10_price": 130.0
+        },
+        {
+          "week": 4,
+          "targets": 6,
+          "target_share": 0.22,
+          "wopr": 0.58,
+          "epa": 0.42,
+          "raw_price": 36.0,
+          "psa10_price": 150.0
+        }
+      ]
+    }
+  },
+  {
+    "player_id": "00-0039894",
+    "name": "Ladd McConkey",
+    "position": "WR",
+    "team": "LAC",
+    "rookie_year": 2024,
+    "usage": {
+      "snap_pct": 0.72,
+      "route_participation_pct": 0.81,
+      "target_share": 0.26,
+      "air_yards_share": 0.32,
+      "wopr": 0.614,
+      "yprr": 2.28,
+      "rolling_3wk_wopr_delta": 0.033,
+      "weekly_history": [
+        {
+          "week": 1,
+          "targets": 7,
+          "target_share": 0.27,
+          "wopr": 0.62,
+          "epa": 0.38,
+          "raw_price": 20.0,
+          "psa10_price": 75.0
+        },
+        {
+          "week": 2,
+          "targets": 4,
+          "target_share": 0.2,
+          "wopr": 0.48,
+          "epa": 0.15,
+          "raw_price": 22.0,
+          "psa10_price": 80.0
+        },
+        {
+          "week": 3,
+          "targets": 6,
+          "target_share": 0.25,
+          "wopr": 0.59,
+          "epa": 0.24,
+          "raw_price": 24.0,
+          "psa10_price": 95.0
+        },
+        {
+          "week": 4,
+          "targets": 7,
+          "target_share": 0.29,
+          "wopr": 0.72,
+          "epa": 0.45,
+          "raw_price": 28.0,
+          "psa10_price": 115.0
+        }
+      ]
+    }
+  },
+  {
+    "player_id": "00-0039922",
+    "name": "Bucky Irving",
+    "position": "RB",
+    "team": "TB",
+    "rookie_year": 2024,
+    "usage": {
+      "snap_pct": 0.52,
+      "route_participation_pct": 0.44,
+      "target_share": 0.12,
+      "air_yards_share": 0.04,
+      "wopr": 0.208,
+      "yprr": 1.48,
+      "rolling_3wk_wopr_delta": 0.027,
+      "weekly_history": [
+        {
+          "week": 1,
+          "targets": 3,
+          "target_share": 0.1,
+          "wopr": 0.16,
+          "epa": 0.18,
+          "raw_price": 10.0,
+          "psa10_price": 40.0
+        },
+        {
+          "week": 2,
+          "targets": 2,
+          "target_share": 0.09,
+          "wopr": 0.15,
+          "epa": 0.12,
+          "raw_price": 12.0,
+          "psa10_price": 48.0
+        },
+        {
+          "week": 3,
+          "targets": 3,
+          "target_share": 0.11,
+          "wopr": 0.18,
+          "epa": 0.22,
+          "raw_price": 16.0,
+          "psa10_price": 65.0
+        },
+        {
+          "week": 4,
+          "targets": 4,
+          "target_share": 0.14,
+          "wopr": 0.24,
+          "epa": 0.34,
+          "raw_price": 18.0,
+          "psa10_price": 75.0
+        }
+      ]
+    }
+  },
+  {
+    "player_id": "00-0039886",
+    "name": "Rome Odunze",
+    "position": "WR",
+    "team": "CHI",
+    "rookie_year": 2024,
+    "usage": {
+      "snap_pct": 0.78,
+      "route_participation_pct": 0.82,
+      "target_share": 0.18,
+      "air_yards_share": 0.34,
+      "wopr": 0.508,
+      "yprr": 1.74,
+      "rolling_3wk_wopr_delta": 0.043,
+      "weekly_history": [
+        {
+          "week": 1,
+          "targets": 4,
+          "target_share": 0.14,
+          "wopr": 0.38,
+          "epa": -0.08,
+          "raw_price": 28.0,
+          "psa10_price": 105.0
+        },
+        {
+          "week": 2,
+          "targets": 5,
+          "target_share": 0.15,
+          "wopr": 0.42,
+          "epa": 0.02,
+          "raw_price": 26.0,
+          "psa10_price": 95.0
+        },
+        {
+          "week": 3,
+          "targets": 11,
+          "target_share": 0.28,
+          "wopr": 0.74,
+          "epa": 0.39,
+          "raw_price": 34.0,
+          "psa10_price": 135.0
+        },
+        {
+          "week": 4,
+          "targets": 6,
+          "target_share": 0.19,
+          "wopr": 0.51,
+          "epa": 0.14,
+          "raw_price": 30.0,
+          "psa10_price": 115.0
+        }
+      ]
+    }
+  },
+  {
+    "player_id": "00-0039914",
+    "name": "Bo Nix",
+    "position": "QB",
+    "team": "DEN",
+    "rookie_year": 2024,
+    "usage": {
+      "snap_pct": 1.0,
+      "route_participation_pct": 0.0,
+      "target_share": 0.0,
+      "air_yards_share": 0.0,
+      "wopr": 0.0,
+      "yprr": 0.0,
+      "rolling_3wk_wopr_delta": 0.0,
+      "weekly_history": [
+        {
+          "week": 1,
+          "targets": 0,
+          "target_share": 0.0,
+          "wopr": 0.0,
+          "epa": -0.28,
+          "raw_price": 35.0,
+          "psa10_price": 140.0
+        },
+        {
+          "week": 2,
+          "targets": 0,
+          "target_share": 0.0,
+          "wopr": 0.0,
+          "epa": -0.19,
+          "raw_price": 30.0,
+          "psa10_price": 115.0
+        },
+        {
+          "week": 3,
+          "targets": 0,
+          "target_share": 0.0,
+          "wopr": 0.0,
+          "epa": 0.15,
+          "raw_price": 38.0,
+          "psa10_price": 155.0
+        },
+        {
+          "week": 4,
+          "targets": 0,
+          "target_share": 0.0,
+          "wopr": 0.0,
+          "epa": 0.18,
+          "raw_price": 42.0,
+          "psa10_price": 170.0
+        }
+      ]
+    }
+  },
+  {
+    "player_id": "00-0039918",
+    "name": "Drake Maye",
+    "position": "QB",
+    "team": "NE",
+    "rookie_year": 2024,
+    "usage": {
+      "snap_pct": 0.65,
+      "route_participation_pct": 0.0,
+      "target_share": 0.0,
+      "air_yards_share": 0.0,
+      "wopr": 0.0,
+      "yprr": 0.0,
+      "rolling_3wk_wopr_delta": 0.0,
+      "weekly_history": [
+        {
+          "week": 1,
+          "targets": 0,
+          "target_share": 0.0,
+          "wopr": 0.0,
+          "epa": -0.05,
+          "raw_price": 50.0,
+          "psa10_price": 210.0
+        },
+        {
+          "week": 2,
+          "targets": 0,
+          "target_share": 0.0,
+          "wopr": 0.0,
+          "epa": 0.04,
+          "raw_price": 52.0,
+          "psa10_price": 220.0
+        },
+        {
+          "week": 3,
+          "targets": 0,
+          "target_share": 0.0,
+          "wopr": 0.0,
+          "epa": 0.12,
+          "raw_price": 58.0,
+          "psa10_price": 240.0
+        },
+        {
+          "week": 4,
+          "targets": 0,
+          "target_share": 0.0,
+          "wopr": 0.0,
+          "epa": 0.25,
+          "raw_price": 65.0,
+          "psa10_price": 275.0
+        }
+      ]
+    }
+  },
+  {
+    "player_id": "00-0039896",
+    "name": "Keon Coleman",
+    "position": "WR",
+    "team": "BUF",
+    "rookie_year": 2024,
+    "usage": {
+      "snap_pct": 0.69,
+      "route_participation_pct": 0.74,
+      "target_share": 0.18,
+      "air_yards_share": 0.28,
+      "wopr": 0.466,
+      "yprr": 1.95,
+      "rolling_3wk_wopr_delta": -0.013,
+      "weekly_history": [
+        {
+          "week": 1,
+          "targets": 5,
+          "target_share": 0.21,
+          "wopr": 0.52,
+          "epa": 0.32,
+          "raw_price": 18.0,
+          "psa10_price": 72.0
+        },
+        {
+          "week": 2,
+          "targets": 1,
+          "target_share": 0.06,
+          "wopr": 0.14,
+          "epa": -0.12,
+          "raw_price": 15.0,
+          "psa10_price": 58.0
+        },
+        {
+          "week": 3,
+          "targets": 4,
+          "target_share": 0.17,
+          "wopr": 0.45,
+          "epa": 0.28,
+          "raw_price": 18.0,
+          "psa10_price": 70.0
+        },
+        {
+          "week": 4,
+          "targets": 4,
+          "target_share": 0.18,
+          "wopr": 0.48,
+          "epa": 0.35,
+          "raw_price": 20.0,
+          "psa10_price": 82.0
+        }
+      ]
+    }
+  },
+  {
+    "player_id": "00-0039926",
+    "name": "Trey Benson",
+    "position": "RB",
+    "team": "ARI",
+    "rookie_year": 2024,
+    "usage": {
+      "snap_pct": 0.35,
+      "route_participation_pct": 0.28,
+      "target_share": 0.08,
+      "air_yards_share": 0.02,
+      "wopr": 0.134,
+      "yprr": 1.15,
+      "rolling_3wk_wopr_delta": 0.037,
+      "weekly_history": [
+        {
+          "week": 1,
+          "targets": 1,
+          "target_share": 0.04,
+          "wopr": 0.08,
+          "epa": -0.05,
+          "raw_price": 10.0,
+          "psa10_price": 42.0
+        },
+        {
+          "week": 2,
+          "targets": 1,
+          "target_share": 0.05,
+          "wopr": 0.09,
+          "epa": 0.02,
+          "raw_price": 11.0,
+          "psa10_price": 45.0
+        },
+        {
+          "week": 3,
+          "targets": 2,
+          "target_share": 0.08,
+          "wopr": 0.14,
+          "epa": 0.08,
+          "raw_price": 12.0,
+          "psa10_price": 50.0
+        },
+        {
+          "week": 4,
+          "targets": 3,
+          "target_share": 0.11,
+          "wopr": 0.19,
+          "epa": 0.18,
+          "raw_price": 14.0,
+          "psa10_price": 58.0
+        }
+      ]
+    }
+  }
+]
