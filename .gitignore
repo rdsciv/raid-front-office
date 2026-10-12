@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Python Cache & Bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+# Raw Large Dataset (Symlinked from local Downloads)
+bdb_2027/data/

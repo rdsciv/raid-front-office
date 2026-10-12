@@ -1,0 +1,186 @@
+[
+  {
+    "archetype": "Wide Receivers & Tight Ends",
+    "total_evaluated": 60,
+    "sleeper_count": 13,
+    "bust_count": 16,
+    "sleeper_top_picks": [
+      {
+        "draft_pick": 124,
+        "shuttle_time": 4.231082484590535,
+        "decel_efficiency_index": 41.50121602439371,
+        "actual_target": 4.2
+      },
+      {
+        "draft_pick": 43,
+        "shuttle_time": 4.2369402822599165,
+        "decel_efficiency_index": 40.96989242668333,
+        "actual_target": 4.2
+      },
+      {
+        "draft_pick": 116,
+        "shuttle_time": 4.294017703962774,
+        "decel_efficiency_index": 36.665293737235054,
+        "actual_target": 4.2
+      }
+    ],
+    "bust_top_picks": [
+      {
+        "draft_pick": 217,
+        "shuttle_time": 3.9576269625499316,
+        "decel_efficiency_index": 17.141741671807637,
+        "actual_target": 4.2
+      },
+      {
+        "draft_pick": 91,
+        "shuttle_time": 4.0106496815630965,
+        "decel_efficiency_index": 11.508934418737168,
+        "actual_target": 4.2
+      },
+      {
+        "draft_pick": 202,
+        "shuttle_time": 4.017728321913823,
+        "decel_efficiency_index": 14.445382891317655,
+        "actual_target": 4.2
+      }
+    ]
+  },
+  {
+    "archetype": "EDGE Rushers & Defensive Linemen",
+    "total_evaluated": 60,
+    "sleeper_count": 7,
+    "bust_count": 10,
+    "sleeper_top_picks": [
+      {
+        "draft_pick": 69,
+        "three_cone_time": 7.176185640524101,
+        "effective_bend_index": 116.64374934694807,
+        "actual_target": 28.5
+      },
+      {
+        "draft_pick": 7,
+        "three_cone_time": 7.305100802173594,
+        "effective_bend_index": 87.24923027440263,
+        "actual_target": 24.49668403002732
+      },
+      {
+        "draft_pick": 213,
+        "three_cone_time": 7.2801899995051045,
+        "effective_bend_index": 73.45025992797211,
+        "actual_target": 14.081484874719902
+      }
+    ],
+    "bust_top_picks": [
+      {
+        "draft_pick": 136,
+        "three_cone_time": 6.88542391542363,
+        "effective_bend_index": 35.65828724612848,
+        "actual_target": 10.208265972610235
+      },
+      {
+        "draft_pick": 7,
+        "three_cone_time": 6.893396513152674,
+        "effective_bend_index": 24.414820779697916,
+        "actual_target": 14.290826557637361
+      },
+      {
+        "draft_pick": 115,
+        "three_cone_time": 6.902863854019668,
+        "effective_bend_index": 30.492622117016932,
+        "actual_target": 13.561510448216978
+      }
+    ]
+  },
+  {
+    "archetype": "Defensive Backs (CB & Safety)",
+    "total_evaluated": 60,
+    "sleeper_count": 12,
+    "bust_count": 21,
+    "sleeper_top_picks": [
+      {
+        "draft_pick": 156,
+        "forty_yard_dash": 4.39124894428586,
+        "db_fluidity_index": 35.436252078269796,
+        "actual_target": -0.32
+      },
+      {
+        "draft_pick": 94,
+        "forty_yard_dash": 4.430146725803453,
+        "db_fluidity_index": 27.987931163751,
+        "actual_target": -0.32
+      },
+      {
+        "draft_pick": 112,
+        "forty_yard_dash": 4.385864605769658,
+        "db_fluidity_index": 25.13843715197431,
+        "actual_target": -0.32
+      }
+    ],
+    "bust_top_picks": [
+      {
+        "draft_pick": 187,
+        "forty_yard_dash": 4.65,
+        "db_fluidity_index": 9.246930834382901,
+        "actual_target": 0.37407320917284026
+      },
+      {
+        "draft_pick": 44,
+        "forty_yard_dash": 4.616910356745031,
+        "db_fluidity_index": 7.694335368433138,
+        "actual_target": 0.2468498834102759
+      },
+      {
+        "draft_pick": 214,
+        "forty_yard_dash": 4.60519145451798,
+        "db_fluidity_index": 6.1830683240874,
+        "actual_target": 0.45
+      }
+    ]
+  },
+  {
+    "archetype": "Interior Trench & Running Backs",
+    "total_evaluated": 60,
+    "sleeper_count": 14,
+    "bust_count": 17,
+    "sleeper_top_picks": [
+      {
+        "draft_pick": 114,
+        "ten_yard_split": 1.6557086150774327,
+        "trench_explosiveness_index": 22.675105011677132,
+        "actual_target": 3.2
+      },
+      {
+        "draft_pick": 16,
+        "ten_yard_split": 1.6225823977327394,
+        "trench_explosiveness_index": 21.263171116730845,
+        "actual_target": 3.2
+      },
+      {
+        "draft_pick": 112,
+        "ten_yard_split": 1.5917494732304818,
+        "trench_explosiveness_index": 19.670922790339198,
+        "actual_target": 3.048974832123031
+      }
+    ],
+    "bust_top_picks": [
+      {
+        "draft_pick": 148,
+        "ten_yard_split": 1.7955552004433022,
+        "trench_explosiveness_index": 7.469555773346896,
+        "actual_target": 0.4
+      },
+      {
+        "draft_pick": 72,
+        "ten_yard_split": 1.7933141384202682,
+        "trench_explosiveness_index": 3.2371586182778005,
+        "actual_target": 0.4839385146230093
+      },
+      {
+        "draft_pick": 67,
+        "ten_yard_split": 1.7819014210980488,
+        "trench_explosiveness_index": 8.490117709882288,
+        "actual_target": 0.9139670856834848
+      }
+    ]
+  }
+]

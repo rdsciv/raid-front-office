@@ -16,6 +16,10 @@ import {
   Download,
   Shield,
   HelpCircle,
+  Compass,
+  Activity,
+  Binary,
+  Target,
 } from 'lucide-react';
 import {
   PlayerArbitrageRecord,
@@ -38,8 +42,18 @@ import { ParameterDrawer } from './components/ParameterDrawer';
 import { PlayerChartModal } from './components/PlayerChartModal';
 import { BatchDrawer } from './components/BatchDrawer';
 import { RoiBadge } from './components/MetricBadge';
+import { CombineProspect } from './lib/combineTypes';
+import { CombineScoutView } from './components/CombineScout/CombineScoutView';
+import { KinematicMatrixView } from './components/CombineScout/KinematicMatrixView';
+import { ProspectModal } from './components/CombineScout/ProspectModal';
+import { SchemeFitView } from './components/SchemeFit/SchemeFitView';
 
 export function App() {
+  const [activeTab, setActiveTab] = useState<'combine_scout' | 'scheme_fit' | 'decision_matrix' | 'grading_arbitrage'>('scheme_fit');
+  const [combineProspects, setCombineProspects] = useState<CombineProspect[]>([]);
+  const [selectedCombineProspect, setSelectedCombineProspect] = useState<CombineProspect | null>(null);
+  const [isLoadingCombine, setIsLoadingCombine] = useState<boolean>(true);
+
   const [players, setPlayers] = useState<PlayerArbitrageRecord[]>(FALLBACK_ARBITRAGE_DATA);
   const [parameters, setParameters] = useState<MarketParameters>(DEFAULT_PARAMETERS);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -70,6 +84,31 @@ export function App() {
     }
 
     loadArbitrageData();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // Load 510-prospect Combine Scout dataset from public/data/combine_scout_data.json
+  useEffect(() => {
+    let isMounted = true;
+    async function loadCombineData() {
+      try {
+        const response = await fetch('./data/combine_scout_data.json', { cache: 'no-cache' });
+        if (response.ok) {
+          const json = await response.json();
+          if (Array.isArray(json) && json.length > 0 && isMounted) {
+            setCombineProspects(json);
+          }
+        }
+      } catch (err) {
+        console.warn('Utilizing fallback combine data:', err);
+      } finally {
+        if (isMounted) setIsLoadingCombine(false);
+      }
+    }
+
+    loadCombineData();
     return () => {
       isMounted = false;
     };
@@ -204,6 +243,7 @@ export function App() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setSelectedPlayer(null);
+        setSelectedCombineProspect(null);
         setIsDrawerOpen(false);
         setIsBatchOpen(false);
       }
@@ -239,72 +279,192 @@ export function App() {
       <header className="border-b border-slate-800/80 bg-slate-950/95 backdrop-blur-md sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-gradient-to-br from-cyan-500/20 to-emerald-500/10 border border-cyan-500/40 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.25)]">
-              <Zap className="w-5 h-5" />
+            <div className={`p-2.5 rounded-xl border shadow-lg transition-all ${
+              activeTab === 'combine_scout'
+                ? 'bg-blue-500/20 border-blue-500/40 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.25)]'
+                : activeTab === 'scheme_fit'
+                ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.25)]'
+                : activeTab === 'decision_matrix'
+                ? 'bg-indigo-500/20 border-indigo-500/40 text-indigo-400 shadow-[0_0_15px_rgba(99,102,241,0.25)]'
+                : 'bg-cyan-500/20 border-cyan-500/40 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.25)]'
+            }`}>
+              {activeTab === 'combine_scout' ? <Compass className="w-5 h-5" /> :
+               activeTab === 'scheme_fit' ? <Target className="w-5 h-5" /> :
+               activeTab === 'decision_matrix' ? <Activity className="w-5 h-5" /> :
+               <Zap className="w-5 h-5" />}
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-lg sm:text-xl font-bold font-display tracking-tight text-white flex items-center gap-2">
-                  <span>NFL Front Office Grading Arbitrage</span>
-                  <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-500/40">
-                    Institutional Screener
+                  <span>
+                    {activeTab === 'combine_scout' && 'NFL Scouting Combine Explorer'}
+                    {activeTab === 'scheme_fit' && 'NFL Team Scheme Fit Engine'}
+                    {activeTab === 'decision_matrix' && '10 Hz Kinematic Translation Matrix'}
+                    {activeTab === 'grading_arbitrage' && 'NFL Front Office Grading Arbitrage'}
+                  </span>
+                  <span className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded-full border ${
+                    activeTab === 'combine_scout'
+                      ? 'bg-blue-950 text-blue-400 border-blue-500/40'
+                      : activeTab === 'scheme_fit'
+                      ? 'bg-emerald-950 text-emerald-400 border-emerald-500/40'
+                      : activeTab === 'decision_matrix'
+                      ? 'bg-indigo-950 text-indigo-400 border-indigo-500/40'
+                      : 'bg-cyan-950 text-cyan-400 border-cyan-500/40'
+                  }`}>
+                    {activeTab === 'combine_scout' && 'BDB 2027 • BoxScoreScout'}
+                    {activeTab === 'scheme_fit' && '32 Franchise Profiles'}
+                    {activeTab === 'decision_matrix' && '4-Archetype Quadrants'}
+                    {activeTab === 'grading_arbitrage' && 'Institutional Screener'}
                   </span>
                 </h1>
               </div>
               <p className="text-xs text-slate-400">
-                Cross-referencing weekly NFL usage indicators (WOPR, Air Yards, EPA) with PSA population comps to isolate +EV spreads
+                {activeTab === 'combine_scout' && 'Evaluating 510 NFL Draft prospects (2023–2025) with physical drill percentiles, 10 Hz kinematics, and similar athlete comps'}
+                {activeTab === 'scheme_fit' && 'Sifting 510 prospects by tactical coordinator fit (Shanahan Zone, Fangio Quarters, Spags Blitz-Man, Schwartz Wide-9, Power Trench)'}
+                {activeTab === 'decision_matrix' && 'Cross-referencing stopwatch speeds with continuous sensor mechanics (DEI, EBI, FI, TEI) to isolate sleepers and bust traps'}
+                {activeTab === 'grading_arbitrage' && 'Cross-referencing weekly NFL usage indicators (WOPR, Air Yards, EPA) with PSA population comps to isolate +EV spreads'}
               </p>
             </div>
           </div>
 
-          {/* Header Action Controls */}
-          <div className="flex items-center gap-2.5 self-end md:self-auto flex-wrap">
-            {/* Batch Pill Trigger */}
+          {/* Navigation Tabs */}
+          <div className="flex items-center gap-1 bg-slate-900/90 p-1 rounded-xl border border-slate-800 self-start md:self-auto flex-wrap">
             <button
-              onClick={() => setIsBatchOpen(true)}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all ${
-                batchItems.length > 0
-                  ? 'bg-emerald-950/80 border-emerald-500/40 text-emerald-300 shadow-[0_0_12px_rgba(16,185,129,0.25)]'
-                  : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
+              onClick={() => setActiveTab('combine_scout')}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                activeTab === 'combine_scout'
+                  ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
               }`}
-              title="Open Submission Batch Builder (Hot-key: B)"
             >
-              <Package className="w-4 h-4 text-emerald-400" />
-              <span>Batch: {batchSummary.totalCards} Cards</span>
-              {batchSummary.totalCards > 0 && (
-                <span className="font-mono text-emerald-400 font-bold">
-                  (+{formatCurrency(batchSummary.expectedNetProfit, 0)})
-                </span>
-              )}
+              <Compass className="w-3.5 h-3.5" />
+              <span>Combine Scout</span>
+              <span className="text-[10px] bg-blue-950 px-1.5 py-0.2 rounded-full border border-blue-400/30 text-blue-300">
+                {combineProspects.length || 510}
+              </span>
             </button>
 
-            {/* Parameter Drawer button */}
             <button
-              onClick={() => setIsDrawerOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-cyan-400 border border-slate-800 hover:border-cyan-500/40 text-xs font-semibold transition-all"
+              onClick={() => setActiveTab('scheme_fit')}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                activeTab === 'scheme_fit'
+                  ? 'bg-emerald-600 text-white shadow-md shadow-emerald-500/20'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+              }`}
             >
-              <Sliders className="w-3.5 h-3.5" />
-              <span>Model Fees ({formatCurrency(parameters.gradingFee)})</span>
-              {parameters.gemRateHaircutPct > 0 && (
-                <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
-              )}
+              <Target className="w-3.5 h-3.5" />
+              <span>Scheme Fit</span>
+              <span className="text-[10px] bg-emerald-950 px-1.5 py-0.2 rounded-full border border-emerald-400/30 text-emerald-300">
+                32 Teams
+              </span>
             </button>
 
-            {/* Static Sync Pill */}
-            <div className="hidden sm:flex items-center gap-2 text-xs text-slate-400 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-xl font-mono">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>{dataSource === 'static_json' ? 'Live Synced' : 'Active'}</span>
-              <span className="text-slate-600">|</span>
-              <span className="text-slate-500">{lastSyncDate}</span>
-            </div>
+            <button
+              onClick={() => setActiveTab('decision_matrix')}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                activeTab === 'decision_matrix'
+                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+              }`}
+            >
+              <Activity className="w-3.5 h-3.5" />
+              <span>Decision Matrix</span>
+              <span className="text-[10px] bg-indigo-950 px-1.5 py-0.2 rounded-full border border-indigo-400/30 text-indigo-300">
+                10 Hz
+              </span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('grading_arbitrage')}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                activeTab === 'grading_arbitrage'
+                  ? 'bg-cyan-600 text-white shadow-md shadow-cyan-500/20'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+              }`}
+            >
+              <Zap className="w-3.5 h-3.5" />
+              <span>Card Arbitrage</span>
+            </button>
           </div>
+
+          {/* Arbitrage-Specific Controls */}
+          {activeTab === 'grading_arbitrage' && (
+            <div className="flex items-center gap-2.5 self-end md:self-auto flex-wrap">
+              {/* Batch Pill Trigger */}
+              <button
+                onClick={() => setIsBatchOpen(true)}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all ${
+                  batchItems.length > 0
+                    ? 'bg-emerald-950/80 border-emerald-500/40 text-emerald-300 shadow-[0_0_12px_rgba(16,185,129,0.25)]'
+                    : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
+                }`}
+                title="Open Submission Batch Builder (Hot-key: B)"
+              >
+                <Package className="w-4 h-4 text-emerald-400" />
+                <span>Batch: {batchSummary.totalCards} Cards</span>
+                {batchSummary.totalCards > 0 && (
+                  <span className="font-mono text-emerald-400 font-bold">
+                    (+{formatCurrency(batchSummary.expectedNetProfit, 0)})
+                  </span>
+                )}
+              </button>
+
+              {/* Parameter Drawer button */}
+              <button
+                onClick={() => setIsDrawerOpen(true)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-cyan-400 border border-slate-800 hover:border-cyan-500/40 text-xs font-semibold transition-all"
+              >
+                <Sliders className="w-3.5 h-3.5" />
+                <span>Model Fees ({formatCurrency(parameters.gradingFee)})</span>
+                {parameters.gemRateHaircutPct > 0 && (
+                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+                )}
+              </button>
+
+              {/* Static Sync Pill */}
+              <div className="hidden sm:flex items-center gap-2 text-xs text-slate-400 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-xl font-mono">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span>{dataSource === 'static_json' ? 'Live Synced' : 'Active'}</span>
+                <span className="text-slate-600">|</span>
+                <span className="text-slate-500">{lastSyncDate}</span>
+              </div>
+            </div>
+          )}
         </div>
       </header>
 
       {/* Main Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-        {/* KPI Summary Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {activeTab === 'combine_scout' && (
+          isLoadingCombine ? (
+            <div className="p-16 text-center text-slate-400 bg-slate-900/40 rounded-2xl border border-slate-800">
+              <Compass className="w-8 h-8 animate-spin mx-auto mb-3 text-blue-400" />
+              <div className="font-bold text-white text-base">Loading 510 NFL Scouting Combine Prospects...</div>
+              <div className="text-xs text-slate-500 mt-1">Ingesting 10 Hz kinematic telemetry and athletic score percentiles</div>
+            </div>
+          ) : (
+            <CombineScoutView prospects={combineProspects} />
+          )
+        )}
+
+        {activeTab === 'scheme_fit' && (
+          <SchemeFitView
+            prospects={combineProspects}
+            onSelectProspect={(p) => setSelectedCombineProspect(p)}
+          />
+        )}
+
+        {activeTab === 'decision_matrix' && (
+          <KinematicMatrixView
+            prospects={combineProspects}
+            onSelectProspect={(p) => setSelectedCombineProspect(p)}
+          />
+        )}
+
+        {activeTab === 'grading_arbitrage' && (
+          <>
+            {/* KPI Summary Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Card 1: Top Arbitrage Spread */}
           <div className="p-4 rounded-2xl bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800/80 shadow-lg relative overflow-hidden group hover:border-cyan-500/40 transition-all">
             <div className="absolute top-0 right-0 w-24 h-24 bg-cyan-500/5 rounded-full blur-2xl group-hover:bg-cyan-500/10 transition-all" />
@@ -502,7 +662,9 @@ export function App() {
               </div>
             </div>
           </div>
-        </section>
+            </section>
+          </>
+        )}
       </main>
 
       {/* Parameter Drawer */}
@@ -531,6 +693,16 @@ export function App() {
         parameters={parameters}
         selectedCardId={selectedCardId}
         onAddToBatch={handleAddToBatch}
+      />
+
+      {/* Combine Prospect Detail Modal */}
+      <ProspectModal
+        prospect={selectedCombineProspect}
+        onClose={() => setSelectedCombineProspect(null)}
+        onSelectComp={(compName) => {
+          const match = combineProspects.find((p) => p.name.toLowerCase() === compName.toLowerCase());
+          if (match) setSelectedCombineProspect(match);
+        }}
       />
 
       {/* Footer */}

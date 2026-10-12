@@ -1,0 +1,5 @@
+Archetype,Conventional Drill,10Hz Kinematic Metric,NFL Target Metric,Base R2,Enhanced R2,Delta R2,Delta AIC,LRT p-value,Kinematic Coeff p-val
+Wide Receivers & Tight Ends,Combine 20-yd Shuttle Time (s),Deceleration Efficiency Index (DEI),NFL Stem Break Separation (yd),0.042,0.15,+0.108,-5.2,7.42e-03,1.00e-02
+EDGE Rushers & Defensive Linemen,Combine 3-Cone Time (s),Effective Bend Index (EBI),NFL Pass Rush Win Rate (%),0.349,0.932,+0.582,-133.2,3.00e-31,4.47e-29
+Defensive Backs (CB & Safety),Combine 40-yd Dash Time (s),Hip Fluidity Index (FI),NFL Target EPA Allowed,0.301,0.847,+0.546,-89.2,1.31e-21,3.96e-20
+Interior Trench & Running Backs,Combine 10-yd Split Time (s),Trench Explosiveness Index (TEI),NFL LOS Knockback / Displacement (yd),0.246,0.929,+0.683,-139.6,1.19e-32,2.24e-30
