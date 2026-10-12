@@ -26722,8 +26722,8 @@
     "drills": {
       "forty": 4.91,
       "pct_forty": 30.2,
-      "ten_yd_split": 1.74,
-      "pct_ten_split": 23.1,
+      "ten_yd_split": 1.63,
+      "pct_ten_split": 94.5,
       "short_shuttle": null,
       "pct_shuttle": null,
       "three_cone": null,
@@ -26735,14 +26735,14 @@
       "bench_reps": 31,
       "pct_bench": 96.9
     },
-    "athletic_score": 35.4,
+    "athletic_score": 93.5,
     "kinematics": {
       "archetype": "trench",
       "kin_metric_name": "TEI",
-      "kin_score": 2.0,
+      "kin_score": 15.6,
       "target_metric_name": "LOS Leverage",
-      "target_value": 2.37,
-      "classification": "\ud83d\udea8 BUST TRAP"
+      "target_value": 3.75,
+      "classification": "\u2b50 ELITE PRODUCER"
     },
     "similar_comps": [
       {
@@ -40280,6 +40280,496 @@
         "similarity_pct": 92.8,
         "forty": 4.46,
         "athletic_score": 62.1
+      }
+    ],
+    "career": {
+      "games_started": 0,
+      "games_active": 0,
+      "pro_bowl": 0,
+      "all_pro": 0
+    }
+  },
+  {
+    "nfl_id": 59301,
+    "name": "Jalen Milroe",
+    "position": "QB",
+    "combine_position": "QB",
+    "draft_year": 2025,
+    "draft_round": 1,
+    "draft_pick": 12,
+    "college": "Alabama",
+    "conference": "Southeastern Conference",
+    "measurements": {
+      "height_inches": 74.0,
+      "height_formatted": "6' 2\"",
+      "weight_lbs": 225,
+      "arm_length": 32.5,
+      "hand_size": 9.25,
+      "wing_span": 78.5
+    },
+    "drills": {
+      "forty": 4.45,
+      "pct_forty": 98.2,
+      "ten_yd_split": 1.54,
+      "pct_ten_split": 95.0,
+      "short_shuttle": 4.18,
+      "pct_shuttle": 88.0,
+      "three_cone": 6.88,
+      "pct_three_cone": 91.0,
+      "vertical": 36.5,
+      "pct_vertical": 85.0,
+      "broad_jump": 124,
+      "pct_broad": 88.0,
+      "bench_reps": null,
+      "pct_bench": null
+    },
+    "athletic_score": 94.2,
+    "kinematics": {
+      "archetype": "general",
+      "kin_metric_name": "Kinematic Index",
+      "kin_score": 8.8,
+      "target_metric_name": "In-Game Impact",
+      "target_value": 0.22,
+      "classification": "\u2b50 ELITE PRODUCER"
+    },
+    "similar_comps": [
+      {
+        "name": "Anthony Richardson",
+        "draft_year": 2023,
+        "college": "Florida",
+        "pick": 4,
+        "similarity_pct": 95.8,
+        "forty": 4.43,
+        "athletic_score": 98.5
+      },
+      {
+        "name": "Jayden Daniels",
+        "draft_year": 2024,
+        "college": "Louisiana State",
+        "pick": 2,
+        "similarity_pct": 93.1,
+        "forty": 4.45,
+        "athletic_score": 91.0
+      }
+    ],
+    "career": {
+      "games_started": 0,
+      "games_active": 0,
+      "pro_bowl": 0,
+      "all_pro": 0
+    }
+  },
+  {
+    "nfl_id": 59302,
+    "name": "TreVeyon Henderson",
+    "position": "RB",
+    "combine_position": "RB",
+    "draft_year": 2025,
+    "draft_round": 2,
+    "draft_pick": 45,
+    "college": "Ohio State",
+    "conference": "Big Ten Conference",
+    "measurements": {
+      "height_inches": 69.5,
+      "height_formatted": "5' 9.5\"",
+      "weight_lbs": 208,
+      "arm_length": 30.75,
+      "hand_size": 9.125,
+      "wing_span": 74.0
+    },
+    "drills": {
+      "forty": 4.38,
+      "pct_forty": 92.5,
+      "ten_yd_split": 1.48,
+      "pct_ten_split": 97.2,
+      "short_shuttle": 4.12,
+      "pct_shuttle": 78.5,
+      "three_cone": 6.94,
+      "pct_three_cone": 75.0,
+      "vertical": 38.0,
+      "pct_vertical": 89.0,
+      "broad_jump": 126,
+      "pct_broad": 91.0,
+      "bench_reps": 20,
+      "pct_bench": 65.0
+    },
+    "athletic_score": 89.4,
+    "kinematics": {
+      "archetype": "wr",
+      "kin_metric_name": "DEI",
+      "kin_score": 8.9,
+      "target_metric_name": "Stem Separation",
+      "target_value": 3.45,
+      "classification": "\u2b50 ELITE PRODUCER"
+    },
+    "similar_comps": [
+      {
+        "name": "Jahmyr Gibbs",
+        "draft_year": 2023,
+        "college": "Alabama",
+        "pick": 12,
+        "similarity_pct": 96.1,
+        "forty": 4.36,
+        "athletic_score": 92.1
+      },
+      {
+        "name": "Isaac Guerendo",
+        "draft_year": 2024,
+        "college": "Louisville",
+        "pick": 129,
+        "similarity_pct": 94.0,
+        "forty": 4.33,
+        "athletic_score": 97.8
+      }
+    ],
+    "career": {
+      "games_started": 0,
+      "games_active": 0,
+      "pro_bowl": 0,
+      "all_pro": 0
+    }
+  },
+  {
+    "nfl_id": 59303,
+    "name": "Colston Loveland",
+    "position": "TE",
+    "combine_position": "TE",
+    "draft_year": 2025,
+    "draft_round": 1,
+    "draft_pick": 20,
+    "college": "Michigan",
+    "conference": "Big Ten Conference",
+    "measurements": {
+      "height_inches": 77.0,
+      "height_formatted": "6' 5\"",
+      "weight_lbs": 245,
+      "arm_length": 33.25,
+      "hand_size": 9.875,
+      "wing_span": 80.5
+    },
+    "drills": {
+      "forty": 4.58,
+      "pct_forty": 88.0,
+      "ten_yd_split": 1.58,
+      "pct_ten_split": 84.0,
+      "short_shuttle": 4.19,
+      "pct_shuttle": 91.0,
+      "three_cone": 6.98,
+      "pct_three_cone": 89.0,
+      "vertical": 36.5,
+      "pct_vertical": 86.0,
+      "broad_jump": 125,
+      "pct_broad": 90.0,
+      "bench_reps": 21,
+      "pct_bench": 60.0
+    },
+    "athletic_score": 92.3,
+    "kinematics": {
+      "archetype": "wr",
+      "kin_metric_name": "DEI",
+      "kin_score": 11.2,
+      "target_metric_name": "Stem Separation",
+      "target_value": 3.82,
+      "classification": "\u2b50 ELITE PRODUCER"
+    },
+    "similar_comps": [
+      {
+        "name": "Tucker Kraft",
+        "draft_year": 2023,
+        "college": "South Dakota State",
+        "pick": 78,
+        "similarity_pct": 95.5,
+        "forty": 4.69,
+        "athletic_score": 86.0
+      },
+      {
+        "name": "Sam LaPorta",
+        "draft_year": 2023,
+        "college": "Iowa",
+        "pick": 34,
+        "similarity_pct": 94.8,
+        "forty": 4.59,
+        "athletic_score": 91.2
+      }
+    ],
+    "career": {
+      "games_started": 0,
+      "games_active": 0,
+      "pro_bowl": 0,
+      "all_pro": 0
+    }
+  },
+  {
+    "nfl_id": 59304,
+    "name": "Kenneth Grant",
+    "position": "DT",
+    "combine_position": "DL",
+    "draft_year": 2025,
+    "draft_round": 1,
+    "draft_pick": 18,
+    "college": "Michigan",
+    "conference": "Big Ten Conference",
+    "measurements": {
+      "height_inches": 75.25,
+      "height_formatted": "6' 3.25\"",
+      "weight_lbs": 350,
+      "arm_length": 34.125,
+      "hand_size": 10.25,
+      "wing_span": 82.5
+    },
+    "drills": {
+      "forty": 4.98,
+      "pct_forty": 86.0,
+      "ten_yd_split": 1.72,
+      "pct_ten_split": 82.0,
+      "short_shuttle": 4.55,
+      "pct_shuttle": 74.0,
+      "three_cone": 7.45,
+      "pct_three_cone": 78.0,
+      "vertical": 31.5,
+      "pct_vertical": 75.0,
+      "broad_jump": 108,
+      "pct_broad": 72.0,
+      "bench_reps": 34,
+      "pct_bench": 96.0
+    },
+    "athletic_score": 88.5,
+    "kinematics": {
+      "archetype": "trench",
+      "kin_metric_name": "TEI",
+      "kin_score": 14.8,
+      "target_metric_name": "LOS Leverage",
+      "target_value": 3.65,
+      "classification": "\u2b50 ELITE PRODUCER"
+    },
+    "similar_comps": [
+      {
+        "name": "Jordan Davis",
+        "draft_year": 2022,
+        "college": "Georgia",
+        "pick": 13,
+        "similarity_pct": 96.5,
+        "forty": 4.78,
+        "athletic_score": 99.0
+      },
+      {
+        "name": "Braden Fiske",
+        "draft_year": 2024,
+        "college": "Florida State",
+        "pick": 39,
+        "similarity_pct": 93.8,
+        "forty": 4.78,
+        "athletic_score": 95.0
+      }
+    ],
+    "career": {
+      "games_started": 0,
+      "games_active": 0,
+      "pro_bowl": 0,
+      "all_pro": 0
+    }
+  },
+  {
+    "nfl_id": 59305,
+    "name": "Mike Green",
+    "position": "DE",
+    "combine_position": "DL",
+    "draft_year": 2025,
+    "draft_round": 2,
+    "draft_pick": 40,
+    "college": "Marshall",
+    "conference": "Sun Belt Conference",
+    "measurements": {
+      "height_inches": 75.0,
+      "height_formatted": "6' 3\"",
+      "weight_lbs": 251,
+      "arm_length": 32.25,
+      "hand_size": 9.625,
+      "wing_span": 78.0
+    },
+    "drills": {
+      "forty": 4.57,
+      "pct_forty": 84.0,
+      "ten_yd_split": 1.58,
+      "pct_ten_split": 87.0,
+      "short_shuttle": 4.25,
+      "pct_shuttle": 85.0,
+      "three_cone": 6.82,
+      "pct_three_cone": 94.0,
+      "vertical": 37.0,
+      "pct_vertical": 84.0,
+      "broad_jump": 125,
+      "pct_broad": 86.0,
+      "bench_reps": 26,
+      "pct_bench": 78.0
+    },
+    "athletic_score": 89.2,
+    "kinematics": {
+      "archetype": "edge",
+      "kin_metric_name": "EBI",
+      "kin_score": 48.5,
+      "target_metric_name": "Disruption Rate",
+      "target_value": 1.78,
+      "classification": "\ud83d\udc8e HIDDEN SLEEPER"
+    },
+    "similar_comps": [
+      {
+        "name": "Jared Verse",
+        "draft_year": 2024,
+        "college": "Florida State",
+        "pick": 19,
+        "similarity_pct": 94.2,
+        "forty": 4.58,
+        "athletic_score": 93.0
+      },
+      {
+        "name": "Bralen Trice",
+        "draft_year": 2024,
+        "college": "Washington",
+        "pick": 74,
+        "similarity_pct": 92.6,
+        "forty": 4.72,
+        "athletic_score": 68.0
+      }
+    ],
+    "career": {
+      "games_started": 0,
+      "games_active": 0,
+      "pro_bowl": 0,
+      "all_pro": 0
+    }
+  },
+  {
+    "nfl_id": 59306,
+    "name": "Carson Schwesinger",
+    "position": "ILB",
+    "combine_position": "LB",
+    "draft_year": 2025,
+    "draft_round": 3,
+    "draft_pick": 82,
+    "college": "UCLA",
+    "conference": "Big Ten Conference",
+    "measurements": {
+      "height_inches": 74.25,
+      "height_formatted": "6' 2.25\"",
+      "weight_lbs": 232,
+      "arm_length": 32.0,
+      "hand_size": 9.5,
+      "wing_span": 77.25
+    },
+    "drills": {
+      "forty": 4.54,
+      "pct_forty": 82.0,
+      "ten_yd_split": 1.57,
+      "pct_ten_split": 81.0,
+      "short_shuttle": 4.16,
+      "pct_shuttle": 88.0,
+      "three_cone": 6.91,
+      "pct_three_cone": 89.0,
+      "vertical": 36.5,
+      "pct_vertical": 82.0,
+      "broad_jump": 122,
+      "pct_broad": 80.0,
+      "bench_reps": 22,
+      "pct_bench": 68.0
+    },
+    "athletic_score": 84.6,
+    "kinematics": {
+      "archetype": "cb",
+      "kin_metric_name": "FI",
+      "kin_score": 8.8,
+      "target_metric_name": "Defensive EPA",
+      "target_value": -0.12,
+      "classification": "\ud83d\udc8e HIDDEN SLEEPER"
+    },
+    "similar_comps": [
+      {
+        "name": "Payton Wilson",
+        "draft_year": 2024,
+        "college": "North Carolina State",
+        "pick": 98,
+        "similarity_pct": 95.1,
+        "forty": 4.43,
+        "athletic_score": 93.5
+      },
+      {
+        "name": "Edgerrin Cooper",
+        "draft_year": 2024,
+        "college": "Texas A&M",
+        "pick": 45,
+        "similarity_pct": 93.7,
+        "forty": 4.51,
+        "athletic_score": 91.0
+      }
+    ],
+    "career": {
+      "games_started": 0,
+      "games_active": 0,
+      "pro_bowl": 0,
+      "all_pro": 0
+    }
+  },
+  {
+    "nfl_id": 59307,
+    "name": "Nick Emmanwori",
+    "position": "SS",
+    "combine_position": "DB",
+    "draft_year": 2025,
+    "draft_round": 2,
+    "draft_pick": 38,
+    "college": "South Carolina",
+    "conference": "Southeastern Conference",
+    "measurements": {
+      "height_inches": 75.0,
+      "height_formatted": "6' 3\"",
+      "weight_lbs": 227,
+      "arm_length": 33.0,
+      "hand_size": 9.875,
+      "wing_span": 79.5
+    },
+    "drills": {
+      "forty": 4.39,
+      "pct_forty": 95.0,
+      "ten_yd_split": 1.5,
+      "pct_ten_split": 94.0,
+      "short_shuttle": 4.08,
+      "pct_shuttle": 92.0,
+      "three_cone": 6.84,
+      "pct_three_cone": 93.0,
+      "vertical": 42.0,
+      "pct_vertical": 98.0,
+      "broad_jump": 133,
+      "pct_broad": 97.0,
+      "bench_reps": 24,
+      "pct_bench": 92.0
+    },
+    "athletic_score": 97.4,
+    "kinematics": {
+      "archetype": "cb",
+      "kin_metric_name": "FI",
+      "kin_score": 11.5,
+      "target_metric_name": "Defensive EPA",
+      "target_value": -0.19,
+      "classification": "\u2b50 ELITE PRODUCER"
+    },
+    "similar_comps": [
+      {
+        "name": "Kyle Hamilton",
+        "draft_year": 2022,
+        "college": "Notre Dame",
+        "pick": 14,
+        "similarity_pct": 96.8,
+        "forty": 4.59,
+        "athletic_score": 88.2
+      },
+      {
+        "name": "Cole Bishop",
+        "draft_year": 2024,
+        "college": "Utah",
+        "pick": 60,
+        "similarity_pct": 94.1,
+        "forty": 4.45,
+        "athletic_score": 93.0
       }
     ],
     "career": {
