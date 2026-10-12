@@ -563,6 +563,46 @@ export function calculateSchemeFit(
     thresholdPenalty += 10;
   }
 
+  // Empirical SumerSports Historical Combine Thresholds
+  if (prospect.position === 'QB' && drills.broad_jump !== null) {
+    if (drills.broad_jump < 110) {
+      concerns.push(`Broad Jump below 110" starter threshold (${drills.broad_jump}")`);
+      thresholdPenalty += 5;
+    } else if (drills.broad_jump >= 120) {
+      strengths.push(`Plus lower-body kinetic chain explosion (${drills.broad_jump}" broad jump)`);
+    }
+  }
+
+  if (prospect.position === 'TE') {
+    if (drills.broad_jump !== null && drills.broad_jump < 120) {
+      concerns.push(`Broad jump under 120" limits Round 1 projection (${drills.broad_jump}")`);
+      thresholdPenalty += 4;
+    }
+    if (drills.forty !== null && drills.forty > 4.70) {
+      concerns.push(`40-yd dash > 4.70s caps space mismatch utility (${drills.forty}s)`);
+      thresholdPenalty += 6;
+    }
+  }
+
+  if (prospect.position === 'OT' && drills.forty !== null && drills.forty > 5.40) {
+    concerns.push(`40-yd dash exceeds 5.4s climbing cutoff (${drills.forty}s)`);
+    thresholdPenalty += 6;
+  }
+
+  if (['IOL', 'G', 'C'].includes(prospect.position)) {
+    if (drills.short_shuttle !== null && drills.short_shuttle > 4.80) {
+      concerns.push(`Shuttle time exceeds 4.80s guard cutoff (${drills.short_shuttle}s)`);
+      thresholdPenalty += 5;
+    }
+    if (drills.three_cone !== null && drills.three_cone > 7.80) {
+      concerns.push(`3-Cone drill exceeds 7.80s redirect threshold (${drills.three_cone}s)`);
+      thresholdPenalty += 5;
+    }
+    if (drills.bench_reps !== null && drills.bench_reps >= 28) {
+      strengths.push(`Interior anchor strength (${drills.bench_reps} bench reps)`);
+    }
+  }
+
   const finalFitScore = Math.max(25, Math.min(99, Math.round((score / (totalWeights || 1)) - thresholdPenalty)));
 
   // Tier Classification
