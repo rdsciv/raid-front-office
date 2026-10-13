@@ -1,0 +1,7097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NFL Big Data Bowl 2027 | Unified Kinematic Translation Engine (UKTE)</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: #111827;
+      --card-border: #1f2937;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --blue: #3b82f6;
+      --blue-glow: rgba(59, 130, 246, 0.2);
+      --red: #ef4444;
+      --green: #10b981;
+      --amber: #f59e0b;
+      --purple: #8b5cf6;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      padding: 24px;
+      line-height: 1.5;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--card-border);
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-blue { background: #1e3a8a; color: #93c5fd; border: 1px solid #2563eb; }
+    .badge-green { background: #064e3b; color: #6ee7b7; border: 1px solid #059669; }
+    .badge-red { background: #7f1d1d; color: #fca5a5; border: 1px solid #b91c1c; }
+
+    .mode-toggle {
+      display: flex;
+      gap: 6px;
+      background: #1f2937;
+      padding: 4px;
+      border-radius: 8px;
+    }
+    .mode-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .mode-btn.active {
+      background: #2563eb;
+      color: white;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .tab-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      background: #1e40af;
+      color: #ffffff;
+      border-color: #3b82f6;
+      box-shadow: 0 0 15px var(--blue-glow);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 20px;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Scatter Plot */
+    #scatter-canvas {
+      width: 100%;
+      height: 440px;
+      background: #0d1322;
+      border-radius: 8px;
+      cursor: crosshair;
+    }
+
+    /* Drill Canvas */
+    #drill-canvas {
+      width: 100%;
+      height: 220px;
+      background: #0d1322;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+    .drill-controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .btn {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .btn:hover { background: #1d4ed8; }
+
+    /* Calculator */
+    .calc-row {
+      margin-bottom: 14px;
+    }
+    .calc-row label {
+      display: block;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+    .calc-row input[type="range"] {
+      width: 100%;
+      accent-color: #3b82f6;
+    }
+    .calc-row .val-disp {
+      float: right;
+      font-weight: 700;
+      color: #60a5fa;
+    }
+    .result-box {
+      background: #1e293b;
+      padding: 14px;
+      border-radius: 8px;
+      border-left: 4px solid #3b82f6;
+      margin-top: 14px;
+    }
+
+    /* Prospect details tooltip */
+    #prospect-detail {
+      background: #1f2937;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 12px;
+      font-size: 12px;
+      border: 1px solid #374151;
+      min-height: 52px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>🏈 NFL Big Data Bowl 2027: UKTE Visualizer</h1>
+      <p style="color: var(--text-muted); font-size: 13px; margin-top: 4px;">
+        10 Hz Combine Kinematic Signal Translation to Regular-Season NFL Game Performance
+      </p>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="btn-mode-emp" onclick="setMode('empirical')">⚡ Real Kaggle NFL Data</button>
+        <button class="mode-btn" id="btn-mode-syn" onclick="setMode('synthetic')">🔬 Calibration Model</button>
+      </div>
+      <span class="badge badge-green">Savitzky-Golay 10 Hz</span>
+    </div>
+  </header>
+
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="switchArchetype('wr')">Wide Receivers & Tight Ends (DEI)</button>
+    <button class="tab-btn" onclick="switchArchetype('edge')">EDGE Rushers & DL (Effective Bend)</button>
+    <button class="tab-btn" onclick="switchArchetype('cb')">Defensive Backs (Hip Fluidity)</button>
+    <button class="tab-btn" onclick="switchArchetype('trench')">Interior Trench & RB (0.5s Impulse)</button>
+  </div>
+
+  <div class="grid">
+    <!-- Left: Scatter Matrix -->
+    <div class="card">
+      <div class="card-title">
+        <span id="matrix-title">Evaluator Decision Matrix (Sleeper Alpha vs. Bust Traps)</span>
+        <span style="font-size: 12px; color: var(--text-muted);" id="prospect-count-lbl">Showing real prospects</span>
+      </div>
+      <canvas id="scatter-canvas" width="600" height="440"></canvas>
+      <div id="prospect-detail">
+        <strong>Hover over any prospect</strong> on the decision matrix to view their stopwatch time, 10 Hz kinematic score, NFL outcome, and scouting diagnosis.
+      </div>
+    </div>
+
+    <!-- Right: Kinematics Simulator & Front-Office Calculator -->
+    <div>
+      <div class="card" style="margin-bottom: 20px;">
+        <div class="card-title">
+          <span id="drill-title">10 Hz Drill Trajectory Simulator</span>
+          <span class="badge badge-blue" id="drill-badge">20-Yd Shuttle Plant</span>
+        </div>
+        <canvas id="drill-canvas" width="400" height="220"></canvas>
+        <div class="drill-controls">
+          <button class="btn" onclick="togglePlay()">Play / Pause</button>
+          <button class="btn" style="background: #374151;" onclick="resetAnim()">Reset</button>
+          <span style="font-size: 12px; color: var(--text-muted);" id="anim-frame-lbl">Frame: 0 / 40</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>Front-Office Marginal Performance Calculator</span>
+          <span class="badge badge-green">Live Regression</span>
+        </div>
+        <div class="calc-row">
+          <label><span id="calc-trad-lbl">Shuttle Time (s)</span>: <span class="val-disp" id="calc-trad-val">4.15</span></label>
+          <input type="range" id="input-trad" min="3.90" max="4.60" step="0.01" value="4.15" oninput="recalc()">
+        </div>
+        <div class="calc-row">
+          <label><span id="calc-kin-lbl">Decel Efficiency Index (DEI)</span>: <span class="val-disp" id="calc-kin-val">38.0</span></label>
+          <input type="range" id="input-kin" min="5.0" max="50.0" step="0.5" value="38.0" oninput="recalc()">
+        </div>
+        <div class="calc-row">
+          <label>Draft Round Selection: <span class="val-disp" id="calc-pick-val">Pick #64 (Round 2)</span></label>
+          <input type="range" id="input-pick" min="1" max="220" step="1" value="64" oninput="recalc()">
+        </div>
+
+        <div class="result-box">
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8;">Forecasted NFL Game Metric:</div>
+          <div style="font-size: 22px; font-weight: 800; color: #60a5fa; margin: 4px 0;" id="calc-result-metric">3.45 yd Separation</div>
+          <div style="font-size: 12px; color: #e2e8f0;" id="calc-result-diag">💎 High Kinematic Value: Projected starter with elite route-stem separation.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const allData = {
+  "empirical": {
+    "wr": {
+      "name": "Wide Receivers & Tight Ends",
+      "trad_label": "Shuttle (s)",
+      "kin_label": "DEI",
+      "target_label": "Separation",
+      "unit": "yd",
+      "players": [
+        {
+          "name": "Andrei Iosivas",
+          "pick": 206,
+          "trad": 4.12,
+          "kin": 21.1,
+          "target": 2.78,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Princeton"
+        },
+        {
+          "name": "Jalen McMillan",
+          "pick": 92,
+          "trad": 4.18,
+          "kin": 20.5,
+          "target": 3.34,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Washington"
+        },
+        {
+          "name": "Jadon Haselwood",
+          "pick": 150,
+          "trad": 4.31,
+          "kin": 19.8,
+          "target": 2.68,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Arkansas"
+        },
+        {
+          "name": "Michael Wilson",
+          "pick": 94,
+          "trad": 4.27,
+          "kin": 18.7,
+          "target": 2.98,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Stanford"
+        },
+        {
+          "name": "Rome Odunze",
+          "pick": 9,
+          "trad": 4.03,
+          "kin": 15.7,
+          "target": 2.93,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Washington"
+        },
+        {
+          "name": "Jayden Reed",
+          "pick": 50,
+          "trad": 4.29,
+          "kin": 15.0,
+          "target": 3.48,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Michigan State"
+        },
+        {
+          "name": "Zack Kuntz",
+          "pick": 220,
+          "trad": 4.12,
+          "kin": 14.9,
+          "target": 3.31,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Old Dominion"
+        },
+        {
+          "name": "Darnell Washington",
+          "pick": 93,
+          "trad": 4.08,
+          "kin": 13.8,
+          "target": 3.04,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Georgia"
+        },
+        {
+          "name": "Grant DuBose",
+          "pick": 256,
+          "trad": 4.32,
+          "kin": 12.8,
+          "target": 3.3,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "North Carolina-Charlotte"
+        },
+        {
+          "name": "Brayden Willis",
+          "pick": 247,
+          "trad": 4.36,
+          "kin": 12.7,
+          "target": 3.18,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Oklahoma"
+        },
+        {
+          "name": "Mitch Tinsley",
+          "pick": 150,
+          "trad": 4.21,
+          "kin": 12.5,
+          "target": 3.03,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Penn State"
+        },
+        {
+          "name": "Antoine Green",
+          "pick": 219,
+          "trad": 4.27,
+          "kin": 11.8,
+          "target": 2.53,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "North Carolina"
+        },
+        {
+          "name": "Dontay Demus",
+          "pick": 150,
+          "trad": 4.39,
+          "kin": 11.4,
+          "target": 2.03,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Maryland"
+        },
+        {
+          "name": "Adonai Mitchell",
+          "pick": 52,
+          "trad": 4.25,
+          "kin": 11.4,
+          "target": 2.98,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Texas"
+        },
+        {
+          "name": "Demario Douglas",
+          "pick": 210,
+          "trad": 4.29,
+          "kin": 11.1,
+          "target": 3.68,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Liberty"
+        },
+        {
+          "name": "Arian Smith",
+          "pick": 110,
+          "trad": 4.19,
+          "kin": 10.9,
+          "target": 3.42,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Georgia"
+        },
+        {
+          "name": "Troy Franklin",
+          "pick": 102,
+          "trad": 4.31,
+          "kin": 10.5,
+          "target": 3.45,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Oregon"
+        },
+        {
+          "name": "Tucker Kraft",
+          "pick": 78,
+          "trad": 4.29,
+          "kin": 10.4,
+          "target": 3.74,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "South Dakota State"
+        },
+        {
+          "name": "Andrew Armstrong",
+          "pick": 150,
+          "trad": 4.18,
+          "kin": 10.2,
+          "target": 2.49,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Arkansas"
+        },
+        {
+          "name": "Bryce Ford-Wheaton",
+          "pick": 150,
+          "trad": 4.15,
+          "kin": 9.8,
+          "target": 2.79,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "West Virginia"
+        },
+        {
+          "name": "Lideatrick Griffin",
+          "pick": 150,
+          "trad": 4.35,
+          "kin": 9.5,
+          "target": 3.17,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Mississippi State"
+        },
+        {
+          "name": "Jaylin Noel",
+          "pick": 79,
+          "trad": 4.17,
+          "kin": 9.2,
+          "target": 3.39,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Iowa State"
+        },
+        {
+          "name": "Jalin Conyers",
+          "pick": 150,
+          "trad": 4.27,
+          "kin": 8.7,
+          "target": 3.17,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Texas Tech"
+        },
+        {
+          "name": "Xavier Hutchinson",
+          "pick": 205,
+          "trad": 4.35,
+          "kin": 8.6,
+          "target": 2.96,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Iowa State"
+        },
+        {
+          "name": "Jimmy Horn",
+          "pick": 208,
+          "trad": 4.41,
+          "kin": 8.4,
+          "target": 3.66,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Colorado"
+        },
+        {
+          "name": "Malik Heath",
+          "pick": 150,
+          "trad": 4.46,
+          "kin": 8.4,
+          "target": 3.16,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Mississippi"
+        },
+        {
+          "name": "Dallin Holker",
+          "pick": 150,
+          "trad": 4.21,
+          "kin": 7.7,
+          "target": 2.69,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Colorado State"
+        },
+        {
+          "name": "Da'Quan Felton",
+          "pick": 150,
+          "trad": 4.3,
+          "kin": 6.6,
+          "target": 2.42,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Virginia Tech"
+        },
+        {
+          "name": "Ryan Flournoy",
+          "pick": 216,
+          "trad": 4.25,
+          "kin": 6.4,
+          "target": 3.03,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Southeast Missouri"
+        },
+        {
+          "name": "Dominic Lovett",
+          "pick": 244,
+          "trad": 4.27,
+          "kin": 5.7,
+          "target": 2.58,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Georgia"
+        },
+        {
+          "name": "Luke McCaffrey",
+          "pick": 100,
+          "trad": 4.02,
+          "kin": 5.5,
+          "target": 3.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Rice"
+        },
+        {
+          "name": "Chimere Dike",
+          "pick": 103,
+          "trad": 4.27,
+          "kin": 3.8,
+          "target": 3.38,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Florida"
+        },
+        {
+          "name": "Trey Knox",
+          "pick": 150,
+          "trad": 4.54,
+          "kin": 3.7,
+          "target": 3.67,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "South Carolina"
+        },
+        {
+          "name": "Ben Sinnott",
+          "pick": 53,
+          "trad": 4.23,
+          "kin": 3.0,
+          "target": 3.35,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Kansas State"
+        },
+        {
+          "name": "Theo Johnson",
+          "pick": 107,
+          "trad": 4.19,
+          "kin": 2.5,
+          "target": 3.2,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Penn State"
+        },
+        {
+          "name": "Luke Lachey",
+          "pick": 255,
+          "trad": 4.47,
+          "kin": 1.4,
+          "target": 2.57,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Iowa"
+        },
+        {
+          "name": "Joshua Simon",
+          "pick": 150,
+          "trad": 4.4,
+          "kin": 1.4,
+          "target": 3.25,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "South Carolina"
+        },
+        {
+          "name": "Harold Fannin",
+          "pick": 67,
+          "trad": 4.39,
+          "kin": 1.3,
+          "target": 3.11,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Bowling Green"
+        },
+        {
+          "name": "Jack Bech",
+          "pick": 58,
+          "trad": 4.21,
+          "kin": 1.2,
+          "target": 2.63,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Texas Christian"
+        },
+        {
+          "name": "Jackson Hawes",
+          "pick": 173,
+          "trad": 4.4,
+          "kin": 1.1,
+          "target": 3.42,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Georgia Tech"
+        },
+        {
+          "name": "Gunnar Helm",
+          "pick": 120,
+          "trad": 4.4,
+          "kin": 1.0,
+          "target": 3.52,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Texas"
+        },
+        {
+          "name": "Cade Stover",
+          "pick": 123,
+          "trad": 4.45,
+          "kin": 1.0,
+          "target": 3.34,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Ohio State"
+        },
+        {
+          "name": "Ja'Tavion Sanders",
+          "pick": 101,
+          "trad": 4.32,
+          "kin": 1.0,
+          "target": 3.49,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Texas"
+        },
+        {
+          "name": "Isaiah Williams",
+          "pick": 150,
+          "trad": 4.25,
+          "kin": 1.0,
+          "target": 3.16,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Illinois"
+        },
+        {
+          "name": "Gavin Bartholomew",
+          "pick": 202,
+          "trad": 4.25,
+          "kin": 1.0,
+          "target": 3.17,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Pittsburgh"
+        },
+        {
+          "name": "Isaac TeSlaa",
+          "pick": 70,
+          "trad": 4.05,
+          "kin": 1.0,
+          "target": 2.64,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Arkansas"
+        },
+        {
+          "name": "Thomas Fidone",
+          "pick": 219,
+          "trad": 4.29,
+          "kin": 1.0,
+          "target": 2.81,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Nebraska"
+        },
+        {
+          "name": "Tip Reiman",
+          "pick": 82,
+          "trad": 4.26,
+          "kin": 1.0,
+          "target": 3.55,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Illinois"
+        },
+        {
+          "name": "Mitchell Evans",
+          "pick": 163,
+          "trad": 4.4,
+          "kin": 1.0,
+          "target": 3.36,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Notre Dame"
+        }
+      ]
+    },
+    "edge": {
+      "name": "EDGE Rushers & Defensive Linemen",
+      "trad_label": "3-Cone (s)",
+      "kin_label": "EBI",
+      "target_label": "Disruption Rate",
+      "unit": "%",
+      "players": [
+        {
+          "name": "Tyrion Ingram-Dawkins",
+          "pick": 139,
+          "trad": 7.28,
+          "kin": 450.0,
+          "target": 0.29,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Georgia"
+        },
+        {
+          "name": "Maason Smith",
+          "pick": 48,
+          "trad": 7.62,
+          "kin": 450.0,
+          "target": 0.39,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Louisiana State"
+        },
+        {
+          "name": "Jose Ramirez",
+          "pick": 196,
+          "trad": 6.95,
+          "kin": 450.0,
+          "target": 1.75,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Eastern Michigan"
+        },
+        {
+          "name": "Tonka Hemingway",
+          "pick": 135,
+          "trad": 7.36,
+          "kin": 438.0,
+          "target": 1.41,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "South Carolina"
+        },
+        {
+          "name": "Princely Umanmielen",
+          "pick": 77,
+          "trad": 7.33,
+          "kin": 412.4,
+          "target": 0.49,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Mississippi"
+        },
+        {
+          "name": "Isaiah Land",
+          "pick": 120,
+          "trad": 7.2,
+          "kin": 348.4,
+          "target": 1.1,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Florida A&M"
+        },
+        {
+          "name": "Logan Lee",
+          "pick": 178,
+          "trad": 7.16,
+          "kin": 306.2,
+          "target": 0.0,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Iowa"
+        },
+        {
+          "name": "Jerrod Clark",
+          "pick": 120,
+          "trad": 7.6,
+          "kin": 285.8,
+          "target": 0.0,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Coastal Carolina"
+        },
+        {
+          "name": "Brandon Dorlus",
+          "pick": 109,
+          "trad": 7.43,
+          "kin": 275.9,
+          "target": 1.57,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Oregon"
+        },
+        {
+          "name": "Jordan Phillips",
+          "pick": 143,
+          "trad": 8.19,
+          "kin": 269.4,
+          "target": 0.28,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Maryland"
+        },
+        {
+          "name": "Byron Young",
+          "pick": 77,
+          "trad": 7.19,
+          "kin": 266.1,
+          "target": 0.98,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Tennessee"
+        },
+        {
+          "name": "D.J. Dale",
+          "pick": 120,
+          "trad": 7.69,
+          "kin": 259.6,
+          "target": 1.61,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Alabama"
+        },
+        {
+          "name": "Tavius Robinson",
+          "pick": 124,
+          "trad": 7.15,
+          "kin": 250.8,
+          "target": 0.57,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Mississippi"
+        },
+        {
+          "name": "Isaiah Foskey",
+          "pick": 40,
+          "trad": 7.28,
+          "kin": 240.3,
+          "target": 0.35,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Notre Dame"
+        },
+        {
+          "name": "Dante Stills",
+          "pick": 213,
+          "trad": 7.38,
+          "kin": 232.8,
+          "target": 0.51,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "West Virginia"
+        },
+        {
+          "name": "Yahya Black",
+          "pick": 164,
+          "trad": 7.63,
+          "kin": 220.1,
+          "target": 0.4,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Iowa"
+        },
+        {
+          "name": "Jared Verse",
+          "pick": 19,
+          "trad": 7.31,
+          "kin": 196.0,
+          "target": 0.76,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Florida State"
+        },
+        {
+          "name": "Ethan Downs",
+          "pick": 120,
+          "trad": 7.58,
+          "kin": 194.2,
+          "target": 1.61,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Oklahoma"
+        },
+        {
+          "name": "Darius Alexander",
+          "pick": 65,
+          "trad": 7.6,
+          "kin": 166.0,
+          "target": 0.77,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Toledo"
+        },
+        {
+          "name": "Marshawn Kneeland",
+          "pick": 56,
+          "trad": 7.02,
+          "kin": 165.2,
+          "target": 0.22,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Western Michigan"
+        },
+        {
+          "name": "Bradyn Swinson",
+          "pick": 146,
+          "trad": 7.13,
+          "kin": 159.6,
+          "target": 0.0,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Louisiana State"
+        },
+        {
+          "name": "Barryn Sorrell",
+          "pick": 124,
+          "trad": 7.06,
+          "kin": 156.5,
+          "target": 0.61,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Texas"
+        },
+        {
+          "name": "Isaiah McGuire",
+          "pick": 126,
+          "trad": 7.39,
+          "kin": 155.1,
+          "target": 0.53,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Missouri"
+        },
+        {
+          "name": "Keeanu Benton",
+          "pick": 49,
+          "trad": 7.34,
+          "kin": 150.0,
+          "target": 0.46,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Wisconsin"
+        },
+        {
+          "name": "Leonard Taylor",
+          "pick": 120,
+          "trad": 7.81,
+          "kin": 136.9,
+          "target": 0.83,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Miami"
+        },
+        {
+          "name": "Javon Solomon",
+          "pick": 168,
+          "trad": 7.15,
+          "kin": 136.5,
+          "target": 0.62,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Troy"
+        },
+        {
+          "name": "Eric Gregory",
+          "pick": 120,
+          "trad": 7.68,
+          "kin": 136.2,
+          "target": 0.0,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Arkansas"
+        },
+        {
+          "name": "Gervon Dexter",
+          "pick": 53,
+          "trad": 7.5,
+          "kin": 131.2,
+          "target": 0.68,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Florida"
+        },
+        {
+          "name": "Donovan Ezeiruaku",
+          "pick": 44,
+          "trad": 6.94,
+          "kin": 123.8,
+          "target": 0.31,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Boston College"
+        },
+        {
+          "name": "Braden Fiske",
+          "pick": 39,
+          "trad": 7.15,
+          "kin": 119.7,
+          "target": 1.09,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Florida State"
+        },
+        {
+          "name": "Tyler Batty",
+          "pick": 120,
+          "trad": 7.21,
+          "kin": 117.0,
+          "target": 0.0,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Brigham Young"
+        },
+        {
+          "name": "Ty Robinson",
+          "pick": 111,
+          "trad": 7.58,
+          "kin": 115.3,
+          "target": 0.44,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Nebraska"
+        },
+        {
+          "name": "Caleb Murphy",
+          "pick": 120,
+          "trad": 7.28,
+          "kin": 114.9,
+          "target": 1.45,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Ferris State"
+        },
+        {
+          "name": "Lukas Van Ness",
+          "pick": 13,
+          "trad": 7.02,
+          "kin": 106.0,
+          "target": 0.87,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Iowa"
+        },
+        {
+          "name": "Jalen Redmond",
+          "pick": 120,
+          "trad": 7.3,
+          "kin": 105.2,
+          "target": 0.61,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Oklahoma"
+        },
+        {
+          "name": "Siaki Ika",
+          "pick": 98,
+          "trad": 7.8,
+          "kin": 99.3,
+          "target": 0.36,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Baylor"
+        },
+        {
+          "name": "Zacch Pickens",
+          "pick": 64,
+          "trad": 7.45,
+          "kin": 94.2,
+          "target": 0.54,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "South Carolina"
+        },
+        {
+          "name": "David Walker",
+          "pick": 121,
+          "trad": 7.15,
+          "kin": 80.0,
+          "target": NaN,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Central Arkansas"
+        },
+        {
+          "name": "DeWayne Carter",
+          "pick": 95,
+          "trad": 7.95,
+          "kin": 76.2,
+          "target": 0.0,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Duke"
+        },
+        {
+          "name": "Gabe Hall",
+          "pick": 120,
+          "trad": 7.65,
+          "kin": 73.4,
+          "target": 0.0,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Baylor"
+        },
+        {
+          "name": "Eric Watts",
+          "pick": 120,
+          "trad": 7.59,
+          "kin": 72.9,
+          "target": 0.1,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Connecticut"
+        },
+        {
+          "name": "Tyler Lacy",
+          "pick": 130,
+          "trad": 7.6,
+          "kin": 69.5,
+          "target": 0.17,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Oklahoma State"
+        },
+        {
+          "name": "Nelson Ceaser",
+          "pick": 120,
+          "trad": 7.3,
+          "kin": 38.2,
+          "target": 0.96,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Houston"
+        },
+        {
+          "name": "Habakkuk Baldonado",
+          "pick": 120,
+          "trad": 7.11,
+          "kin": 26.7,
+          "target": 0.0,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Pittsburgh"
+        }
+      ]
+    },
+    "cb": {
+      "name": "Defensive Backs (CB & Safety)",
+      "trad_label": "40-yd (s)",
+      "kin_label": "FI",
+      "target_label": "Defensive EPA",
+      "unit": "",
+      "players": [
+        {
+          "name": "Jaylin Simpson",
+          "pick": 164,
+          "trad": 4.45,
+          "kin": 80.0,
+          "target": -0.11,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Auburn"
+        },
+        {
+          "name": "Isaiah Johnson",
+          "pick": 110,
+          "trad": 4.64,
+          "kin": 80.0,
+          "target": -0.38,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Syracuse"
+        },
+        {
+          "name": "Kris Abrams-Draine",
+          "pick": 145,
+          "trad": 4.44,
+          "kin": 80.0,
+          "target": -0.21,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Missouri"
+        },
+        {
+          "name": "Josh Newton",
+          "pick": 149,
+          "trad": 4.51,
+          "kin": 80.0,
+          "target": 0.04,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Texas Christian"
+        },
+        {
+          "name": "Andru Phillips",
+          "pick": 70,
+          "trad": 4.48,
+          "kin": 80.0,
+          "target": 0.04,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Kentucky"
+        },
+        {
+          "name": "Patrick McMorris",
+          "pick": 198,
+          "trad": 4.45,
+          "kin": 80.0,
+          "target": -0.34,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "California"
+        },
+        {
+          "name": "Myles Harden",
+          "pick": 227,
+          "trad": 4.5,
+          "kin": 80.0,
+          "target": -0.13,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "South Dakota"
+        },
+        {
+          "name": "Kalen King",
+          "pick": 255,
+          "trad": 4.61,
+          "kin": 80.0,
+          "target": -0.33,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Penn State"
+        },
+        {
+          "name": "Jaylen Key",
+          "pick": 257,
+          "trad": 4.6,
+          "kin": 80.0,
+          "target": -0.07,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Alabama"
+        },
+        {
+          "name": "Millard Bradford",
+          "pick": 110,
+          "trad": 4.42,
+          "kin": 80.0,
+          "target": -0.01,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Texas Christian"
+        },
+        {
+          "name": "Andre' Sam",
+          "pick": 110,
+          "trad": 4.59,
+          "kin": 80.0,
+          "target": -0.24,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Louisiana State"
+        },
+        {
+          "name": "Renardo Green",
+          "pick": 64,
+          "trad": 4.49,
+          "kin": 80.0,
+          "target": 0.02,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Florida State"
+        },
+        {
+          "name": "Javon Bullard",
+          "pick": 58,
+          "trad": 4.47,
+          "kin": 80.0,
+          "target": -0.03,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Georgia"
+        },
+        {
+          "name": "Max Melton",
+          "pick": 43,
+          "trad": 4.39,
+          "kin": 80.0,
+          "target": -0.02,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Rutgers"
+        },
+        {
+          "name": "Evan Williams",
+          "pick": 111,
+          "trad": 4.6,
+          "kin": 80.0,
+          "target": -0.06,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Oregon"
+        },
+        {
+          "name": "Daijahn Anthony",
+          "pick": 224,
+          "trad": 4.55,
+          "kin": 76.6,
+          "target": 0.11,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Mississippi"
+        },
+        {
+          "name": "Mike Sainristil",
+          "pick": 50,
+          "trad": 4.47,
+          "kin": 53.5,
+          "target": 0.07,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Michigan"
+        },
+        {
+          "name": "Jay Ward",
+          "pick": 134,
+          "trad": 4.55,
+          "kin": 49.2,
+          "target": -0.11,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Louisiana State"
+        },
+        {
+          "name": "Jaden Hicks",
+          "pick": 133,
+          "trad": 4.45,
+          "kin": 29.8,
+          "target": 0.0,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Washington State"
+        },
+        {
+          "name": "Arquon Bush",
+          "pick": 110,
+          "trad": 4.54,
+          "kin": 29.2,
+          "target": -0.29,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Cincinnati"
+        },
+        {
+          "name": "Dorian Strong",
+          "pick": 177,
+          "trad": 4.5,
+          "kin": 23.3,
+          "target": 0.22,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Virginia Tech"
+        },
+        {
+          "name": "Kamren Kinchens",
+          "pick": 99,
+          "trad": 4.65,
+          "kin": 22.8,
+          "target": -0.06,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Miami"
+        },
+        {
+          "name": "Kaevon Merriweather",
+          "pick": 110,
+          "trad": 4.62,
+          "kin": 22.7,
+          "target": -0.06,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Iowa"
+        },
+        {
+          "name": "Quan Martin",
+          "pick": 47,
+          "trad": 4.46,
+          "kin": 21.7,
+          "target": 0.09,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Illinois"
+        },
+        {
+          "name": "Jermari Harris",
+          "pick": 110,
+          "trad": 4.45,
+          "kin": 19.2,
+          "target": -0.14,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Iowa"
+        },
+        {
+          "name": "Bilhal Kone",
+          "pick": 178,
+          "trad": 4.43,
+          "kin": 16.5,
+          "target": -0.45,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Western Michigan"
+        },
+        {
+          "name": "Trey Amos",
+          "pick": 61,
+          "trad": 4.43,
+          "kin": 15.2,
+          "target": 0.11,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Mississippi"
+        },
+        {
+          "name": "Lathan Ransom",
+          "pick": 122,
+          "trad": 4.45,
+          "kin": 14.1,
+          "target": 0.13,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Ohio State"
+        },
+        {
+          "name": "Cole Bishop",
+          "pick": 60,
+          "trad": 4.45,
+          "kin": 12.9,
+          "target": -0.03,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Utah"
+        },
+        {
+          "name": "Nohl Williams",
+          "pick": 85,
+          "trad": 4.5,
+          "kin": 12.0,
+          "target": -0.08,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "California"
+        },
+        {
+          "name": "Trey Dean",
+          "pick": 110,
+          "trad": 4.75,
+          "kin": 12.0,
+          "target": -0.23,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Florida"
+        },
+        {
+          "name": "Elijah Jones",
+          "pick": 90,
+          "trad": 4.44,
+          "kin": 11.4,
+          "target": 0.04,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Boston College"
+        },
+        {
+          "name": "Dwight McGlothern",
+          "pick": 110,
+          "trad": 4.47,
+          "kin": 11.3,
+          "target": -0.2,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Arkansas"
+        },
+        {
+          "name": "Jammie Robinson",
+          "pick": 145,
+          "trad": 4.59,
+          "kin": 11.1,
+          "target": -0.17,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Florida State"
+        },
+        {
+          "name": "Dante Trader",
+          "pick": 155,
+          "trad": 4.45,
+          "kin": 10.7,
+          "target": -0.03,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Maryland"
+        },
+        {
+          "name": "Zy Alexander",
+          "pick": 110,
+          "trad": 4.56,
+          "kin": 10.6,
+          "target": -0.17,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Louisiana State"
+        },
+        {
+          "name": "Jonas Sanker",
+          "pick": 93,
+          "trad": 4.48,
+          "kin": 9.7,
+          "target": -0.06,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Virginia"
+        },
+        {
+          "name": "Sydney Brown",
+          "pick": 66,
+          "trad": 4.47,
+          "kin": 9.0,
+          "target": -0.02,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Illinois"
+        },
+        {
+          "name": "Kitan Crawford",
+          "pick": 225,
+          "trad": 4.41,
+          "kin": 8.8,
+          "target": 0.06,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Nevada"
+        },
+        {
+          "name": "Maxwell Hairston",
+          "pick": 30,
+          "trad": 4.28,
+          "kin": 8.7,
+          "target": -0.0,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Kentucky"
+        },
+        {
+          "name": "O'Donnell Fortune",
+          "pick": 110,
+          "trad": 4.45,
+          "kin": 8.6,
+          "target": -0.34,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "South Carolina"
+        },
+        {
+          "name": "Kamal Hadden",
+          "pick": 211,
+          "trad": 4.45,
+          "kin": 8.6,
+          "target": -0.4,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Tennessee"
+        },
+        {
+          "name": "Azareye'h Thomas",
+          "pick": 73,
+          "trad": 4.45,
+          "kin": 8.5,
+          "target": 0.04,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Florida State"
+        },
+        {
+          "name": "Denzel Burke",
+          "pick": 174,
+          "trad": 4.48,
+          "kin": 8.1,
+          "target": 0.07,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Ohio State"
+        },
+        {
+          "name": "Daniel Scott",
+          "pick": 158,
+          "trad": 4.45,
+          "kin": 7.8,
+          "target": -0.14,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "California"
+        },
+        {
+          "name": "Robert Longerbeam",
+          "pick": 212,
+          "trad": 4.39,
+          "kin": 7.7,
+          "target": 0.0,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Rutgers"
+        },
+        {
+          "name": "DeMarcco Hellams",
+          "pick": 224,
+          "trad": 4.57,
+          "kin": 6.8,
+          "target": -0.16,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Alabama"
+        },
+        {
+          "name": "R.J. Mickens",
+          "pick": 214,
+          "trad": 4.49,
+          "kin": 6.5,
+          "target": -0.18,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Clemson"
+        },
+        {
+          "name": "Jarrian Jones",
+          "pick": 96,
+          "trad": 4.38,
+          "kin": 6.4,
+          "target": -0.08,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Florida State"
+        },
+        {
+          "name": "Marques Sigle",
+          "pick": 160,
+          "trad": 4.37,
+          "kin": 6.3,
+          "target": -0.02,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Kansas State"
+        },
+        {
+          "name": "Jaylon Jones",
+          "pick": 221,
+          "trad": 4.57,
+          "kin": 6.2,
+          "target": -0.06,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Texas A&M"
+        },
+        {
+          "name": "Jaylen Reed",
+          "pick": 187,
+          "trad": 4.49,
+          "kin": 6.0,
+          "target": -0.44,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Penn State"
+        },
+        {
+          "name": "Darien Porter",
+          "pick": 68,
+          "trad": 4.3,
+          "kin": 5.9,
+          "target": 0.02,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Iowa State"
+        },
+        {
+          "name": "Tyreque Jones",
+          "pick": 110,
+          "trad": 4.52,
+          "kin": 5.4,
+          "target": -0.18,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Boise State"
+        },
+        {
+          "name": "Marcellas Dial",
+          "pick": 180,
+          "trad": 4.46,
+          "kin": 5.3,
+          "target": -0.06,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "South Carolina"
+        },
+        {
+          "name": "Christian Roland-Wallace",
+          "pick": 110,
+          "trad": 4.45,
+          "kin": 5.1,
+          "target": 0.01,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Southern California"
+        },
+        {
+          "name": "Sebastian Castro",
+          "pick": 110,
+          "trad": 4.59,
+          "kin": 5.1,
+          "target": -0.15,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Iowa"
+        },
+        {
+          "name": "Daequan Hardy",
+          "pick": 219,
+          "trad": 4.38,
+          "kin": 5.0,
+          "target": -0.03,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Penn State"
+        },
+        {
+          "name": "Jarvis Brownlee",
+          "pick": 146,
+          "trad": 4.45,
+          "kin": 5.0,
+          "target": -0.01,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Louisville"
+        },
+        {
+          "name": "Tyler Nubin",
+          "pick": 47,
+          "trad": 4.45,
+          "kin": 4.9,
+          "target": 0.03,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Minnesota"
+        },
+        {
+          "name": "Gervarrius Owens",
+          "pick": 254,
+          "trad": 4.45,
+          "kin": 4.9,
+          "target": -0.09,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Houston"
+        },
+        {
+          "name": "Tykee Smith",
+          "pick": 89,
+          "trad": 4.46,
+          "kin": 4.8,
+          "target": -0.06,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Georgia"
+        },
+        {
+          "name": "Quinyon Mitchell",
+          "pick": 22,
+          "trad": 4.33,
+          "kin": 4.7,
+          "target": -0.14,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Toledo"
+        },
+        {
+          "name": "Craig Woodson",
+          "pick": 106,
+          "trad": 4.45,
+          "kin": 4.7,
+          "target": -0.14,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "California"
+        },
+        {
+          "name": "Kamari Lassiter",
+          "pick": 42,
+          "trad": 4.45,
+          "kin": 4.5,
+          "target": -0.15,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Georgia"
+        },
+        {
+          "name": "Ryan Cooper",
+          "pick": 110,
+          "trad": 4.45,
+          "kin": 4.5,
+          "target": -0.07,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Oregon State"
+        },
+        {
+          "name": "Dominique Hampton",
+          "pick": 161,
+          "trad": 4.51,
+          "kin": 4.2,
+          "target": -0.16,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Washington"
+        },
+        {
+          "name": "Cam Hart",
+          "pick": 140,
+          "trad": 4.5,
+          "kin": 4.1,
+          "target": -0.14,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Notre Dame"
+        },
+        {
+          "name": "Zah Frazier",
+          "pick": 169,
+          "trad": 4.36,
+          "kin": 4.1,
+          "target": 0.0,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Texas-San Antonio"
+        },
+        {
+          "name": "Billy Bowman",
+          "pick": 118,
+          "trad": 4.42,
+          "kin": 3.9,
+          "target": 0.01,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Oklahoma"
+        },
+        {
+          "name": "Jason Taylor",
+          "pick": 234,
+          "trad": 4.5,
+          "kin": 3.8,
+          "target": -0.07,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Oklahoma State"
+        },
+        {
+          "name": "Mac McWilliams",
+          "pick": 145,
+          "trad": 4.41,
+          "kin": 3.7,
+          "target": -0.19,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Central Florida"
+        },
+        {
+          "name": "Jaylin Smith",
+          "pick": 97,
+          "trad": 4.45,
+          "kin": 3.7,
+          "target": -0.01,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Southern California"
+        },
+        {
+          "name": "Dadrion Taylor-Demerson",
+          "pick": 104,
+          "trad": 4.41,
+          "kin": 3.6,
+          "target": 0.02,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Texas Tech"
+        },
+        {
+          "name": "Cam Smith",
+          "pick": 51,
+          "trad": 4.43,
+          "kin": 3.5,
+          "target": -0.01,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "South Carolina"
+        },
+        {
+          "name": "Antonio Johnson",
+          "pick": 160,
+          "trad": 4.52,
+          "kin": 3.5,
+          "target": -0.04,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Texas A&M"
+        },
+        {
+          "name": "Julius Brents",
+          "pick": 44,
+          "trad": 4.53,
+          "kin": 3.4,
+          "target": -0.01,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Kansas State"
+        },
+        {
+          "name": "Cobee Bryant",
+          "pick": 110,
+          "trad": 4.53,
+          "kin": 3.4,
+          "target": 0.03,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Kansas"
+        },
+        {
+          "name": "Rayuan Lane",
+          "pick": 200,
+          "trad": 4.57,
+          "kin": 3.4,
+          "target": -0.04,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Navy"
+        },
+        {
+          "name": "Caleb Ransaw",
+          "pick": 88,
+          "trad": 4.33,
+          "kin": 3.2,
+          "target": 0.0,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Tulane"
+        },
+        {
+          "name": "Jordan Hancock",
+          "pick": 170,
+          "trad": 4.45,
+          "kin": 3.1,
+          "target": -0.01,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Ohio State"
+        },
+        {
+          "name": "Hunter Wohler",
+          "pick": 232,
+          "trad": 4.57,
+          "kin": 3.0,
+          "target": -0.1,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Wisconsin"
+        },
+        {
+          "name": "Kei'Trel Clark",
+          "pick": 180,
+          "trad": 4.42,
+          "kin": 2.9,
+          "target": -0.02,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Louisville"
+        },
+        {
+          "name": "Rashad Torrence",
+          "pick": 110,
+          "trad": 4.72,
+          "kin": 2.9,
+          "target": 0.11,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Florida"
+        },
+        {
+          "name": "Kelee Ringo",
+          "pick": 105,
+          "trad": 4.36,
+          "kin": 2.8,
+          "target": -0.01,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Georgia"
+        },
+        {
+          "name": "M.J. Devonshire",
+          "pick": 229,
+          "trad": 4.45,
+          "kin": 2.7,
+          "target": -0.06,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Pittsburgh"
+        },
+        {
+          "name": "Mello Dotson",
+          "pick": 110,
+          "trad": 4.59,
+          "kin": 2.6,
+          "target": 0.17,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Kansas"
+        },
+        {
+          "name": "Malaki Starks",
+          "pick": 27,
+          "trad": 4.5,
+          "kin": 2.6,
+          "target": -0.03,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Georgia"
+        },
+        {
+          "name": "Deantre Prince",
+          "pick": 153,
+          "trad": 4.38,
+          "kin": 2.4,
+          "target": -0.06,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Mississippi"
+        },
+        {
+          "name": "Alijah Clark",
+          "pick": 110,
+          "trad": 4.5,
+          "kin": 2.3,
+          "target": 0.09,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Syracuse"
+        },
+        {
+          "name": "Calen Bullock",
+          "pick": 78,
+          "trad": 4.48,
+          "kin": 2.2,
+          "target": -0.15,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Southern California"
+        },
+        {
+          "name": "D.J. James",
+          "pick": 192,
+          "trad": 4.42,
+          "kin": 2.1,
+          "target": -0.12,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Auburn"
+        },
+        {
+          "name": "Terrion Arnold",
+          "pick": 24,
+          "trad": 4.5,
+          "kin": 2.1,
+          "target": -0.03,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Alabama"
+        },
+        {
+          "name": "Alex Austin",
+          "pick": 252,
+          "trad": 4.55,
+          "kin": 2.1,
+          "target": -0.05,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Oregon State"
+        },
+        {
+          "name": "Jabbar Muhammad",
+          "pick": 110,
+          "trad": 4.45,
+          "kin": 2.0,
+          "target": 0.06,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Oregon"
+        },
+        {
+          "name": "Deonte Banks",
+          "pick": 24,
+          "trad": 4.35,
+          "kin": 2.0,
+          "target": 0.01,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Maryland"
+        },
+        {
+          "name": "Quincy Riley",
+          "pick": 131,
+          "trad": 4.48,
+          "kin": 2.0,
+          "target": -0.11,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Louisville"
+        },
+        {
+          "name": "Upton Stout",
+          "pick": 100,
+          "trad": 4.44,
+          "kin": 2.0,
+          "target": 0.05,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Western Kentucky"
+        },
+        {
+          "name": "Brian Branch",
+          "pick": 45,
+          "trad": 4.58,
+          "kin": 2.0,
+          "target": -0.02,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Alabama"
+        },
+        {
+          "name": "Tyrique Stevenson",
+          "pick": 56,
+          "trad": 4.45,
+          "kin": 2.0,
+          "target": -0.05,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Miami"
+        },
+        {
+          "name": "Riley Moss",
+          "pick": 83,
+          "trad": 4.45,
+          "kin": 2.0,
+          "target": -0.12,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Iowa"
+        },
+        {
+          "name": "Jordan Battle",
+          "pick": 95,
+          "trad": 4.55,
+          "kin": 2.0,
+          "target": 0.04,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Alabama"
+        },
+        {
+          "name": "Clark Phillips",
+          "pick": 113,
+          "trad": 4.51,
+          "kin": 2.0,
+          "target": -0.01,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Utah"
+        },
+        {
+          "name": "Chamarri Conner",
+          "pick": 119,
+          "trad": 4.51,
+          "kin": 2.0,
+          "target": -0.05,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Virginia Tech"
+        },
+        {
+          "name": "Darius Rush",
+          "pick": 138,
+          "trad": 4.36,
+          "kin": 2.0,
+          "target": -0.24,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "South Carolina"
+        },
+        {
+          "name": "Cameron Mitchell",
+          "pick": 142,
+          "trad": 4.47,
+          "kin": 2.0,
+          "target": -0.04,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Northwestern"
+        },
+        {
+          "name": "Darrell Luter",
+          "pick": 155,
+          "trad": 4.46,
+          "kin": 2.0,
+          "target": 0.02,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "South Alabama"
+        },
+        {
+          "name": "Christopher Smith",
+          "pick": 170,
+          "trad": 4.62,
+          "kin": 2.0,
+          "target": 0.04,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Georgia"
+        },
+        {
+          "name": "Anthony Johnson",
+          "pick": 242,
+          "trad": 4.54,
+          "kin": 2.0,
+          "target": -0.11,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Iowa State"
+        },
+        {
+          "name": "Brandon Hill",
+          "pick": 248,
+          "trad": 4.43,
+          "kin": 2.0,
+          "target": 0.08,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Pittsburgh"
+        },
+        {
+          "name": "Brandon Joseph",
+          "pick": 110,
+          "trad": 4.62,
+          "kin": 2.0,
+          "target": -0.09,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Notre Dame"
+        },
+        {
+          "name": "Anthony Johnson",
+          "pick": 110,
+          "trad": 4.63,
+          "kin": 2.0,
+          "target": -0.14,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Virginia"
+        },
+        {
+          "name": "Nehemiah Pritchett",
+          "pick": 136,
+          "trad": 4.36,
+          "kin": 2.0,
+          "target": -0.01,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Auburn"
+        },
+        {
+          "name": "Ryan Watts",
+          "pick": 195,
+          "trad": 4.53,
+          "kin": 2.0,
+          "target": 0.22,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Texas"
+        },
+        {
+          "name": "Josh Proctor",
+          "pick": 110,
+          "trad": 4.55,
+          "kin": 2.0,
+          "target": -0.88,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Ohio State"
+        },
+        {
+          "name": "Josh Wallace",
+          "pick": 110,
+          "trad": 4.45,
+          "kin": 2.0,
+          "target": -0.17,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Michigan"
+        },
+        {
+          "name": "Demani Richardson",
+          "pick": 110,
+          "trad": 4.6,
+          "kin": 2.0,
+          "target": 0.04,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Texas A&M"
+        },
+        {
+          "name": "Chau Smith-Wade",
+          "pick": 157,
+          "trad": 4.54,
+          "kin": 2.0,
+          "target": 0.02,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Washington State"
+        }
+      ]
+    },
+    "trench": {
+      "name": "Interior Trench & Running Backs",
+      "trad_label": "10-yd (s)",
+      "kin_label": "TEI",
+      "target_label": "Leverage",
+      "unit": "yd",
+      "players": [
+        {
+          "name": "Mason McCormick",
+          "pick": 119,
+          "trad": 1.71,
+          "kin": 12.0,
+          "target": 2.4,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "South Dakota State"
+        },
+        {
+          "name": "Taliese Fuaga",
+          "pick": 14,
+          "trad": 1.77,
+          "kin": 6.1,
+          "target": 2.37,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Oregon State"
+        },
+        {
+          "name": "Byron Murphy",
+          "pick": 16,
+          "trad": 1.69,
+          "kin": 6.0,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Texas"
+        },
+        {
+          "name": "Troy Fautanu",
+          "pick": 20,
+          "trad": 1.71,
+          "kin": 5.8,
+          "target": 2.39,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Washington"
+        },
+        {
+          "name": "Joe Alt",
+          "pick": 5,
+          "trad": 1.73,
+          "kin": 5.3,
+          "target": 2.4,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Notre Dame"
+        },
+        {
+          "name": "Mekhi Wingo",
+          "pick": 189,
+          "trad": 1.64,
+          "kin": 5.1,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Louisiana State"
+        },
+        {
+          "name": "Leonard Taylor",
+          "pick": 130,
+          "trad": 1.76,
+          "kin": 5.0,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Miami"
+        },
+        {
+          "name": "Earl Bostick",
+          "pick": 130,
+          "trad": 1.74,
+          "kin": 4.7,
+          "target": 2.28,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Kansas"
+        },
+        {
+          "name": "Eli Cox",
+          "pick": 130,
+          "trad": 1.75,
+          "kin": 4.7,
+          "target": 2.39,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Kentucky"
+        },
+        {
+          "name": "Brandon Dorlus",
+          "pick": 109,
+          "trad": 1.68,
+          "kin": 4.6,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Oregon"
+        },
+        {
+          "name": "Jacob Monk",
+          "pick": 163,
+          "trad": 1.66,
+          "kin": 4.5,
+          "target": 2.41,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Duke"
+        },
+        {
+          "name": "Cooper Beebe",
+          "pick": 73,
+          "trad": 1.75,
+          "kin": 4.2,
+          "target": 2.42,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Kansas State"
+        },
+        {
+          "name": "C.J. West",
+          "pick": 113,
+          "trad": 1.73,
+          "kin": 4.2,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Indiana"
+        },
+        {
+          "name": "Kelvin Banks",
+          "pick": 9,
+          "trad": 1.79,
+          "kin": 4.2,
+          "target": 2.36,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Texas"
+        },
+        {
+          "name": "Logan Lee",
+          "pick": 178,
+          "trad": 1.77,
+          "kin": 4.2,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Iowa"
+        },
+        {
+          "name": "Adetomiwa Adebawore",
+          "pick": 110,
+          "trad": 1.61,
+          "kin": 4.1,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Northwestern"
+        },
+        {
+          "name": "Kingsley Suamataia",
+          "pick": 63,
+          "trad": 1.74,
+          "kin": 4.1,
+          "target": 2.39,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Brigham Young"
+        },
+        {
+          "name": "Aeneas Peebles",
+          "pick": 210,
+          "trad": 1.74,
+          "kin": 4.0,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Virginia Tech"
+        },
+        {
+          "name": "Blake Freeland",
+          "pick": 106,
+          "trad": 1.68,
+          "kin": 3.8,
+          "target": 2.31,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Brigham Young"
+        },
+        {
+          "name": "Nick Saldiveri",
+          "pick": 103,
+          "trad": 1.8,
+          "kin": 3.8,
+          "target": 2.34,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Old Dominion"
+        },
+        {
+          "name": "Ryan Hayes",
+          "pick": 238,
+          "trad": 1.78,
+          "kin": 3.8,
+          "target": 2.43,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Michigan"
+        },
+        {
+          "name": "Zacch Pickens",
+          "pick": 64,
+          "trad": 1.74,
+          "kin": 3.8,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "South Carolina"
+        },
+        {
+          "name": "Christian Haynes",
+          "pick": 81,
+          "trad": 1.75,
+          "kin": 3.8,
+          "target": 2.42,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Connecticut"
+        },
+        {
+          "name": "Keaton Bills",
+          "pick": 130,
+          "trad": 1.9,
+          "kin": 3.7,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Utah"
+        },
+        {
+          "name": "Caleb Rogers",
+          "pick": 98,
+          "trad": 1.78,
+          "kin": 3.7,
+          "target": 2.39,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Texas Tech"
+        },
+        {
+          "name": "T'Vondre Sweat",
+          "pick": 38,
+          "trad": 1.8,
+          "kin": 3.6,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Texas"
+        },
+        {
+          "name": "Tanor Bortolini",
+          "pick": 117,
+          "trad": 1.69,
+          "kin": 3.6,
+          "target": 2.4,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Wisconsin"
+        },
+        {
+          "name": "Gervon Dexter",
+          "pick": 53,
+          "trad": 1.81,
+          "kin": 3.6,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Florida"
+        },
+        {
+          "name": "Tommy Akingbesote",
+          "pick": 247,
+          "trad": 1.77,
+          "kin": 3.5,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Maryland"
+        },
+        {
+          "name": "Broderick Jones",
+          "pick": 14,
+          "trad": 1.74,
+          "kin": 3.5,
+          "target": 2.35,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Georgia"
+        },
+        {
+          "name": "Caedan Wallace",
+          "pick": 68,
+          "trad": 1.74,
+          "kin": 3.5,
+          "target": 2.41,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Penn State"
+        },
+        {
+          "name": "Yahya Black",
+          "pick": 164,
+          "trad": 1.88,
+          "kin": 3.5,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Iowa"
+        },
+        {
+          "name": "Keondre Coburn",
+          "pick": 194,
+          "trad": 1.82,
+          "kin": 3.4,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Texas"
+        },
+        {
+          "name": "Delmar Glaze",
+          "pick": 77,
+          "trad": 1.78,
+          "kin": 3.4,
+          "target": 2.32,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Maryland"
+        },
+        {
+          "name": "D.J. Dale",
+          "pick": 130,
+          "trad": 1.81,
+          "kin": 3.4,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Alabama"
+        },
+        {
+          "name": "McKinnley Jackson",
+          "pick": 97,
+          "trad": 1.78,
+          "kin": 3.4,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Texas A&M"
+        },
+        {
+          "name": "Myles Murphy",
+          "pick": 130,
+          "trad": 1.82,
+          "kin": 3.3,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "North Carolina"
+        },
+        {
+          "name": "Dawand Jones",
+          "pick": 111,
+          "trad": 1.92,
+          "kin": 3.3,
+          "target": 2.37,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Ohio State"
+        },
+        {
+          "name": "Robbie Ouzts",
+          "pick": 175,
+          "trad": 1.64,
+          "kin": 3.3,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Alabama"
+        },
+        {
+          "name": "K.T. Leveston",
+          "pick": 254,
+          "trad": 1.85,
+          "kin": 3.2,
+          "target": 2.31,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": "Kansas State"
+        },
+        {
+          "name": "John Williams",
+          "pick": 250,
+          "trad": 1.8,
+          "kin": 3.2,
+          "target": 2.38,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Cincinnati"
+        },
+        {
+          "name": "Jordan McFadden",
+          "pick": 156,
+          "trad": 1.74,
+          "kin": 3.2,
+          "target": 2.41,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Clemson"
+        },
+        {
+          "name": "John Michael Schmitz",
+          "pick": 57,
+          "trad": 1.85,
+          "kin": 3.1,
+          "target": 2.4,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Minnesota"
+        },
+        {
+          "name": "Cody Mauch",
+          "pick": 48,
+          "trad": 1.79,
+          "kin": 3.1,
+          "target": 2.37,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "North Dakota State"
+        },
+        {
+          "name": "Patrick Paul",
+          "pick": 55,
+          "trad": 1.77,
+          "kin": 3.1,
+          "target": 2.4,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Houston"
+        },
+        {
+          "name": "Connor Galvin",
+          "pick": 130,
+          "trad": 1.81,
+          "kin": 3.1,
+          "target": 2.42,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Baylor"
+        },
+        {
+          "name": "Marcus Harris",
+          "pick": 247,
+          "trad": 1.77,
+          "kin": 3.0,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Auburn"
+        },
+        {
+          "name": "Mark Evans",
+          "pick": 130,
+          "trad": 1.9,
+          "kin": 3.0,
+          "target": 2.39,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Arkansas-Pine Bluff"
+        },
+        {
+          "name": "Maason Smith",
+          "pick": 48,
+          "trad": 1.75,
+          "kin": 2.9,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Louisiana State"
+        },
+        {
+          "name": "Drake Nugent",
+          "pick": 130,
+          "trad": 1.83,
+          "kin": 2.9,
+          "target": 2.45,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Michigan"
+        },
+        {
+          "name": "Jovaughn Gwyn",
+          "pick": 225,
+          "trad": 1.8,
+          "kin": 2.9,
+          "target": 2.46,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "South Carolina"
+        },
+        {
+          "name": "Steve Avila",
+          "pick": 36,
+          "trad": 1.86,
+          "kin": 2.9,
+          "target": 2.4,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Texas Christian"
+        },
+        {
+          "name": "Anton Harrison",
+          "pick": 27,
+          "trad": 1.77,
+          "kin": 2.8,
+          "target": 2.4,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Oklahoma"
+        },
+        {
+          "name": "Nick Broeker",
+          "pick": 230,
+          "trad": 1.84,
+          "kin": 2.8,
+          "target": 2.43,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Mississippi"
+        },
+        {
+          "name": "Zion Logue",
+          "pick": 197,
+          "trad": 1.82,
+          "kin": 2.8,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Georgia"
+        },
+        {
+          "name": "Aireontae Ersery",
+          "pick": 48,
+          "trad": 1.75,
+          "kin": 2.7,
+          "target": 2.39,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Minnesota"
+        },
+        {
+          "name": "Jerrod Clark",
+          "pick": 130,
+          "trad": 1.82,
+          "kin": 2.7,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Coastal Carolina"
+        },
+        {
+          "name": "DeWayne Carter",
+          "pick": 95,
+          "trad": 1.72,
+          "kin": 2.7,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": "Duke"
+        },
+        {
+          "name": "Dylan McMahon",
+          "pick": 190,
+          "trad": 1.75,
+          "kin": 2.7,
+          "target": 2.42,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "North Carolina State"
+        },
+        {
+          "name": "Clay Webb",
+          "pick": 130,
+          "trad": 1.72,
+          "kin": 2.6,
+          "target": 2.4,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Jacksonville State"
+        },
+        {
+          "name": "Joe Huber",
+          "pick": 130,
+          "trad": 1.8,
+          "kin": 2.6,
+          "target": 2.38,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Wisconsin"
+        },
+        {
+          "name": "Nick Gargiulo",
+          "pick": 256,
+          "trad": 1.78,
+          "kin": 2.6,
+          "target": 2.34,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "South Carolina"
+        },
+        {
+          "name": "Juice Scruggs",
+          "pick": 62,
+          "trad": 1.79,
+          "kin": 2.6,
+          "target": 2.4,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Penn State"
+        },
+        {
+          "name": "Ruke Orhorhoro",
+          "pick": 35,
+          "trad": 1.67,
+          "kin": 2.6,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Clemson"
+        },
+        {
+          "name": "Jared Wilson",
+          "pick": 95,
+          "trad": 1.72,
+          "kin": 2.6,
+          "target": 2.36,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Georgia"
+        },
+        {
+          "name": "Jon Gaines",
+          "pick": 122,
+          "trad": 1.73,
+          "kin": 2.5,
+          "target": 2.39,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "UCLA"
+        },
+        {
+          "name": "Tashawn Manning",
+          "pick": 130,
+          "trad": 1.85,
+          "kin": 2.5,
+          "target": 2.4,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Kentucky"
+        },
+        {
+          "name": "Elijah Simmons",
+          "pick": 130,
+          "trad": 1.88,
+          "kin": 2.5,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Tennessee"
+        },
+        {
+          "name": "Darnell Wright",
+          "pick": 10,
+          "trad": 1.81,
+          "kin": 2.4,
+          "target": 2.37,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Tennessee"
+        },
+        {
+          "name": "Ty Robinson",
+          "pick": 111,
+          "trad": 1.71,
+          "kin": 2.4,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Nebraska"
+        },
+        {
+          "name": "Blake Fisher",
+          "pick": 59,
+          "trad": 1.82,
+          "kin": 2.4,
+          "target": 2.35,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Notre Dame"
+        },
+        {
+          "name": "Cameron Young",
+          "pick": 123,
+          "trad": 1.8,
+          "kin": 2.4,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Mississippi State"
+        },
+        {
+          "name": "Ricky Stromberg",
+          "pick": 97,
+          "trad": 1.81,
+          "kin": 2.4,
+          "target": 2.42,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Arkansas"
+        },
+        {
+          "name": "T.J. Bass",
+          "pick": 130,
+          "trad": 1.86,
+          "kin": 2.3,
+          "target": 2.44,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Oregon"
+        },
+        {
+          "name": "Will Campbell",
+          "pick": 4,
+          "trad": 1.76,
+          "kin": 2.3,
+          "target": 2.31,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Louisiana State"
+        },
+        {
+          "name": "Anthony Bradford",
+          "pick": 108,
+          "trad": 1.74,
+          "kin": 2.2,
+          "target": 2.4,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Louisiana State"
+        },
+        {
+          "name": "Luke Wypler",
+          "pick": 190,
+          "trad": 1.83,
+          "kin": 2.2,
+          "target": 2.41,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Ohio State"
+        },
+        {
+          "name": "O'Cyrus Torrence",
+          "pick": 59,
+          "trad": 1.84,
+          "kin": 2.2,
+          "target": 2.4,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Florida"
+        },
+        {
+          "name": "Matthew Jones",
+          "pick": 130,
+          "trad": 1.87,
+          "kin": 2.2,
+          "target": 2.48,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Ohio State"
+        },
+        {
+          "name": "Keeanu Benton",
+          "pick": 49,
+          "trad": 1.79,
+          "kin": 2.2,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Wisconsin"
+        },
+        {
+          "name": "Wyatt Milum",
+          "pick": 89,
+          "trad": 1.84,
+          "kin": 2.1,
+          "target": 2.39,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "West Virginia"
+        },
+        {
+          "name": "Brandon Crenshaw-Dickson",
+          "pick": 130,
+          "trad": 1.87,
+          "kin": 2.1,
+          "target": 2.32,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Florida"
+        },
+        {
+          "name": "Tyler Booker",
+          "pick": 12,
+          "trad": 1.96,
+          "kin": 2.1,
+          "target": 2.41,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Alabama"
+        },
+        {
+          "name": "Josh Conerly",
+          "pick": 29,
+          "trad": 1.71,
+          "kin": 2.1,
+          "target": 2.37,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Oregon"
+        },
+        {
+          "name": "Armand Membou",
+          "pick": 7,
+          "trad": 1.74,
+          "kin": 2.0,
+          "target": 2.37,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Missouri"
+        },
+        {
+          "name": "Christian Mahogany",
+          "pick": 210,
+          "trad": 1.74,
+          "kin": 2.0,
+          "target": 2.39,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Boston College"
+        },
+        {
+          "name": "Joshua Farmer",
+          "pick": 137,
+          "trad": 1.77,
+          "kin": 2.0,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Florida State"
+        },
+        {
+          "name": "Siaki Ika",
+          "pick": 98,
+          "trad": 1.88,
+          "kin": 2.0,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Baylor"
+        },
+        {
+          "name": "Gottlieb Ayedze",
+          "pick": 130,
+          "trad": 1.72,
+          "kin": 2.0,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Maryland"
+        },
+        {
+          "name": "Tate Ratledge",
+          "pick": 57,
+          "trad": 1.72,
+          "kin": 2.0,
+          "target": 2.43,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Georgia"
+        },
+        {
+          "name": "Jonah Savaiinaea",
+          "pick": 37,
+          "trad": 1.72,
+          "kin": 2.0,
+          "target": 2.38,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Arizona"
+        },
+        {
+          "name": "Joshua Gray",
+          "pick": 130,
+          "trad": 1.73,
+          "kin": 1.9,
+          "target": 2.41,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Oregon State"
+        },
+        {
+          "name": "Tyler Guyton",
+          "pick": 29,
+          "trad": 1.76,
+          "kin": 1.9,
+          "target": 2.37,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Oklahoma"
+        },
+        {
+          "name": "Keith Randolph",
+          "pick": 130,
+          "trad": 1.78,
+          "kin": 1.9,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Illinois"
+        },
+        {
+          "name": "Xavier Truss",
+          "pick": 130,
+          "trad": 1.82,
+          "kin": 1.8,
+          "target": 2.35,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Georgia"
+        },
+        {
+          "name": "Cam Jackson",
+          "pick": 140,
+          "trad": 1.81,
+          "kin": 1.8,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Florida"
+        },
+        {
+          "name": "Warren Brinson",
+          "pick": 198,
+          "trad": 1.76,
+          "kin": 1.8,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Georgia"
+        },
+        {
+          "name": "Jalen Rivers",
+          "pick": 153,
+          "trad": 1.85,
+          "kin": 1.8,
+          "target": 2.36,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Miami"
+        },
+        {
+          "name": "Matt Lee",
+          "pick": 237,
+          "trad": 1.76,
+          "kin": 1.8,
+          "target": 2.47,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Miami"
+        },
+        {
+          "name": "Garret Greenfield",
+          "pick": 130,
+          "trad": 1.77,
+          "kin": 1.8,
+          "target": 2.36,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "South Dakota State"
+        },
+        {
+          "name": "Jarrett Patterson",
+          "pick": 201,
+          "trad": 1.82,
+          "kin": 1.8,
+          "target": 2.43,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Notre Dame"
+        },
+        {
+          "name": "Jalen Travis",
+          "pick": 127,
+          "trad": 1.8,
+          "kin": 1.8,
+          "target": 2.36,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Iowa State"
+        },
+        {
+          "name": "Nazir Stackhouse",
+          "pick": 130,
+          "trad": 1.8,
+          "kin": 1.8,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Georgia"
+        },
+        {
+          "name": "Eric Gregory",
+          "pick": 130,
+          "trad": 1.76,
+          "kin": 1.8,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Arkansas"
+        },
+        {
+          "name": "Braeden Daniels",
+          "pick": 118,
+          "trad": 1.71,
+          "kin": 1.8,
+          "target": 2.42,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Utah"
+        },
+        {
+          "name": "Frank Crum",
+          "pick": 130,
+          "trad": 1.69,
+          "kin": 1.7,
+          "target": 2.38,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Wyoming"
+        },
+        {
+          "name": "Nesta Jade Silvera",
+          "pick": 231,
+          "trad": 1.77,
+          "kin": 1.7,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Arizona State"
+        },
+        {
+          "name": "Peter Skoronski",
+          "pick": 11,
+          "trad": 1.75,
+          "kin": 1.7,
+          "target": 2.37,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Northwestern"
+        },
+        {
+          "name": "Junior Tafuna",
+          "pick": 130,
+          "trad": 1.8,
+          "kin": 1.7,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Utah"
+        },
+        {
+          "name": "Andrew Coker",
+          "pick": 130,
+          "trad": 1.85,
+          "kin": 1.7,
+          "target": 2.38,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Texas Christian"
+        },
+        {
+          "name": "Sedrick Van Pran-Granger",
+          "pick": 141,
+          "trad": 1.77,
+          "kin": 1.6,
+          "target": 2.48,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Georgia"
+        },
+        {
+          "name": "Connor Colby",
+          "pick": 249,
+          "trad": 1.78,
+          "kin": 1.6,
+          "target": 2.38,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Iowa"
+        },
+        {
+          "name": "Sidy Sow",
+          "pick": 117,
+          "trad": 1.8,
+          "kin": 1.6,
+          "target": 2.38,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Eastern Michigan"
+        },
+        {
+          "name": "Beaux Limmer",
+          "pick": 217,
+          "trad": 1.75,
+          "kin": 1.6,
+          "target": 2.42,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Arkansas"
+        },
+        {
+          "name": "John Ojukwu",
+          "pick": 130,
+          "trad": 1.81,
+          "kin": 1.5,
+          "target": 2.35,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Boise State"
+        },
+        {
+          "name": "Jarrett Kingston",
+          "pick": 215,
+          "trad": 1.73,
+          "kin": 1.5,
+          "target": 2.45,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Southern California"
+        },
+        {
+          "name": "Carson Vinson",
+          "pick": 141,
+          "trad": 1.8,
+          "kin": 1.4,
+          "target": 2.4,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Alabama A&M"
+        },
+        {
+          "name": "Darius Alexander",
+          "pick": 65,
+          "trad": 1.72,
+          "kin": 1.4,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Toledo"
+        },
+        {
+          "name": "P.J. Mustipher",
+          "pick": 130,
+          "trad": 1.88,
+          "kin": 1.4,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Penn State"
+        },
+        {
+          "name": "Zeek Biggers",
+          "pick": 253,
+          "trad": 1.74,
+          "kin": 1.4,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Georgia Tech"
+        },
+        {
+          "name": "Torricelli Simpkins",
+          "pick": 130,
+          "trad": 1.84,
+          "kin": 1.4,
+          "target": 2.37,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "South Carolina"
+        },
+        {
+          "name": "Miles Frazier",
+          "pick": 171,
+          "trad": 1.79,
+          "kin": 1.4,
+          "target": 2.23,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Louisiana State"
+        },
+        {
+          "name": "Darius Robinson",
+          "pick": 27,
+          "trad": 1.73,
+          "kin": 1.3,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Missouri"
+        },
+        {
+          "name": "C.J. Hanson",
+          "pick": 248,
+          "trad": 1.76,
+          "kin": 1.3,
+          "target": 2.37,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Holy Cross"
+        },
+        {
+          "name": "Dominick Puni",
+          "pick": 86,
+          "trad": 1.86,
+          "kin": 1.3,
+          "target": 2.4,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Kansas"
+        },
+        {
+          "name": "Karsen Barnhart",
+          "pick": 130,
+          "trad": 1.76,
+          "kin": 1.3,
+          "target": 2.4,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Michigan"
+        },
+        {
+          "name": "Trevor Keegan",
+          "pick": 172,
+          "trad": 1.78,
+          "kin": 1.2,
+          "target": 2.36,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Michigan"
+        },
+        {
+          "name": "Christian Jones",
+          "pick": 162,
+          "trad": 1.78,
+          "kin": 1.2,
+          "target": 2.42,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Texas"
+        },
+        {
+          "name": "Roger Rosengarten",
+          "pick": 62,
+          "trad": 1.73,
+          "kin": 1.2,
+          "target": 2.37,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Washington"
+        },
+        {
+          "name": "Gabe Hall",
+          "pick": 130,
+          "trad": 1.72,
+          "kin": 1.2,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Baylor"
+        },
+        {
+          "name": "Brady Latham",
+          "pick": 130,
+          "trad": 1.8,
+          "kin": 1.1,
+          "target": 2.42,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Arkansas"
+        },
+        {
+          "name": "McClendon Curtis",
+          "pick": 130,
+          "trad": 1.85,
+          "kin": 1.0,
+          "target": 2.37,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Chattanooga"
+        },
+        {
+          "name": "Drew Kendall",
+          "pick": 168,
+          "trad": 1.79,
+          "kin": 1.0,
+          "target": 2.42,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Boston College"
+        },
+        {
+          "name": "Logan Brown",
+          "pick": 130,
+          "trad": 1.75,
+          "kin": 1.0,
+          "target": 2.41,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Kansas"
+        },
+        {
+          "name": "Sione Vaki",
+          "pick": 132,
+          "trad": 1.54,
+          "kin": 0.9,
+          "target": 2.5,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": "Utah"
+        },
+        {
+          "name": "Ozzy Trapilo",
+          "pick": 56,
+          "trad": 1.77,
+          "kin": 0.6,
+          "target": 2.41,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Boston College"
+        },
+        {
+          "name": "Nathan Thomas",
+          "pick": 233,
+          "trad": 1.76,
+          "kin": 0.5,
+          "target": 2.31,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "Louisiana-Lafayette"
+        },
+        {
+          "name": "Anthony Belton",
+          "pick": 54,
+          "trad": 1.82,
+          "kin": 0.5,
+          "target": 2.37,
+          "z_trad": 0.0,
+          "z_kin": 0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": "North Carolina State"
+        }
+      ]
+    }
+  },
+  "synthetic": {
+    "wr": {
+      "name": "Wide Receivers & Tight Ends",
+      "trad_label": "Shuttle (s)",
+      "kin_label": "DEI",
+      "target_label": "Separation (yd)",
+      "unit": "yd",
+      "players": [
+        {
+          "name": "Amon-Ra Miller",
+          "pick": 24,
+          "trad": 4.1,
+          "kin": 13.2,
+          "target": 4.2,
+          "z_trad": 0.96,
+          "z_kin": -1.14,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "Jaxon Higgins",
+          "pick": 171,
+          "trad": 4.25,
+          "kin": 19.3,
+          "target": 4.2,
+          "z_trad": -0.17,
+          "z_kin": -0.53,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Marvin Coleman",
+          "pick": 40,
+          "trad": 4.17,
+          "kin": 29.1,
+          "target": 4.2,
+          "z_trad": 0.41,
+          "z_kin": 0.46,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Devonte Reed",
+          "pick": 86,
+          "trad": 4.32,
+          "kin": 8.5,
+          "target": 3.89,
+          "z_trad": -0.72,
+          "z_kin": -1.62,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Rome Mitchell",
+          "pick": 195,
+          "trad": 4.4,
+          "kin": 17.8,
+          "target": 4.2,
+          "z_trad": -1.34,
+          "z_kin": -0.68,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Malik Worthy",
+          "pick": 25,
+          "trad": 4.36,
+          "kin": 22.9,
+          "target": 4.2,
+          "z_trad": -1.05,
+          "z_kin": -0.16,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Keon Nabers",
+          "pick": 91,
+          "trad": 4.01,
+          "kin": 11.5,
+          "target": 4.2,
+          "z_trad": 1.59,
+          "z_kin": -1.31,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "Adonai Odunze",
+          "pick": 203,
+          "trad": 4.31,
+          "kin": 26.2,
+          "target": 4.2,
+          "z_trad": -0.62,
+          "z_kin": 0.17,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Brian Thomas Jr.",
+          "pick": 6,
+          "trad": 4.32,
+          "kin": 15.3,
+          "target": 4.2,
+          "z_trad": -0.72,
+          "z_kin": -0.93,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Ladd McConkey",
+          "pick": 159,
+          "trad": 4.23,
+          "kin": 35.9,
+          "target": 4.2,
+          "z_trad": -0.05,
+          "z_kin": 1.14,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": ""
+        },
+        {
+          "name": "Xavier Worthy",
+          "pick": 69,
+          "trad": 4.45,
+          "kin": 11.8,
+          "target": 4.2,
+          "z_trad": -1.7,
+          "z_kin": -1.28,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Ricky Pearsall",
+          "pick": 94,
+          "trad": 4.26,
+          "kin": 21.5,
+          "target": 4.2,
+          "z_trad": -0.28,
+          "z_kin": -0.3,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Ja'Lynn Polk",
+          "pick": 219,
+          "trad": 4.23,
+          "kin": 35.3,
+          "target": 4.2,
+          "z_trad": -0.02,
+          "z_kin": 1.09,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": ""
+        },
+        {
+          "name": "Troy Franklin",
+          "pick": 202,
+          "trad": 4.02,
+          "kin": 14.4,
+          "target": 4.2,
+          "z_trad": 1.53,
+          "z_kin": -1.02,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "Jermaine Burton",
+          "pick": 27,
+          "trad": 4.09,
+          "kin": 14.4,
+          "target": 4.2,
+          "z_trad": 1.01,
+          "z_kin": -1.02,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "Roman Wilson",
+          "pick": 83,
+          "trad": 4.1,
+          "kin": 37.0,
+          "target": 4.2,
+          "z_trad": 0.89,
+          "z_kin": 1.26,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Jalen McMillan",
+          "pick": 54,
+          "trad": 4.0,
+          "kin": 26.5,
+          "target": 4.2,
+          "z_trad": 1.69,
+          "z_kin": 0.2,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Luke McCaffrey",
+          "pick": 131,
+          "trad": 4.23,
+          "kin": 30.4,
+          "target": 4.2,
+          "z_trad": -0.01,
+          "z_kin": 0.59,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": ""
+        },
+        {
+          "name": "Johnny Wilson",
+          "pick": 100,
+          "trad": 4.17,
+          "kin": 35.4,
+          "target": 4.2,
+          "z_trad": 0.37,
+          "z_kin": 1.1,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Ainias Smith",
+          "pick": 27,
+          "trad": 4.21,
+          "kin": 28.6,
+          "target": 4.2,
+          "z_trad": 0.12,
+          "z_kin": 0.41,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 21",
+          "pick": 75,
+          "trad": 4.45,
+          "kin": 19.9,
+          "target": 4.2,
+          "z_trad": -1.65,
+          "z_kin": -0.47,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 22",
+          "pick": 116,
+          "trad": 4.29,
+          "kin": 36.7,
+          "target": 4.2,
+          "z_trad": -0.52,
+          "z_kin": 1.22,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 23",
+          "pick": 65,
+          "trad": 4.26,
+          "kin": 25.2,
+          "target": 4.2,
+          "z_trad": -0.28,
+          "z_kin": 0.07,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 24",
+          "pick": 65,
+          "trad": 4.09,
+          "kin": 15.4,
+          "target": 4.2,
+          "z_trad": 0.98,
+          "z_kin": -0.92,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 25",
+          "pick": 55,
+          "trad": 4.19,
+          "kin": 38.4,
+          "target": 4.2,
+          "z_trad": 0.27,
+          "z_kin": 1.4,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 26",
+          "pick": 165,
+          "trad": 4.22,
+          "kin": 12.9,
+          "target": 4.2,
+          "z_trad": 0.03,
+          "z_kin": -1.17,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 27",
+          "pick": 117,
+          "trad": 4.21,
+          "kin": 34.5,
+          "target": 4.2,
+          "z_trad": 0.12,
+          "z_kin": 1.0,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 28",
+          "pick": 42,
+          "trad": 4.03,
+          "kin": 11.3,
+          "target": 4.2,
+          "z_trad": 1.42,
+          "z_kin": -1.33,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 29",
+          "pick": 37,
+          "trad": 4.25,
+          "kin": 19.6,
+          "target": 4.2,
+          "z_trad": -0.2,
+          "z_kin": -0.5,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 30",
+          "pick": 111,
+          "trad": 4.12,
+          "kin": 23.5,
+          "target": 4.2,
+          "z_trad": 0.74,
+          "z_kin": -0.1,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 31",
+          "pick": 46,
+          "trad": 4.37,
+          "kin": 24.4,
+          "target": 4.2,
+          "z_trad": -1.09,
+          "z_kin": -0.02,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 32",
+          "pick": 89,
+          "trad": 4.02,
+          "kin": 16.7,
+          "target": 4.2,
+          "z_trad": 1.49,
+          "z_kin": -0.78,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 33",
+          "pick": 26,
+          "trad": 4.17,
+          "kin": 10.3,
+          "target": 4.2,
+          "z_trad": 0.38,
+          "z_kin": -1.43,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 34",
+          "pick": 210,
+          "trad": 4.2,
+          "kin": 32.5,
+          "target": 4.2,
+          "z_trad": 0.2,
+          "z_kin": 0.8,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 35",
+          "pick": 6,
+          "trad": 4.03,
+          "kin": 18.3,
+          "target": 4.2,
+          "z_trad": 1.44,
+          "z_kin": -0.62,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 36",
+          "pick": 97,
+          "trad": 4.23,
+          "kin": 34.6,
+          "target": 4.2,
+          "z_trad": -0.04,
+          "z_kin": 1.02,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 37",
+          "pick": 180,
+          "trad": 4.51,
+          "kin": 35.1,
+          "target": 4.2,
+          "z_trad": -2.1,
+          "z_kin": 1.06,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 38",
+          "pick": 202,
+          "trad": 4.2,
+          "kin": 33.9,
+          "target": 4.2,
+          "z_trad": 0.17,
+          "z_kin": 0.94,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 39",
+          "pick": 77,
+          "trad": 4.43,
+          "kin": 4.4,
+          "target": 2.14,
+          "z_trad": -1.5,
+          "z_kin": -2.03,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 40",
+          "pick": 124,
+          "trad": 4.23,
+          "kin": 41.5,
+          "target": 4.2,
+          "z_trad": -0.05,
+          "z_kin": 1.71,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 41",
+          "pick": 29,
+          "trad": 4.25,
+          "kin": 31.3,
+          "target": 4.2,
+          "z_trad": -0.18,
+          "z_kin": 0.68,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 42",
+          "pick": 43,
+          "trad": 4.27,
+          "kin": 32.6,
+          "target": 4.2,
+          "z_trad": -0.38,
+          "z_kin": 0.81,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 43",
+          "pick": 143,
+          "trad": 4.17,
+          "kin": 42.0,
+          "target": 4.2,
+          "z_trad": 0.37,
+          "z_kin": 1.76,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 44",
+          "pick": 217,
+          "trad": 4.06,
+          "kin": 15.7,
+          "target": 4.2,
+          "z_trad": 1.24,
+          "z_kin": -0.89,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 45",
+          "pick": 47,
+          "trad": 4.23,
+          "kin": 20.7,
+          "target": 4.2,
+          "z_trad": -0.07,
+          "z_kin": -0.39,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 46",
+          "pick": 11,
+          "trad": 4.27,
+          "kin": 24.5,
+          "target": 4.2,
+          "z_trad": -0.34,
+          "z_kin": -0.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 47",
+          "pick": 169,
+          "trad": 4.16,
+          "kin": 23.7,
+          "target": 4.2,
+          "z_trad": 0.5,
+          "z_kin": -0.08,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 48",
+          "pick": 80,
+          "trad": 4.18,
+          "kin": 38.9,
+          "target": 4.2,
+          "z_trad": 0.3,
+          "z_kin": 1.44,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 49",
+          "pick": 11,
+          "trad": 4.14,
+          "kin": 40.9,
+          "target": 4.2,
+          "z_trad": 0.61,
+          "z_kin": 1.65,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 50",
+          "pick": 114,
+          "trad": 4.2,
+          "kin": 23.3,
+          "target": 4.2,
+          "z_trad": 0.2,
+          "z_kin": -0.12,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 51",
+          "pick": 196,
+          "trad": 4.25,
+          "kin": 19.8,
+          "target": 4.2,
+          "z_trad": -0.21,
+          "z_kin": -0.47,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 52",
+          "pick": 217,
+          "trad": 3.96,
+          "kin": 17.1,
+          "target": 4.2,
+          "z_trad": 1.98,
+          "z_kin": -0.74,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 53",
+          "pick": 187,
+          "trad": 4.29,
+          "kin": 32.5,
+          "target": 4.2,
+          "z_trad": -0.5,
+          "z_kin": 0.8,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 54",
+          "pick": 130,
+          "trad": 4.53,
+          "kin": 31.0,
+          "target": 4.2,
+          "z_trad": -2.3,
+          "z_kin": 0.65,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 55",
+          "pick": 123,
+          "trad": 4.49,
+          "kin": 19.5,
+          "target": 4.2,
+          "z_trad": -1.95,
+          "z_kin": -0.5,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 56",
+          "pick": 121,
+          "trad": 4.31,
+          "kin": 28.9,
+          "target": 4.2,
+          "z_trad": -0.68,
+          "z_kin": 0.44,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 57",
+          "pick": 41,
+          "trad": 4.48,
+          "kin": 16.0,
+          "target": 4.2,
+          "z_trad": -1.9,
+          "z_kin": -0.85,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 58",
+          "pick": 186,
+          "trad": 4.15,
+          "kin": 21.9,
+          "target": 4.2,
+          "z_trad": 0.55,
+          "z_kin": -0.27,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 59",
+          "pick": 43,
+          "trad": 4.24,
+          "kin": 41.0,
+          "target": 4.2,
+          "z_trad": -0.1,
+          "z_kin": 1.66,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": ""
+        },
+        {
+          "name": "WR Prospect 60",
+          "pick": 49,
+          "trad": 4.06,
+          "kin": 6.3,
+          "target": 4.03,
+          "z_trad": 1.19,
+          "z_kin": -1.84,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        }
+      ]
+    },
+    "edge": {
+      "name": "EDGE Rushers & Defensive Linemen",
+      "trad_label": "3-Cone (s)",
+      "kin_label": "EBI",
+      "target_label": "PRWR (%)",
+      "unit": "%",
+      "players": [
+        {
+          "name": "Dallas Turner",
+          "pick": 113,
+          "trad": 7.24,
+          "kin": 20.5,
+          "target": 4.0,
+          "z_trad": -0.59,
+          "z_kin": -0.76,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Laiatu Latu",
+          "pick": 145,
+          "trad": 7.29,
+          "kin": 28.1,
+          "target": 4.21,
+          "z_trad": -0.93,
+          "z_kin": -0.49,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Jared Verse",
+          "pick": 142,
+          "trad": 7.29,
+          "kin": 25.9,
+          "target": 4.0,
+          "z_trad": -0.9,
+          "z_kin": -0.57,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Chop Robinson",
+          "pick": 101,
+          "trad": 6.98,
+          "kin": 44.3,
+          "target": 13.04,
+          "z_trad": 1.13,
+          "z_kin": 0.08,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Darius Robinson",
+          "pick": 8,
+          "trad": 7.06,
+          "kin": 88.4,
+          "target": 28.5,
+          "z_trad": 0.61,
+          "z_kin": 1.65,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Chris Braswell",
+          "pick": 185,
+          "trad": 7.19,
+          "kin": 6.7,
+          "target": 4.0,
+          "z_trad": -0.23,
+          "z_kin": -1.25,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Jonah Elliss",
+          "pick": 190,
+          "trad": 7.12,
+          "kin": 8.0,
+          "target": 4.0,
+          "z_trad": 0.19,
+          "z_kin": -1.21,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Marshawn Kneeland",
+          "pick": 168,
+          "trad": 6.91,
+          "kin": 117.2,
+          "target": 28.5,
+          "z_trad": 1.56,
+          "z_kin": 2.68,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Adisa Isaac",
+          "pick": 112,
+          "trad": 7.12,
+          "kin": 43.4,
+          "target": 12.86,
+          "z_trad": 0.17,
+          "z_kin": 0.05,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Bralen Trice",
+          "pick": 78,
+          "trad": 6.97,
+          "kin": 68.9,
+          "target": 21.15,
+          "z_trad": 1.14,
+          "z_kin": 0.96,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Austin Booker",
+          "pick": 178,
+          "trad": 7.15,
+          "kin": 45.1,
+          "target": 11.13,
+          "z_trad": -0.01,
+          "z_kin": 0.11,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Mohamed Kamara",
+          "pick": 22,
+          "trad": 7.02,
+          "kin": 58.3,
+          "target": 19.76,
+          "z_trad": 0.82,
+          "z_kin": 0.58,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Jalyx Hunt",
+          "pick": 142,
+          "trad": 6.91,
+          "kin": 79.6,
+          "target": 22.25,
+          "z_trad": 1.58,
+          "z_kin": 1.34,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Javon Solomon",
+          "pick": 5,
+          "trad": 7.13,
+          "kin": 70.7,
+          "target": 21.92,
+          "z_trad": 0.12,
+          "z_kin": 1.03,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Cedric Johnson",
+          "pick": 38,
+          "trad": 7.15,
+          "kin": 56.1,
+          "target": 18.94,
+          "z_trad": -0.01,
+          "z_kin": 0.5,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": ""
+        },
+        {
+          "name": "Gabriel Murphy",
+          "pick": 7,
+          "trad": 7.31,
+          "kin": 87.2,
+          "target": 24.5,
+          "z_trad": -0.99,
+          "z_kin": 1.61,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": ""
+        },
+        {
+          "name": "Myles Murphy",
+          "pick": 179,
+          "trad": 7.14,
+          "kin": 76.7,
+          "target": 19.3,
+          "z_trad": 0.1,
+          "z_kin": 1.24,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Will Anderson Jr.",
+          "pick": 202,
+          "trad": 7.28,
+          "kin": 5.2,
+          "target": 4.0,
+          "z_trad": -0.81,
+          "z_kin": -1.31,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Aidan Hutchinson",
+          "pick": 194,
+          "trad": 7.18,
+          "kin": 17.4,
+          "target": 4.0,
+          "z_trad": -0.22,
+          "z_kin": -0.87,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "George Karlaftis",
+          "pick": 194,
+          "trad": 7.45,
+          "kin": 10.1,
+          "target": 4.0,
+          "z_trad": -1.96,
+          "z_kin": -1.14,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 21",
+          "pick": 185,
+          "trad": 6.99,
+          "kin": 94.7,
+          "target": 25.79,
+          "z_trad": 1.02,
+          "z_kin": 1.88,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 22",
+          "pick": 53,
+          "trad": 6.93,
+          "kin": 59.0,
+          "target": 20.17,
+          "z_trad": 1.44,
+          "z_kin": 0.61,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 23",
+          "pick": 209,
+          "trad": 7.03,
+          "kin": 62.9,
+          "target": 15.28,
+          "z_trad": 0.8,
+          "z_kin": 0.74,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 24",
+          "pick": 83,
+          "trad": 7.31,
+          "kin": 48.9,
+          "target": 11.42,
+          "z_trad": -1.02,
+          "z_kin": 0.25,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 25",
+          "pick": 202,
+          "trad": 7.02,
+          "kin": 37.3,
+          "target": 11.98,
+          "z_trad": 0.84,
+          "z_kin": -0.16,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 26",
+          "pick": 111,
+          "trad": 7.03,
+          "kin": 10.3,
+          "target": 4.0,
+          "z_trad": 0.77,
+          "z_kin": -1.13,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 27",
+          "pick": 120,
+          "trad": 7.29,
+          "kin": 11.1,
+          "target": 4.0,
+          "z_trad": -0.88,
+          "z_kin": -1.1,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 28",
+          "pick": 97,
+          "trad": 7.11,
+          "kin": 12.8,
+          "target": 4.0,
+          "z_trad": 0.26,
+          "z_kin": -1.04,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 29",
+          "pick": 62,
+          "trad": 6.98,
+          "kin": 70.5,
+          "target": 19.09,
+          "z_trad": 1.09,
+          "z_kin": 1.02,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 30",
+          "pick": 114,
+          "trad": 7.0,
+          "kin": 52.3,
+          "target": 20.37,
+          "z_trad": 0.99,
+          "z_kin": 0.37,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 31",
+          "pick": 62,
+          "trad": 7.25,
+          "kin": 10.6,
+          "target": 4.0,
+          "z_trad": -0.66,
+          "z_kin": -1.12,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 32",
+          "pick": 7,
+          "trad": 7.08,
+          "kin": 52.1,
+          "target": 19.09,
+          "z_trad": 0.46,
+          "z_kin": 0.36,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 33",
+          "pick": 213,
+          "trad": 7.28,
+          "kin": 73.5,
+          "target": 14.08,
+          "z_trad": -0.83,
+          "z_kin": 1.12,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 34",
+          "pick": 136,
+          "trad": 6.89,
+          "kin": 35.7,
+          "target": 10.21,
+          "z_trad": 1.71,
+          "z_kin": -0.22,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 35",
+          "pick": 175,
+          "trad": 7.28,
+          "kin": 37.9,
+          "target": 4.62,
+          "z_trad": -0.85,
+          "z_kin": -0.15,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 36",
+          "pick": 143,
+          "trad": 7.14,
+          "kin": 87.4,
+          "target": 21.58,
+          "z_trad": 0.04,
+          "z_kin": 1.62,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 37",
+          "pick": 7,
+          "trad": 6.89,
+          "kin": 24.4,
+          "target": 14.29,
+          "z_trad": 1.66,
+          "z_kin": -0.62,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 38",
+          "pick": 89,
+          "trad": 7.25,
+          "kin": 40.9,
+          "target": 7.7,
+          "z_trad": -0.66,
+          "z_kin": -0.04,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 39",
+          "pick": 52,
+          "trad": 6.95,
+          "kin": 62.6,
+          "target": 18.04,
+          "z_trad": 1.3,
+          "z_kin": 0.73,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 40",
+          "pick": 22,
+          "trad": 7.34,
+          "kin": 10.7,
+          "target": 4.0,
+          "z_trad": -1.2,
+          "z_kin": -1.11,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 41",
+          "pick": 41,
+          "trad": 7.22,
+          "kin": 25.4,
+          "target": 7.42,
+          "z_trad": -0.42,
+          "z_kin": -0.59,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 42",
+          "pick": 90,
+          "trad": 7.2,
+          "kin": 38.3,
+          "target": 10.84,
+          "z_trad": -0.3,
+          "z_kin": -0.13,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 43",
+          "pick": 115,
+          "trad": 6.9,
+          "kin": 30.5,
+          "target": 13.56,
+          "z_trad": 1.6,
+          "z_kin": -0.41,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 44",
+          "pick": 75,
+          "trad": 7.22,
+          "kin": 26.0,
+          "target": 8.32,
+          "z_trad": -0.44,
+          "z_kin": -0.57,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 45",
+          "pick": 175,
+          "trad": 7.13,
+          "kin": 13.6,
+          "target": 4.0,
+          "z_trad": 0.12,
+          "z_kin": -1.01,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 46",
+          "pick": 186,
+          "trad": 7.43,
+          "kin": 5.4,
+          "target": 4.0,
+          "z_trad": -1.8,
+          "z_kin": -1.3,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 47",
+          "pick": 134,
+          "trad": 7.27,
+          "kin": 14.4,
+          "target": 4.0,
+          "z_trad": -0.79,
+          "z_kin": -0.98,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 48",
+          "pick": 132,
+          "trad": 7.36,
+          "kin": 23.2,
+          "target": 4.0,
+          "z_trad": -1.32,
+          "z_kin": -0.67,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 49",
+          "pick": 145,
+          "trad": 7.21,
+          "kin": 14.7,
+          "target": 4.0,
+          "z_trad": -0.4,
+          "z_kin": -0.97,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 50",
+          "pick": 100,
+          "trad": 7.34,
+          "kin": 26.8,
+          "target": 8.69,
+          "z_trad": -1.19,
+          "z_kin": -0.54,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 51",
+          "pick": 52,
+          "trad": 7.27,
+          "kin": 34.3,
+          "target": 14.17,
+          "z_trad": -0.8,
+          "z_kin": -0.27,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 52",
+          "pick": 187,
+          "trad": 7.16,
+          "kin": 67.9,
+          "target": 17.98,
+          "z_trad": -0.05,
+          "z_kin": 0.92,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 53",
+          "pick": 77,
+          "trad": 7.05,
+          "kin": 32.4,
+          "target": 9.16,
+          "z_trad": 0.68,
+          "z_kin": -0.34,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 54",
+          "pick": 69,
+          "trad": 7.18,
+          "kin": 116.6,
+          "target": 28.5,
+          "z_trad": -0.16,
+          "z_kin": 2.66,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 55",
+          "pick": 183,
+          "trad": 6.92,
+          "kin": 39.9,
+          "target": 11.02,
+          "z_trad": 1.46,
+          "z_kin": -0.07,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 56",
+          "pick": 179,
+          "trad": 7.03,
+          "kin": 26.9,
+          "target": 5.72,
+          "z_trad": 0.79,
+          "z_kin": -0.53,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 57",
+          "pick": 89,
+          "trad": 7.43,
+          "kin": 32.2,
+          "target": 6.38,
+          "z_trad": -1.78,
+          "z_kin": -0.35,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 58",
+          "pick": 61,
+          "trad": 7.46,
+          "kin": 50.8,
+          "target": 9.72,
+          "z_trad": -1.96,
+          "z_kin": 0.31,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 59",
+          "pick": 193,
+          "trad": 7.29,
+          "kin": 25.5,
+          "target": 4.0,
+          "z_trad": -0.92,
+          "z_kin": -0.59,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "EDGE Prospect 60",
+          "pick": 43,
+          "trad": 7.05,
+          "kin": 18.6,
+          "target": 10.09,
+          "z_trad": 0.63,
+          "z_kin": -0.83,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        }
+      ]
+    },
+    "cb": {
+      "name": "Defensive Backs (CB & Safety)",
+      "trad_label": "40-yd (s)",
+      "kin_label": "FI",
+      "target_label": "Target EPA",
+      "unit": "",
+      "players": [
+        {
+          "name": "Quinyon Mitchell",
+          "pick": 148,
+          "trad": 4.45,
+          "kin": 14.3,
+          "target": 0.12,
+          "z_trad": 0.34,
+          "z_kin": 0.3,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Terrion Arnold",
+          "pick": 31,
+          "trad": 4.49,
+          "kin": 9.6,
+          "target": 0.02,
+          "z_trad": -0.17,
+          "z_kin": -0.45,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Nate Wiggins",
+          "pick": 162,
+          "trad": 4.51,
+          "kin": 12.1,
+          "target": 0.11,
+          "z_trad": -0.44,
+          "z_kin": -0.06,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Kool-Aid McKinstry",
+          "pick": 137,
+          "trad": 4.5,
+          "kin": 12.1,
+          "target": 0.07,
+          "z_trad": -0.31,
+          "z_kin": -0.06,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Cooper DeJean",
+          "pick": 121,
+          "trad": 4.51,
+          "kin": 15.1,
+          "target": -0.06,
+          "z_trad": -0.43,
+          "z_kin": 0.42,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Ennis Rakestraw Jr.",
+          "pick": 117,
+          "trad": 4.49,
+          "kin": 5.1,
+          "target": 0.42,
+          "z_trad": -0.2,
+          "z_kin": -1.17,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Max Melton",
+          "pick": 213,
+          "trad": 4.56,
+          "kin": 9.6,
+          "target": 0.32,
+          "z_trad": -1.1,
+          "z_kin": -0.45,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Mike Sainristil",
+          "pick": 64,
+          "trad": 4.43,
+          "kin": 9.6,
+          "target": 0.12,
+          "z_trad": 0.55,
+          "z_kin": -0.45,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "Renardo Green",
+          "pick": 99,
+          "trad": 4.48,
+          "kin": 13.1,
+          "target": 0.1,
+          "z_trad": -0.02,
+          "z_kin": 0.11,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Kamari Lassiter",
+          "pick": 216,
+          "trad": 4.37,
+          "kin": 18.3,
+          "target": -0.1,
+          "z_trad": 1.37,
+          "z_kin": 0.93,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Jarrian Jones",
+          "pick": 40,
+          "trad": 4.54,
+          "kin": 6.0,
+          "target": 0.31,
+          "z_trad": -0.89,
+          "z_kin": -1.03,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Andru Phillips",
+          "pick": 197,
+          "trad": 4.37,
+          "kin": 20.8,
+          "target": -0.29,
+          "z_trad": 1.4,
+          "z_kin": 1.33,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Chau Smith-Wade",
+          "pick": 191,
+          "trad": 4.47,
+          "kin": 13.3,
+          "target": -0.05,
+          "z_trad": 0.03,
+          "z_kin": 0.14,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Decamerion Richardson",
+          "pick": 156,
+          "trad": 4.39,
+          "kin": 35.4,
+          "target": -0.32,
+          "z_trad": 1.11,
+          "z_kin": 3.65,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Caelen Carson",
+          "pick": 43,
+          "trad": 4.58,
+          "kin": 9.7,
+          "target": 0.08,
+          "z_trad": -1.43,
+          "z_kin": -0.44,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Josh Newton",
+          "pick": 219,
+          "trad": 4.54,
+          "kin": 4.9,
+          "target": 0.45,
+          "z_trad": -0.95,
+          "z_kin": -1.2,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Kris Abrams-Draine",
+          "pick": 88,
+          "trad": 4.41,
+          "kin": 9.4,
+          "target": 0.13,
+          "z_trad": 0.87,
+          "z_kin": -0.49,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "Christian Gonzalez",
+          "pick": 136,
+          "trad": 4.52,
+          "kin": 19.6,
+          "target": -0.14,
+          "z_trad": -0.67,
+          "z_kin": 1.14,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": ""
+        },
+        {
+          "name": "Devon Witherspoon",
+          "pick": 77,
+          "trad": 4.49,
+          "kin": 7.0,
+          "target": 0.21,
+          "z_trad": -0.24,
+          "z_kin": -0.87,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Sauce Gardner",
+          "pick": 155,
+          "trad": 4.38,
+          "kin": 17.7,
+          "target": -0.25,
+          "z_trad": 1.21,
+          "z_kin": 0.83,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 21",
+          "pick": 126,
+          "trad": 4.56,
+          "kin": 5.9,
+          "target": 0.45,
+          "z_trad": -1.14,
+          "z_kin": -1.05,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 22",
+          "pick": 44,
+          "trad": 4.62,
+          "kin": 7.7,
+          "target": 0.25,
+          "z_trad": -1.93,
+          "z_kin": -0.76,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 23",
+          "pick": 65,
+          "trad": 4.45,
+          "kin": 12.0,
+          "target": 0.13,
+          "z_trad": 0.31,
+          "z_kin": -0.07,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 24",
+          "pick": 31,
+          "trad": 4.34,
+          "kin": 8.6,
+          "target": -0.04,
+          "z_trad": 1.75,
+          "z_kin": -0.61,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 25",
+          "pick": 214,
+          "trad": 4.61,
+          "kin": 6.2,
+          "target": 0.45,
+          "z_trad": -1.77,
+          "z_kin": -1.0,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 26",
+          "pick": 26,
+          "trad": 4.41,
+          "kin": 6.2,
+          "target": 0.26,
+          "z_trad": 0.87,
+          "z_kin": -0.99,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 27",
+          "pick": 112,
+          "trad": 4.39,
+          "kin": 25.1,
+          "target": -0.32,
+          "z_trad": 1.18,
+          "z_kin": 2.01,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 28",
+          "pick": 72,
+          "trad": 4.48,
+          "kin": 7.4,
+          "target": 0.13,
+          "z_trad": -0.04,
+          "z_kin": -0.81,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 29",
+          "pick": 68,
+          "trad": 4.55,
+          "kin": 8.7,
+          "target": 0.3,
+          "z_trad": -0.98,
+          "z_kin": -0.6,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 30",
+          "pick": 182,
+          "trad": 4.44,
+          "kin": 8.2,
+          "target": 0.27,
+          "z_trad": 0.46,
+          "z_kin": -0.67,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 31",
+          "pick": 209,
+          "trad": 4.43,
+          "kin": 8.7,
+          "target": 0.38,
+          "z_trad": 0.63,
+          "z_kin": -0.6,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 32",
+          "pick": 157,
+          "trad": 4.55,
+          "kin": 24.1,
+          "target": -0.24,
+          "z_trad": -0.97,
+          "z_kin": 1.84,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 33",
+          "pick": 67,
+          "trad": 4.56,
+          "kin": 18.7,
+          "target": -0.17,
+          "z_trad": -1.19,
+          "z_kin": 0.99,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 34",
+          "pick": 39,
+          "trad": 4.35,
+          "kin": 7.9,
+          "target": -0.04,
+          "z_trad": 1.61,
+          "z_kin": -0.72,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 35",
+          "pick": 94,
+          "trad": 4.43,
+          "kin": 28.0,
+          "target": -0.32,
+          "z_trad": 0.58,
+          "z_kin": 2.47,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 36",
+          "pick": 27,
+          "trad": 4.49,
+          "kin": 10.0,
+          "target": 0.1,
+          "z_trad": -0.26,
+          "z_kin": -0.39,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 37",
+          "pick": 19,
+          "trad": 4.38,
+          "kin": 12.6,
+          "target": -0.01,
+          "z_trad": 1.21,
+          "z_kin": 0.01,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 38",
+          "pick": 102,
+          "trad": 4.42,
+          "kin": 14.9,
+          "target": -0.03,
+          "z_trad": 0.73,
+          "z_kin": 0.39,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 39",
+          "pick": 69,
+          "trad": 4.44,
+          "kin": 6.8,
+          "target": 0.26,
+          "z_trad": 0.48,
+          "z_kin": -0.89,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 40",
+          "pick": 187,
+          "trad": 4.65,
+          "kin": 9.2,
+          "target": 0.37,
+          "z_trad": -2.37,
+          "z_kin": -0.51,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 41",
+          "pick": 178,
+          "trad": 4.56,
+          "kin": 11.2,
+          "target": 0.34,
+          "z_trad": -1.16,
+          "z_kin": -0.2,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 42",
+          "pick": 56,
+          "trad": 4.45,
+          "kin": 6.1,
+          "target": 0.23,
+          "z_trad": 0.37,
+          "z_kin": -1.01,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 43",
+          "pick": 136,
+          "trad": 4.55,
+          "kin": 10.9,
+          "target": 0.21,
+          "z_trad": -1.0,
+          "z_kin": -0.25,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 44",
+          "pick": 42,
+          "trad": 4.37,
+          "kin": 10.6,
+          "target": -0.12,
+          "z_trad": 1.38,
+          "z_kin": -0.3,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 45",
+          "pick": 109,
+          "trad": 4.57,
+          "kin": 7.1,
+          "target": 0.4,
+          "z_trad": -1.31,
+          "z_kin": -0.85,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 46",
+          "pick": 108,
+          "trad": 4.47,
+          "kin": 6.2,
+          "target": 0.36,
+          "z_trad": 0.09,
+          "z_kin": -0.99,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 47",
+          "pick": 50,
+          "trad": 4.48,
+          "kin": 24.0,
+          "target": -0.32,
+          "z_trad": -0.12,
+          "z_kin": 1.83,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 48",
+          "pick": 156,
+          "trad": 4.44,
+          "kin": 13.2,
+          "target": 0.17,
+          "z_trad": 0.46,
+          "z_kin": 0.12,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 49",
+          "pick": 63,
+          "trad": 4.54,
+          "kin": 9.4,
+          "target": 0.32,
+          "z_trad": -0.83,
+          "z_kin": -0.49,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 50",
+          "pick": 50,
+          "trad": 4.52,
+          "kin": 8.5,
+          "target": 0.08,
+          "z_trad": -0.57,
+          "z_kin": -0.64,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 51",
+          "pick": 201,
+          "trad": 4.5,
+          "kin": 15.7,
+          "target": 0.08,
+          "z_trad": -0.32,
+          "z_kin": 0.52,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 52",
+          "pick": 153,
+          "trad": 4.37,
+          "kin": 13.5,
+          "target": -0.12,
+          "z_trad": 1.36,
+          "z_kin": 0.16,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 53",
+          "pick": 43,
+          "trad": 4.44,
+          "kin": 19.8,
+          "target": -0.27,
+          "z_trad": 0.41,
+          "z_kin": 1.17,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 54",
+          "pick": 90,
+          "trad": 4.55,
+          "kin": 10.7,
+          "target": 0.23,
+          "z_trad": -1.01,
+          "z_kin": -0.28,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 55",
+          "pick": 22,
+          "trad": 4.56,
+          "kin": 4.5,
+          "target": 0.43,
+          "z_trad": -1.18,
+          "z_kin": -1.27,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 56",
+          "pick": 100,
+          "trad": 4.38,
+          "kin": 14.3,
+          "target": 0.09,
+          "z_trad": 1.3,
+          "z_kin": 0.29,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 57",
+          "pick": 42,
+          "trad": 4.44,
+          "kin": 16.7,
+          "target": -0.18,
+          "z_trad": 0.43,
+          "z_kin": 0.67,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 58",
+          "pick": 27,
+          "trad": 4.36,
+          "kin": 21.2,
+          "target": -0.32,
+          "z_trad": 1.59,
+          "z_kin": 1.39,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 59",
+          "pick": 198,
+          "trad": 4.47,
+          "kin": 13.6,
+          "target": 0.16,
+          "z_trad": 0.04,
+          "z_kin": 0.18,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "DB Prospect 60",
+          "pick": 104,
+          "trad": 4.41,
+          "kin": 10.7,
+          "target": 0.19,
+          "z_trad": 0.89,
+          "z_kin": -0.28,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        }
+      ]
+    },
+    "trench": {
+      "name": "Interior Trench & Running Backs",
+      "trad_label": "10-yd Split (s)",
+      "kin_label": "TEI",
+      "target_label": "Knockback (yd)",
+      "unit": "yd",
+      "players": [
+        {
+          "name": "Joe Alt",
+          "pick": 203,
+          "trad": 1.64,
+          "kin": 13.4,
+          "target": 1.92,
+          "z_trad": 0.64,
+          "z_kin": 0.39,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "JC Latham",
+          "pick": 128,
+          "trad": 1.7,
+          "kin": 13.4,
+          "target": 1.96,
+          "z_trad": -0.34,
+          "z_kin": 0.39,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Olu Fashanu",
+          "pick": 120,
+          "trad": 1.68,
+          "kin": 9.0,
+          "target": 1.03,
+          "z_trad": -0.03,
+          "z_kin": -0.58,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Taliese Fuaga",
+          "pick": 149,
+          "trad": 1.61,
+          "kin": 7.4,
+          "target": 1.05,
+          "z_trad": 1.05,
+          "z_kin": -0.93,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "Amarius Mims",
+          "pick": 96,
+          "trad": 1.73,
+          "kin": 8.4,
+          "target": 0.79,
+          "z_trad": -0.87,
+          "z_kin": -0.7,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Troy Fautanu",
+          "pick": 16,
+          "trad": 1.62,
+          "kin": 21.3,
+          "target": 3.2,
+          "z_trad": 0.86,
+          "z_kin": 2.1,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Jordan Morgan",
+          "pick": 43,
+          "trad": 1.65,
+          "kin": 10.2,
+          "target": 1.57,
+          "z_trad": 0.38,
+          "z_kin": -0.32,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Graham Barton",
+          "pick": 31,
+          "trad": 1.65,
+          "kin": 5.3,
+          "target": 0.73,
+          "z_trad": 0.36,
+          "z_kin": -1.38,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Jackson Powers-Johnson",
+          "pick": 8,
+          "trad": 1.71,
+          "kin": 20.2,
+          "target": 3.2,
+          "z_trad": -0.56,
+          "z_kin": 1.87,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": ""
+        },
+        {
+          "name": "Tyler Guyton",
+          "pick": 111,
+          "trad": 1.72,
+          "kin": 15.1,
+          "target": 2.12,
+          "z_trad": -0.64,
+          "z_kin": 0.76,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": ""
+        },
+        {
+          "name": "Jonathon Brooks",
+          "pick": 209,
+          "trad": 1.62,
+          "kin": 15.0,
+          "target": 2.27,
+          "z_trad": 0.86,
+          "z_kin": 0.74,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Trey Benson",
+          "pick": 160,
+          "trad": 1.61,
+          "kin": 17.9,
+          "target": 2.69,
+          "z_trad": 1.1,
+          "z_kin": 1.36,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Blake Corum",
+          "pick": 149,
+          "trad": 1.69,
+          "kin": 10.8,
+          "target": 1.27,
+          "z_trad": -0.27,
+          "z_kin": -0.19,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "MarShawn Lloyd",
+          "pick": 119,
+          "trad": 1.74,
+          "kin": 11.5,
+          "target": 1.09,
+          "z_trad": -1.02,
+          "z_kin": -0.02,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Bucky Irving",
+          "pick": 14,
+          "trad": 1.72,
+          "kin": 4.4,
+          "target": 0.85,
+          "z_trad": -0.67,
+          "z_kin": -1.59,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Ray Davis",
+          "pick": 112,
+          "trad": 1.59,
+          "kin": 19.7,
+          "target": 3.05,
+          "z_trad": 1.35,
+          "z_kin": 1.76,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Audric Estime",
+          "pick": 42,
+          "trad": 1.72,
+          "kin": 6.1,
+          "target": 0.72,
+          "z_trad": -0.65,
+          "z_kin": -1.21,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Braelon Allen",
+          "pick": 57,
+          "trad": 1.7,
+          "kin": 12.0,
+          "target": 2.03,
+          "z_trad": -0.39,
+          "z_kin": 0.08,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Bijan Robinson",
+          "pick": 115,
+          "trad": 1.66,
+          "kin": 10.3,
+          "target": 1.1,
+          "z_trad": 0.25,
+          "z_kin": -0.3,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Jalen Carter",
+          "pick": 156,
+          "trad": 1.56,
+          "kin": 10.9,
+          "target": 2.08,
+          "z_trad": 1.91,
+          "z_kin": -0.15,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 21",
+          "pick": 204,
+          "trad": 1.67,
+          "kin": 9.4,
+          "target": 0.97,
+          "z_trad": 0.13,
+          "z_kin": -0.48,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 22",
+          "pick": 5,
+          "trad": 1.6,
+          "kin": 10.6,
+          "target": 1.86,
+          "z_trad": 1.17,
+          "z_kin": -0.23,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 23",
+          "pick": 165,
+          "trad": 1.81,
+          "kin": 17.2,
+          "target": 1.63,
+          "z_trad": -2.1,
+          "z_kin": 1.21,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 24",
+          "pick": 131,
+          "trad": 1.74,
+          "kin": 6.2,
+          "target": 0.56,
+          "z_trad": -1.07,
+          "z_kin": -1.18,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 25",
+          "pick": 86,
+          "trad": 1.67,
+          "kin": 10.0,
+          "target": 2.11,
+          "z_trad": 0.1,
+          "z_kin": -0.37,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 26",
+          "pick": 127,
+          "trad": 1.6,
+          "kin": 9.5,
+          "target": 1.74,
+          "z_trad": 1.16,
+          "z_kin": -0.47,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 27",
+          "pick": 97,
+          "trad": 1.59,
+          "kin": 14.8,
+          "target": 2.18,
+          "z_trad": 1.35,
+          "z_kin": 0.69,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 28",
+          "pick": 111,
+          "trad": 1.76,
+          "kin": 10.9,
+          "target": 1.18,
+          "z_trad": -1.26,
+          "z_kin": -0.16,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 29",
+          "pick": 68,
+          "trad": 1.58,
+          "kin": 10.1,
+          "target": 2.1,
+          "z_trad": 1.57,
+          "z_kin": -0.34,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 30",
+          "pick": 172,
+          "trad": 1.67,
+          "kin": 18.4,
+          "target": 2.59,
+          "z_trad": 0.13,
+          "z_kin": 1.48,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 31",
+          "pick": 46,
+          "trad": 1.71,
+          "kin": 12.1,
+          "target": 1.87,
+          "z_trad": -0.47,
+          "z_kin": 0.1,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 32",
+          "pick": 72,
+          "trad": 1.79,
+          "kin": 3.2,
+          "target": 0.48,
+          "z_trad": -1.85,
+          "z_kin": -1.83,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 33",
+          "pick": 10,
+          "trad": 1.74,
+          "kin": 4.6,
+          "target": 0.73,
+          "z_trad": -0.97,
+          "z_kin": -1.53,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 34",
+          "pick": 101,
+          "trad": 1.66,
+          "kin": 3.7,
+          "target": 0.49,
+          "z_trad": 0.34,
+          "z_kin": -1.74,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 35",
+          "pick": 89,
+          "trad": 1.74,
+          "kin": 19.9,
+          "target": 2.85,
+          "z_trad": -1.05,
+          "z_kin": 1.8,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 36",
+          "pick": 138,
+          "trad": 1.73,
+          "kin": 7.8,
+          "target": 0.85,
+          "z_trad": -0.79,
+          "z_kin": -0.84,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 37",
+          "pick": 212,
+          "trad": 1.72,
+          "kin": 10.0,
+          "target": 1.08,
+          "z_trad": -0.73,
+          "z_kin": -0.35,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 38",
+          "pick": 67,
+          "trad": 1.78,
+          "kin": 8.5,
+          "target": 0.91,
+          "z_trad": -1.67,
+          "z_kin": -0.69,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 39",
+          "pick": 60,
+          "trad": 1.67,
+          "kin": 13.9,
+          "target": 2.0,
+          "z_trad": 0.09,
+          "z_kin": 0.49,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 40",
+          "pick": 112,
+          "trad": 1.64,
+          "kin": 12.1,
+          "target": 2.13,
+          "z_trad": 0.65,
+          "z_kin": 0.11,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 41",
+          "pick": 204,
+          "trad": 1.64,
+          "kin": 12.8,
+          "target": 1.8,
+          "z_trad": 0.54,
+          "z_kin": 0.25,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 42",
+          "pick": 197,
+          "trad": 1.72,
+          "kin": 16.3,
+          "target": 1.56,
+          "z_trad": -0.67,
+          "z_kin": 1.02,
+          "classification": "\ud83d\udc8e HIDDEN SLEEPER",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 43",
+          "pick": 109,
+          "trad": 1.64,
+          "kin": 15.2,
+          "target": 2.15,
+          "z_trad": 0.53,
+          "z_kin": 0.78,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 44",
+          "pick": 114,
+          "trad": 1.66,
+          "kin": 22.7,
+          "target": 3.2,
+          "z_trad": 0.33,
+          "z_kin": 2.41,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 45",
+          "pick": 152,
+          "trad": 1.72,
+          "kin": 5.6,
+          "target": 0.42,
+          "z_trad": -0.74,
+          "z_kin": -1.31,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 46",
+          "pick": 56,
+          "trad": 1.74,
+          "kin": 12.7,
+          "target": 1.69,
+          "z_trad": -0.93,
+          "z_kin": 0.23,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 47",
+          "pick": 67,
+          "trad": 1.63,
+          "kin": 8.6,
+          "target": 1.48,
+          "z_trad": 0.79,
+          "z_kin": -0.67,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 48",
+          "pick": 140,
+          "trad": 1.64,
+          "kin": 8.5,
+          "target": 0.94,
+          "z_trad": 0.5,
+          "z_kin": -0.69,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 49",
+          "pick": 54,
+          "trad": 1.6,
+          "kin": 17.0,
+          "target": 2.96,
+          "z_trad": 1.15,
+          "z_kin": 1.17,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 50",
+          "pick": 215,
+          "trad": 1.7,
+          "kin": 7.8,
+          "target": 0.86,
+          "z_trad": -0.37,
+          "z_kin": -0.83,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 51",
+          "pick": 218,
+          "trad": 1.66,
+          "kin": 18.0,
+          "target": 2.32,
+          "z_trad": 0.34,
+          "z_kin": 1.4,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 52",
+          "pick": 16,
+          "trad": 1.66,
+          "kin": 12.9,
+          "target": 2.33,
+          "z_trad": 0.25,
+          "z_kin": 0.28,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 53",
+          "pick": 198,
+          "trad": 1.78,
+          "kin": 8.5,
+          "target": 1.04,
+          "z_trad": -1.66,
+          "z_kin": -0.68,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 54",
+          "pick": 68,
+          "trad": 1.57,
+          "kin": 6.8,
+          "target": 1.64,
+          "z_trad": 1.64,
+          "z_kin": -1.06,
+          "classification": "\ud83d\udea8 BUST TRAP",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 55",
+          "pick": 148,
+          "trad": 1.8,
+          "kin": 7.5,
+          "target": 0.4,
+          "z_trad": -1.88,
+          "z_kin": -0.91,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 56",
+          "pick": 208,
+          "trad": 1.68,
+          "kin": 13.1,
+          "target": 1.56,
+          "z_trad": -0.0,
+          "z_kin": 0.31,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 57",
+          "pick": 175,
+          "trad": 1.74,
+          "kin": 11.4,
+          "target": 1.16,
+          "z_trad": -0.93,
+          "z_kin": -0.04,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 58",
+          "pick": 189,
+          "trad": 1.63,
+          "kin": 12.2,
+          "target": 1.88,
+          "z_trad": 0.78,
+          "z_kin": 0.12,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 59",
+          "pick": 216,
+          "trad": 1.53,
+          "kin": 12.2,
+          "target": 1.87,
+          "z_trad": 2.33,
+          "z_kin": 0.13,
+          "classification": "\u2b50 ELITE CONSENSUS",
+          "college": ""
+        },
+        {
+          "name": "Trench Prospect 60",
+          "pick": 30,
+          "trad": 1.68,
+          "kin": 13.2,
+          "target": 2.27,
+          "z_trad": -0.02,
+          "z_kin": 0.35,
+          "classification": "\ud83d\udccb DEPTH / BACKUP",
+          "college": ""
+        }
+      ]
+    }
+  }
+};
+    let currentMode = allData.empirical ? 'empirical' : 'synthetic';
+    let currentArchetype = 'wr';
+    let hoveredPlayer = null;
+
+    function setMode(mode) {
+      currentMode = mode;
+      document.getElementById('btn-mode-emp').classList.toggle('active', mode === 'empirical');
+      document.getElementById('btn-mode-syn').classList.toggle('active', mode === 'synthetic');
+      updateUI();
+      drawScatter();
+      recalc();
+    }
+
+    function switchArchetype(key) {
+      currentArchetype = key;
+      document.querySelectorAll('.tab-btn').forEach((btn, idx) => {
+        const keys = ['wr', 'edge', 'cb', 'trench'];
+        btn.classList.toggle('active', keys[idx] === key);
+      });
+      updateUI();
+      drawScatter();
+      resetAnim();
+      recalc();
+    }
+
+    function getCurrentDataset() {
+      return allData[currentMode][currentArchetype];
+    }
+
+    function updateUI() {
+      const d = getCurrentDataset();
+      const modeName = (currentMode === 'empirical') ? 'Real NFL Prospects (2023-2025)' : 'Calibration Model';
+      document.getElementById('matrix-title').innerText = `${d.name}: Decision Matrix (${modeName})`;
+      document.getElementById('prospect-count-lbl').innerText = `Total ${d.players.length} evaluated`;
+      document.getElementById('drill-title').innerText = `10 Hz ${d.name} Drill Kinematics`;
+      document.getElementById('calc-trad-lbl').innerText = d.trad_label;
+      document.getElementById('calc-kin-lbl').innerText = d.kin_label;
+      
+      const badge = document.getElementById('drill-badge');
+      if (currentArchetype === 'wr') badge.innerText = '20-Yd Shuttle (Braking Jerk)';
+      if (currentArchetype === 'edge') badge.innerText = '3-Cone Apex (Centripetal Bend)';
+      if (currentArchetype === 'cb') badge.innerText = 'Hip Flip (Phase Latency)';
+      if (currentArchetype === 'trench') badge.innerText = '0-0.5s Impulse Window';
+    }
+
+    // Scatter Canvas Rendering
+    const canvas = document.getElementById('scatter-canvas');
+    const ctx = canvas.getContext('2d');
+
+    function drawScatter() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const d = getCurrentDataset();
+      const players = d.players;
+
+      const w = canvas.width;
+      const h = canvas.height;
+      const pad = 50;
+      const cx = pad + (w - 2 * pad) / 2;
+      const cy = pad + (h - 2 * pad) / 2;
+
+      ctx.strokeStyle = '#1f2937';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(pad, pad, w - 2 * pad, h - 2 * pad);
+
+      ctx.strokeStyle = '#374151';
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(cx, pad); ctx.lineTo(cx, h - pad);
+      ctx.moveTo(pad, cy); ctx.lineTo(w - pad, cy);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = '#475569';
+      ctx.font = '10px -apple-system, sans-serif';
+      ctx.fillText('QUADRANT 2: HIDDEN SLEEPERS 💎', pad + 10, pad + 20);
+      ctx.fillText('QUADRANT 1: ELITE CONSENSUS ⭐', cx + 10, pad + 20);
+      ctx.fillText('QUADRANT 3: DEPTH / BACKUP', pad + 10, h - pad - 10);
+      ctx.fillText('QUADRANT 4: BUST TRAPS 🚨', cx + 10, h - pad - 10);
+
+      ctx.fillStyle = '#9ca3af';
+      ctx.font = '11px -apple-system, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(`Traditional Speed z-score (Slow ◄─► Fast)`, cx, h - 15);
+      
+      ctx.save();
+      ctx.translate(18, cy);
+      ctx.rotate(-Math.PI / 2);
+      ctx.fillText(`10 Hz Kinematic Score z-score (Elite ▲)`, 0, 0);
+      ctx.restore();
+
+      players.forEach(p => {
+        const z_t = Math.max(-2.5, Math.min(2.5, p.z_trad));
+        const z_k = Math.max(-2.5, Math.min(2.5, p.z_kin));
+        const px = cx + (z_t / 2.5) * ((w - 2 * pad) / 2);
+        const py = cy - (z_k / 2.5) * ((h - 2 * pad) / 2);
+
+        let color = '#94a3b8';
+        let rad = 4;
+        if (p.classification.includes('SLEEPER')) { color = '#3b82f6'; rad = 7; }
+        else if (p.classification.includes('BUST')) { color = '#ef4444'; rad = 7; }
+        else if (p.classification.includes('ELITE')) { color = '#10b981'; rad = 5; }
+
+        ctx.beginPath();
+        ctx.arc(px, py, rad, 0, Math.PI * 2);
+        ctx.fillStyle = color;
+        ctx.fill();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = (p === hoveredPlayer) ? 2 : 0.5;
+        ctx.stroke();
+
+        p._px = px;
+        p._py = py;
+      });
+    }
+
+    canvas.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const mx = (e.clientX - rect.left) * (canvas.width / rect.width);
+      const my = (e.clientY - rect.top) * (canvas.height / rect.height);
+      const d = getCurrentDataset();
+
+      hoveredPlayer = null;
+      for (const p of d.players) {
+        const dist = Math.hypot(p._px - mx, p._py - my);
+        if (dist < 8) {
+          hoveredPlayer = p;
+          break;
+        }
+      }
+      drawScatter();
+
+      const detailDiv = document.getElementById('prospect-detail');
+      if (hoveredPlayer) {
+        const collegeText = hoveredPlayer.college ? ` (${hoveredPlayer.college})` : '';
+        detailDiv.innerHTML = `
+          <strong>${hoveredPlayer.name}</strong>${collegeText} | Draft Pick #${hoveredPlayer.pick} | 
+          <span style="color: #60a5fa;">${hoveredPlayer.classification}</span><br>
+          • <strong>Stopwatch Drill</strong>: ${hoveredPlayer.trad}s &nbsp;|&nbsp;
+          • <strong>10 Hz Kinematic</strong>: ${hoveredPlayer.kin} &nbsp;|&nbsp;
+          • <strong>NFL Game Result</strong>: ${hoveredPlayer.target}${d.unit}
+        `;
+      } else {
+        detailDiv.innerHTML = '<strong>Hover over any prospect</strong> on the decision matrix to view their stopwatch time, 10 Hz kinematic score, NFL outcome, and scouting diagnosis.';
+      }
+    });
+
+    // Drill Animation
+    const drillCanvas = document.getElementById('drill-canvas');
+    const drillCtx = drillCanvas.getContext('2d');
+    let animFrame = 0;
+    let isPlaying = true;
+
+    function renderDrill() {
+      drillCtx.clearRect(0, 0, drillCanvas.width, drillCanvas.height);
+      const w = drillCanvas.width;
+      const h = drillCanvas.height;
+
+      drillCtx.strokeStyle = '#1e2937';
+      drillCtx.lineWidth = 1;
+      for (let x = 30; x < w; x += 40) {
+        drillCtx.beginPath();
+        drillCtx.moveTo(x, 20); drillCtx.lineTo(x, h - 20);
+        drillCtx.stroke();
+      }
+
+      const progress = (animFrame % 60) / 60;
+      if (currentArchetype === 'wr') {
+        let px = 60 + Math.sin(progress * Math.PI * 2) * 120;
+        let py = h / 2;
+        drillCtx.fillStyle = '#3b82f6';
+        drillCtx.beginPath();
+        drillCtx.arc(px, py, 9, 0, Math.PI * 2);
+        drillCtx.fill();
+
+        drillCtx.strokeStyle = '#ef4444';
+        drillCtx.lineWidth = 3;
+        drillCtx.beginPath();
+        drillCtx.moveTo(px, py);
+        drillCtx.lineTo(px - Math.cos(progress * Math.PI * 2) * 35, py);
+        drillCtx.stroke();
+
+        drillCtx.fillStyle = '#ef4444';
+        drillCtx.font = '10px monospace';
+        drillCtx.fillText('Braking Vector', px - 30, py - 15);
+      } else if (currentArchetype === 'edge') {
+        let angle = progress * Math.PI * 1.5;
+        let px = w / 2 + Math.cos(angle) * 60;
+        let py = h / 2 + Math.sin(angle) * 60;
+
+        drillCtx.fillStyle = '#f59e0b';
+        drillCtx.beginPath();
+        drillCtx.arc(w / 2, h / 2, 7, 0, Math.PI * 2);
+        drillCtx.fill();
+
+        drillCtx.fillStyle = '#3b82f6';
+        drillCtx.beginPath();
+        drillCtx.arc(px, py, 9, 0, Math.PI * 2);
+        drillCtx.fill();
+
+        drillCtx.strokeStyle = '#10b981';
+        drillCtx.lineWidth = 2.5;
+        drillCtx.beginPath();
+        drillCtx.moveTo(px, py);
+        drillCtx.lineTo(w / 2, h / 2);
+        drillCtx.stroke();
+      } else {
+        let px = 50 + progress * (w - 100);
+        let py = h / 2;
+        drillCtx.fillStyle = '#3b82f6';
+        drillCtx.beginPath();
+        drillCtx.arc(px, py, 9, 0, Math.PI * 2);
+        drillCtx.fill();
+      }
+
+      document.getElementById('anim-frame-lbl').innerText = `Frame: ${animFrame % 60} / 60 (10 Hz)`;
+
+      if (isPlaying) animFrame++;
+      requestAnimationFrame(renderDrill);
+    }
+
+    function togglePlay() { isPlaying = !isPlaying; }
+    function resetAnim() { animFrame = 0; }
+
+    function recalc() {
+      const trad = parseFloat(document.getElementById('input-trad').value);
+      const kin = parseFloat(document.getElementById('input-kin').value);
+      const pick = parseInt(document.getElementById('input-pick').value);
+
+      document.getElementById('calc-trad-val').innerText = trad.toFixed(2);
+      document.getElementById('calc-kin-val').innerText = kin.toFixed(1);
+      document.getElementById('calc-pick-val').innerText = `Pick #${pick} (Rd ${Math.ceil(pick/32)})`;
+
+      let metricVal, metricStr, diagStr;
+      if (currentArchetype === 'wr') {
+        metricVal = 2.40 + (0.55 * (kin - 25) / 10) - (0.35 * (trad - 4.22) / 0.12) - (0.25 * (pick - 100) / 70);
+        metricStr = `${Math.max(1.1, Math.min(4.2, metricVal)).toFixed(2)} yd Separation`;
+        diagStr = (kin > 20) ? '💎 Elite Route-Stem Separator. Top-tier Day 2 / Day 3 sleeper.' : '🚨 Stiff Breaker: High risk of being blanketed in man coverage.';
+      } else if (currentArchetype === 'edge') {
+        metricVal = 14.5 + (4.8 * (kin - 50) / 15) - (2.2 * (trad - 7.12) / 0.18) - (2.5 * (pick - 100) / 70);
+        metricStr = `${Math.max(4.0, Math.min(28.5, metricVal)).toFixed(1)}% Disruption`;
+        diagStr = (kin > 70) ? '💎 Elite Arc Bend: Consistently corners around NFL tackles.' : '🚨 Flattened Arc: Easily washed past the pocket by NFL tackles.';
+      } else if (currentArchetype === 'cb') {
+        metricVal = 0.02 - (0.16 * (kin - 13) / 4.5) + (0.06 * (trad - 4.44) / 0.08) + (0.07 * (pick - 100) / 70);
+        metricStr = `${Math.max(-0.32, Math.min(0.45, metricVal)).toFixed(2)} Target EPA`;
+        diagStr = (kin > 20) ? '💎 Shutdown Hip Fluidity: Minimal phase transition latency.' : '🚨 High Burn Risk: Susceptible to stem double-moves.';
+      } else {
+        metricVal = 1.65 + (0.48 * (kin - 11.5) / 3.0) - (0.22 * (trad - 1.68) / 0.07) - (0.24 * (pick - 100) / 70);
+        metricStr = `${Math.max(0.4, Math.min(3.2, metricVal)).toFixed(2)} yd Leverage`;
+        diagStr = (kin > 16) ? '💎 Explosive Trench Leverage: Resets the line of scrimmage immediately.' : '🚨 Stance Delay: Loses immediate pad level leverage.';
+      }
+
+      document.getElementById('calc-result-metric').innerText = metricStr;
+      document.getElementById('calc-result-diag').innerText = diagStr;
+    }
+
+    updateUI();
+    drawScatter();
+    requestAnimationFrame(renderDrill);
+    recalc();
+  </script>
+</body>
+</html>
