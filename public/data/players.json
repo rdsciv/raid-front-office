@@ -75,43 +75,52 @@
       "air_yards_share": 0.46,
       "wopr": 0.832,
       "yprr": 2.76,
-      "rolling_3wk_wopr_delta": 0.097,
+      "rolling_3wk_wopr_delta": 0.042,
       "weekly_history": [
         {
-          "week": 1,
-          "targets": 7,
-          "target_share": 0.25,
-          "wopr": 0.62,
-          "epa": 0.12,
-          "raw_price": 55.0,
-          "psa10_price": 190.0
+          "week": 14,
+          "targets": 10,
+          "target_share": 0.217,
+          "wopr": 0.5537,
+          "epa": 0.0,
+          "raw_price": 65.0,
+          "psa10_price": 260.0
         },
         {
-          "week": 2,
-          "targets": 18,
-          "target_share": 0.44,
-          "wopr": 1.05,
-          "epa": 0.78,
-          "raw_price": 75.0,
-          "psa10_price": 270.0
+          "week": 15,
+          "targets": 14,
+          "target_share": 0.412,
+          "wopr": 0.9345,
+          "epa": 0.0,
+          "raw_price": 65.0,
+          "psa10_price": 260.0
         },
         {
-          "week": 3,
-          "targets": 12,
-          "target_share": 0.35,
-          "wopr": 0.86,
-          "epa": 0.55,
-          "raw_price": 82.0,
-          "psa10_price": 310.0
+          "week": 16,
+          "targets": 14,
+          "target_share": 0.378,
+          "wopr": 0.9304,
+          "epa": 0.0,
+          "raw_price": 65.0,
+          "psa10_price": 260.0
         },
         {
-          "week": 4,
-          "targets": 15,
-          "target_share": 0.38,
-          "wopr": 0.91,
-          "epa": 0.64,
-          "raw_price": 80.0,
-          "psa10_price": 320.0
+          "week": 17,
+          "targets": 8,
+          "target_share": 0.364,
+          "wopr": 0.8285,
+          "epa": 0.0,
+          "raw_price": 65.0,
+          "psa10_price": 260.0
+        },
+        {
+          "week": 18,
+          "targets": 8,
+          "target_share": 0.286,
+          "wopr": 0.8028,
+          "epa": 0.0,
+          "raw_price": 65.0,
+          "psa10_price": 260.0
         }
       ]
     }
@@ -132,40 +141,49 @@
       "rolling_3wk_wopr_delta": 0.0,
       "weekly_history": [
         {
-          "week": 1,
+          "week": 17,
           "targets": 0,
           "target_share": 0.0,
           "wopr": 0.0,
-          "epa": 0.18,
-          "raw_price": 95.0,
-          "psa10_price": 380.0
+          "epa": 0.0,
+          "raw_price": 140.0,
+          "psa10_price": 580.0
         },
         {
-          "week": 2,
+          "week": 18,
           "targets": 0,
           "target_share": 0.0,
           "wopr": 0.0,
-          "epa": 0.28,
-          "raw_price": 120.0,
-          "psa10_price": 490.0
+          "epa": 0.0,
+          "raw_price": 140.0,
+          "psa10_price": 580.0
         },
         {
-          "week": 3,
+          "week": 19,
           "targets": 0,
           "target_share": 0.0,
           "wopr": 0.0,
-          "epa": 0.58,
-          "raw_price": 160.0,
-          "psa10_price": 680.0
+          "epa": 0.0,
+          "raw_price": 140.0,
+          "psa10_price": 580.0
         },
         {
-          "week": 4,
+          "week": 20,
           "targets": 0,
           "target_share": 0.0,
           "wopr": 0.0,
-          "epa": 0.42,
-          "raw_price": 155.0,
-          "psa10_price": 650.0
+          "epa": 0.0,
+          "raw_price": 140.0,
+          "psa10_price": 580.0
+        },
+        {
+          "week": 21,
+          "targets": 0,
+          "target_share": 0.0,
+          "wopr": 0.0,
+          "epa": 0.0,
+          "raw_price": 140.0,
+          "psa10_price": 580.0
         }
       ]
     }
@@ -237,43 +255,52 @@
       "air_yards_share": 0.28,
       "wopr": 0.571,
       "yprr": 2.32,
-      "rolling_3wk_wopr_delta": 0.027,
+      "rolling_3wk_wopr_delta": 0.117,
       "weekly_history": [
         {
-          "week": 1,
-          "targets": 8,
-          "target_share": 0.26,
-          "wopr": 0.58,
-          "epa": 0.32,
-          "raw_price": 25.0,
-          "psa10_price": 105.0
+          "week": 14,
+          "targets": 5,
+          "target_share": 0.143,
+          "wopr": 0.3005,
+          "epa": 0.0,
+          "raw_price": 26.0,
+          "psa10_price": 120.0
         },
         {
-          "week": 2,
+          "week": 15,
+          "targets": 6,
+          "target_share": 0.176,
+          "wopr": 0.4305,
+          "epa": 0.0,
+          "raw_price": 26.0,
+          "psa10_price": 120.0
+        },
+        {
+          "week": 16,
+          "targets": 13,
+          "target_share": 0.351,
+          "wopr": 0.6573,
+          "epa": 0.0,
+          "raw_price": 26.0,
+          "psa10_price": 120.0
+        },
+        {
+          "week": 17,
+          "targets": 7,
+          "target_share": 0.2,
+          "wopr": 0.4012,
+          "epa": 0.0,
+          "raw_price": 26.0,
+          "psa10_price": 120.0
+        },
+        {
+          "week": 18,
           "targets": 9,
-          "target_share": 0.28,
-          "wopr": 0.63,
-          "epa": 0.45,
-          "raw_price": 32.0,
-          "psa10_price": 130.0
-        },
-        {
-          "week": 3,
-          "targets": 4,
-          "target_share": 0.14,
-          "wopr": 0.35,
-          "epa": -0.1,
-          "raw_price": 28.0,
-          "psa10_price": 115.0
-        },
-        {
-          "week": 4,
-          "targets": 8,
-          "target_share": 0.29,
-          "wopr": 0.66,
-          "epa": 0.38,
-          "raw_price": 30.0,
-          "psa10_price": 125.0
+          "target_share": 0.265,
+          "wopr": 0.6343,
+          "epa": 0.0,
+          "raw_price": 26.0,
+          "psa10_price": 120.0
         }
       ]
     }
@@ -289,44 +316,53 @@
       "route_participation_pct": 0.0,
       "target_share": 0.0,
       "air_yards_share": 0.0,
-      "wopr": 0.0,
+      "wopr": 0.0524,
       "yprr": 0.0,
-      "rolling_3wk_wopr_delta": 0.0,
+      "rolling_3wk_wopr_delta": -0.02,
       "weekly_history": [
         {
-          "week": 1,
-          "targets": 0,
-          "target_share": 0.0,
-          "wopr": 0.0,
-          "epa": -0.15,
+          "week": 19,
+          "targets": 2,
+          "target_share": 0.077,
+          "wopr": 0.2008,
+          "epa": 0.0,
           "raw_price": 85.0,
-          "psa10_price": 320.0
+          "psa10_price": 310.0
         },
         {
-          "week": 2,
-          "targets": 0,
-          "target_share": 0.0,
-          "wopr": 0.0,
-          "epa": -0.22,
-          "raw_price": 70.0,
-          "psa10_price": 260.0
+          "week": 19,
+          "targets": 2,
+          "target_share": 0.087,
+          "wopr": 0.133,
+          "epa": 0.0,
+          "raw_price": 85.0,
+          "psa10_price": 310.0
         },
         {
-          "week": 3,
-          "targets": 0,
-          "target_share": 0.0,
-          "wopr": 0.0,
-          "epa": 0.08,
-          "raw_price": 75.0,
-          "psa10_price": 280.0
+          "week": 19,
+          "targets": 3,
+          "target_share": 0.115,
+          "wopr": 0.1799,
+          "epa": 0.0,
+          "raw_price": 85.0,
+          "psa10_price": 310.0
         },
         {
-          "week": 4,
-          "targets": 0,
-          "target_share": 0.0,
-          "wopr": 0.0,
-          "epa": 0.22,
-          "raw_price": 82.0,
+          "week": 20,
+          "targets": 4,
+          "target_share": 0.103,
+          "wopr": 0.3765,
+          "epa": 0.0,
+          "raw_price": 85.0,
+          "psa10_price": 310.0
+        },
+        {
+          "week": 20,
+          "targets": 2,
+          "target_share": 0.045,
+          "wopr": 0.0524,
+          "epa": 0.0,
+          "raw_price": 85.0,
           "psa10_price": 310.0
         }
       ]
@@ -345,43 +381,52 @@
       "air_yards_share": 0.31,
       "wopr": 0.472,
       "yprr": 1.82,
-      "rolling_3wk_wopr_delta": 0.077,
+      "rolling_3wk_wopr_delta": 0.071,
       "weekly_history": [
         {
-          "week": 1,
-          "targets": 3,
-          "target_share": 0.12,
-          "wopr": 0.35,
-          "epa": 0.52,
-          "raw_price": 38.0,
-          "psa10_price": 160.0
+          "week": 16,
+          "targets": 11,
+          "target_share": 0.268,
+          "wopr": 0.6037,
+          "epa": 0.0,
+          "raw_price": 34.0,
+          "psa10_price": 145.0
         },
         {
-          "week": 2,
-          "targets": 4,
-          "target_share": 0.16,
-          "wopr": 0.44,
-          "epa": 0.1,
-          "raw_price": 35.0,
-          "psa10_price": 140.0
+          "week": 17,
+          "targets": 9,
+          "target_share": 0.237,
+          "wopr": 0.3747,
+          "epa": 0.0,
+          "raw_price": 34.0,
+          "psa10_price": 145.0
         },
         {
-          "week": 3,
-          "targets": 4,
-          "target_share": 0.15,
-          "wopr": 0.41,
-          "epa": 0.05,
-          "raw_price": 32.0,
-          "psa10_price": 130.0
-        },
-        {
-          "week": 4,
+          "week": 20,
           "targets": 6,
-          "target_share": 0.22,
-          "wopr": 0.58,
-          "epa": 0.42,
-          "raw_price": 36.0,
-          "psa10_price": 150.0
+          "target_share": 0.25,
+          "wopr": 0.4159,
+          "epa": 0.0,
+          "raw_price": 34.0,
+          "psa10_price": 145.0
+        },
+        {
+          "week": 21,
+          "targets": 7,
+          "target_share": 0.28,
+          "wopr": 0.6155,
+          "epa": 0.0,
+          "raw_price": 34.0,
+          "psa10_price": 145.0
+        },
+        {
+          "week": 22,
+          "targets": 8,
+          "target_share": 0.25,
+          "wopr": 0.688,
+          "epa": 0.0,
+          "raw_price": 34.0,
+          "psa10_price": 145.0
         }
       ]
     }
@@ -399,43 +444,52 @@
       "air_yards_share": 0.32,
       "wopr": 0.614,
       "yprr": 2.28,
-      "rolling_3wk_wopr_delta": 0.033,
+      "rolling_3wk_wopr_delta": 0.204,
       "weekly_history": [
         {
-          "week": 1,
+          "week": 15,
           "targets": 7,
-          "target_share": 0.27,
-          "wopr": 0.62,
-          "epa": 0.38,
-          "raw_price": 20.0,
-          "psa10_price": 75.0
-        },
-        {
-          "week": 2,
-          "targets": 4,
-          "target_share": 0.2,
-          "wopr": 0.48,
-          "epa": 0.15,
-          "raw_price": 22.0,
-          "psa10_price": 80.0
-        },
-        {
-          "week": 3,
-          "targets": 6,
-          "target_share": 0.25,
-          "wopr": 0.59,
-          "epa": 0.24,
+          "target_share": 0.219,
+          "wopr": 0.4738,
+          "epa": 0.0,
           "raw_price": 24.0,
-          "psa10_price": 95.0
+          "psa10_price": 105.0
         },
         {
-          "week": 4,
-          "targets": 7,
-          "target_share": 0.29,
-          "wopr": 0.72,
-          "epa": 0.45,
-          "raw_price": 28.0,
-          "psa10_price": 115.0
+          "week": 16,
+          "targets": 6,
+          "target_share": 0.2,
+          "wopr": 0.4385,
+          "epa": 0.0,
+          "raw_price": 24.0,
+          "psa10_price": 105.0
+        },
+        {
+          "week": 17,
+          "targets": 10,
+          "target_share": 0.25,
+          "wopr": 0.5843,
+          "epa": 0.0,
+          "raw_price": 24.0,
+          "psa10_price": 105.0
+        },
+        {
+          "week": 18,
+          "targets": 8,
+          "target_share": 0.229,
+          "wopr": 0.5243,
+          "epa": 0.0,
+          "raw_price": 24.0,
+          "psa10_price": 105.0
+        },
+        {
+          "week": 19,
+          "targets": 14,
+          "target_share": 0.438,
+          "wopr": 1.0192,
+          "epa": 0.0,
+          "raw_price": 24.0,
+          "psa10_price": 105.0
         }
       ]
     }
@@ -453,43 +507,52 @@
       "air_yards_share": 0.04,
       "wopr": 0.208,
       "yprr": 1.48,
-      "rolling_3wk_wopr_delta": 0.027,
+      "rolling_3wk_wopr_delta": 0.031,
       "weekly_history": [
         {
-          "week": 1,
-          "targets": 3,
-          "target_share": 0.1,
-          "wopr": 0.16,
-          "epa": 0.18,
-          "raw_price": 10.0,
-          "psa10_price": 40.0
-        },
-        {
-          "week": 2,
+          "week": 15,
           "targets": 2,
-          "target_share": 0.09,
-          "wopr": 0.15,
-          "epa": 0.12,
-          "raw_price": 12.0,
-          "psa10_price": 48.0
+          "target_share": 0.077,
+          "wopr": 0.0953,
+          "epa": 0.0,
+          "raw_price": 15.0,
+          "psa10_price": 70.0
         },
         {
-          "week": 3,
+          "week": 16,
           "targets": 3,
-          "target_share": 0.11,
-          "wopr": 0.18,
-          "epa": 0.22,
-          "raw_price": 16.0,
-          "psa10_price": 65.0
+          "target_share": 0.07,
+          "wopr": 0.086,
+          "epa": 0.0,
+          "raw_price": 15.0,
+          "psa10_price": 70.0
         },
         {
-          "week": 4,
+          "week": 17,
           "targets": 4,
-          "target_share": 0.14,
-          "wopr": 0.24,
-          "epa": 0.34,
-          "raw_price": 18.0,
-          "psa10_price": 75.0
+          "target_share": 0.125,
+          "wopr": 0.1526,
+          "epa": 0.0,
+          "raw_price": 15.0,
+          "psa10_price": 70.0
+        },
+        {
+          "week": 18,
+          "targets": 5,
+          "target_share": 0.161,
+          "wopr": 0.1773,
+          "epa": 0.0,
+          "raw_price": 15.0,
+          "psa10_price": 70.0
+        },
+        {
+          "week": 19,
+          "targets": 2,
+          "target_share": 0.118,
+          "wopr": 0.1458,
+          "epa": 0.0,
+          "raw_price": 15.0,
+          "psa10_price": 70.0
         }
       ]
     }
@@ -507,43 +570,52 @@
       "air_yards_share": 0.34,
       "wopr": 0.508,
       "yprr": 1.74,
-      "rolling_3wk_wopr_delta": 0.043,
+      "rolling_3wk_wopr_delta": -0.118,
       "weekly_history": [
         {
-          "week": 1,
-          "targets": 4,
-          "target_share": 0.14,
-          "wopr": 0.38,
-          "epa": -0.08,
-          "raw_price": 28.0,
-          "psa10_price": 105.0
-        },
-        {
-          "week": 2,
+          "week": 14,
           "targets": 5,
-          "target_share": 0.15,
-          "wopr": 0.42,
-          "epa": 0.02,
+          "target_share": 0.208,
+          "wopr": 0.6225,
+          "epa": 0.0,
           "raw_price": 26.0,
-          "psa10_price": 95.0
+          "psa10_price": 110.0
         },
         {
-          "week": 3,
-          "targets": 11,
-          "target_share": 0.28,
-          "wopr": 0.74,
-          "epa": 0.39,
-          "raw_price": 34.0,
-          "psa10_price": 135.0
+          "week": 15,
+          "targets": 7,
+          "target_share": 0.226,
+          "wopr": 0.5655,
+          "epa": 0.0,
+          "raw_price": 26.0,
+          "psa10_price": 110.0
         },
         {
-          "week": 4,
-          "targets": 6,
-          "target_share": 0.19,
-          "wopr": 0.51,
-          "epa": 0.14,
-          "raw_price": 30.0,
-          "psa10_price": 115.0
+          "week": 16,
+          "targets": 7,
+          "target_share": 0.189,
+          "wopr": 0.4832,
+          "epa": 0.0,
+          "raw_price": 26.0,
+          "psa10_price": 110.0
+        },
+        {
+          "week": 17,
+          "targets": 4,
+          "target_share": 0.154,
+          "wopr": 0.5577,
+          "epa": 0.0,
+          "raw_price": 26.0,
+          "psa10_price": 110.0
+        },
+        {
+          "week": 18,
+          "targets": 2,
+          "target_share": 0.083,
+          "wopr": 0.2758,
+          "epa": 0.0,
+          "raw_price": 26.0,
+          "psa10_price": 110.0
         }
       ]
     }
@@ -564,40 +636,49 @@
       "rolling_3wk_wopr_delta": 0.0,
       "weekly_history": [
         {
-          "week": 1,
+          "week": 17,
           "targets": 0,
           "target_share": 0.0,
           "wopr": 0.0,
-          "epa": -0.28,
-          "raw_price": 35.0,
-          "psa10_price": 140.0
+          "epa": 0.0,
+          "raw_price": 40.0,
+          "psa10_price": 165.0
         },
         {
-          "week": 2,
+          "week": 17,
           "targets": 0,
           "target_share": 0.0,
           "wopr": 0.0,
-          "epa": -0.19,
-          "raw_price": 30.0,
-          "psa10_price": 115.0
+          "epa": 0.0,
+          "raw_price": 40.0,
+          "psa10_price": 165.0
         },
         {
-          "week": 3,
+          "week": 18,
           "targets": 0,
           "target_share": 0.0,
           "wopr": 0.0,
-          "epa": 0.15,
-          "raw_price": 38.0,
-          "psa10_price": 155.0
+          "epa": 0.0,
+          "raw_price": 40.0,
+          "psa10_price": 165.0
         },
         {
-          "week": 4,
+          "week": 18,
           "targets": 0,
           "target_share": 0.0,
           "wopr": 0.0,
-          "epa": 0.18,
-          "raw_price": 42.0,
-          "psa10_price": 170.0
+          "epa": 0.0,
+          "raw_price": 40.0,
+          "psa10_price": 165.0
+        },
+        {
+          "week": 19,
+          "targets": 0,
+          "target_share": 0.0,
+          "wopr": 0.0,
+          "epa": 0.0,
+          "raw_price": 40.0,
+          "psa10_price": 165.0
         }
       ]
     }
@@ -615,43 +696,52 @@
       "air_yards_share": 0.0,
       "wopr": 0.0,
       "yprr": 0.0,
-      "rolling_3wk_wopr_delta": 0.0,
+      "rolling_3wk_wopr_delta": 0.026,
       "weekly_history": [
         {
-          "week": 1,
+          "week": 16,
           "targets": 0,
           "target_share": 0.0,
           "wopr": 0.0,
-          "epa": -0.05,
-          "raw_price": 50.0,
-          "psa10_price": 210.0
+          "epa": 0.0,
+          "raw_price": 60.0,
+          "psa10_price": 250.0
         },
         {
-          "week": 2,
+          "week": 17,
           "targets": 0,
           "target_share": 0.0,
           "wopr": 0.0,
-          "epa": 0.04,
-          "raw_price": 52.0,
-          "psa10_price": 220.0
+          "epa": 0.0,
+          "raw_price": 60.0,
+          "psa10_price": 250.0
         },
         {
-          "week": 3,
-          "targets": 0,
-          "target_share": 0.0,
-          "wopr": 0.0,
-          "epa": 0.12,
-          "raw_price": 58.0,
-          "psa10_price": 240.0
+          "week": 17,
+          "targets": 2,
+          "target_share": 0.057,
+          "wopr": 0.1146,
+          "epa": 0.0,
+          "raw_price": 60.0,
+          "psa10_price": 250.0
         },
         {
-          "week": 4,
+          "week": 18,
+          "targets": 4,
+          "target_share": 0.118,
+          "wopr": 0.2002,
+          "epa": 0.0,
+          "raw_price": 60.0,
+          "psa10_price": 250.0
+        },
+        {
+          "week": 18,
           "targets": 0,
           "target_share": 0.0,
           "wopr": 0.0,
-          "epa": 0.25,
-          "raw_price": 65.0,
-          "psa10_price": 275.0
+          "epa": 0.0,
+          "raw_price": 60.0,
+          "psa10_price": 250.0
         }
       ]
     }
@@ -669,43 +759,52 @@
       "air_yards_share": 0.28,
       "wopr": 0.466,
       "yprr": 1.95,
-      "rolling_3wk_wopr_delta": -0.013,
+      "rolling_3wk_wopr_delta": -0.251,
       "weekly_history": [
         {
-          "week": 1,
-          "targets": 5,
-          "target_share": 0.21,
-          "wopr": 0.52,
-          "epa": 0.32,
+          "week": 17,
+          "targets": 7,
+          "target_share": 0.259,
+          "wopr": 0.6167,
+          "epa": 0.0,
           "raw_price": 18.0,
-          "psa10_price": 72.0
+          "psa10_price": 78.0
         },
         {
-          "week": 2,
+          "week": 18,
+          "targets": 10,
+          "target_share": 0.323,
+          "wopr": 1.0511,
+          "epa": 0.0,
+          "raw_price": 18.0,
+          "psa10_price": 78.0
+        },
+        {
+          "week": 19,
+          "targets": 3,
+          "target_share": 0.12,
+          "wopr": 0.324,
+          "epa": 0.0,
+          "raw_price": 18.0,
+          "psa10_price": 78.0
+        },
+        {
+          "week": 20,
           "targets": 1,
-          "target_share": 0.06,
-          "wopr": 0.14,
-          "epa": -0.12,
-          "raw_price": 15.0,
-          "psa10_price": 58.0
-        },
-        {
-          "week": 3,
-          "targets": 4,
-          "target_share": 0.17,
-          "wopr": 0.45,
-          "epa": 0.28,
+          "target_share": 0.048,
+          "wopr": 0.0865,
+          "epa": 0.0,
           "raw_price": 18.0,
-          "psa10_price": 70.0
+          "psa10_price": 78.0
         },
         {
-          "week": 4,
+          "week": 21,
           "targets": 4,
-          "target_share": 0.18,
-          "wopr": 0.48,
-          "epa": 0.35,
-          "raw_price": 20.0,
-          "psa10_price": 82.0
+          "target_share": 0.129,
+          "wopr": 0.3944,
+          "epa": 0.0,
+          "raw_price": 18.0,
+          "psa10_price": 78.0
         }
       ]
     }
@@ -723,43 +822,52 @@
       "air_yards_share": 0.02,
       "wopr": 0.134,
       "yprr": 1.15,
-      "rolling_3wk_wopr_delta": 0.037,
+      "rolling_3wk_wopr_delta": -0.017,
       "weekly_history": [
         {
-          "week": 1,
-          "targets": 1,
-          "target_share": 0.04,
-          "wopr": 0.08,
-          "epa": -0.05,
-          "raw_price": 10.0,
-          "psa10_price": 42.0
-        },
-        {
-          "week": 2,
-          "targets": 1,
-          "target_share": 0.05,
-          "wopr": 0.09,
-          "epa": 0.02,
-          "raw_price": 11.0,
-          "psa10_price": 45.0
-        },
-        {
-          "week": 3,
+          "week": 10,
           "targets": 2,
-          "target_share": 0.08,
-          "wopr": 0.14,
-          "epa": 0.08,
+          "target_share": 0.083,
+          "wopr": 0.0745,
+          "epa": 0.0,
           "raw_price": 12.0,
-          "psa10_price": 50.0
+          "psa10_price": 52.0
         },
         {
-          "week": 4,
-          "targets": 3,
-          "target_share": 0.11,
-          "wopr": 0.19,
-          "epa": 0.18,
-          "raw_price": 14.0,
-          "psa10_price": 58.0
+          "week": 12,
+          "targets": 0,
+          "target_share": 0.0,
+          "wopr": 0.0,
+          "epa": 0.0,
+          "raw_price": 12.0,
+          "psa10_price": 52.0
+        },
+        {
+          "week": 13,
+          "targets": 0,
+          "target_share": 0.0,
+          "wopr": 0.0,
+          "epa": 0.0,
+          "raw_price": 12.0,
+          "psa10_price": 52.0
+        },
+        {
+          "week": 14,
+          "targets": 1,
+          "target_share": 0.026,
+          "wopr": 0.0172,
+          "epa": 0.0,
+          "raw_price": 12.0,
+          "psa10_price": 52.0
+        },
+        {
+          "week": 15,
+          "targets": 0,
+          "target_share": 0.0,
+          "wopr": 0.0,
+          "epa": 0.0,
+          "raw_price": 12.0,
+          "psa10_price": 52.0
         }
       ]
     }
