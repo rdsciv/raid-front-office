@@ -47,9 +47,14 @@ import { CombineScoutView } from './components/CombineScout/CombineScoutView';
 import { KinematicMatrixView } from './components/CombineScout/KinematicMatrixView';
 import { ProspectModal } from './components/CombineScout/ProspectModal';
 import { SchemeFitView } from './components/SchemeFit/SchemeFitView';
+import { EmpiricalLabView } from './components/Presentation/EmpiricalLabView';
+import { PresentationDeckView } from './components/Presentation/PresentationDeckView';
+import { ResearchPaperView } from './components/Presentation/ResearchPaperView';
 
 export function App() {
-  const [activeTab, setActiveTab] = useState<'combine_scout' | 'scheme_fit' | 'decision_matrix' | 'grading_arbitrage'>('scheme_fit');
+  const [activeTab, setActiveTab] = useState<
+    'scheme_fit' | 'combine_scout' | 'decision_matrix' | 'empirical_lab' | 'presentation_deck' | 'research_paper' | 'grading_arbitrage'
+  >('scheme_fit');
   const [combineProspects, setCombineProspects] = useState<CombineProspect[]>([]);
   const [selectedCombineProspect, setSelectedCombineProspect] = useState<CombineProspect | null>(null);
   const [isLoadingCombine, setIsLoadingCombine] = useState<boolean>(true);
@@ -280,48 +285,72 @@ export function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className={`p-2.5 rounded-xl border shadow-lg transition-all ${
-              activeTab === 'combine_scout'
-                ? 'bg-blue-500/20 border-blue-500/40 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.25)]'
-                : activeTab === 'scheme_fit'
+              activeTab === 'scheme_fit'
                 ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.25)]'
+                : activeTab === 'combine_scout'
+                ? 'bg-blue-500/20 border-blue-500/40 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.25)]'
                 : activeTab === 'decision_matrix'
                 ? 'bg-indigo-500/20 border-indigo-500/40 text-indigo-400 shadow-[0_0_15px_rgba(99,102,241,0.25)]'
+                : activeTab === 'empirical_lab'
+                ? 'bg-purple-500/20 border-purple-500/40 text-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.25)]'
+                : activeTab === 'presentation_deck'
+                ? 'bg-amber-500/20 border-amber-500/40 text-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.25)]'
+                : activeTab === 'research_paper'
+                ? 'bg-sky-500/20 border-sky-500/40 text-sky-400 shadow-[0_0_15px_rgba(14,165,233,0.25)]'
                 : 'bg-cyan-500/20 border-cyan-500/40 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.25)]'
             }`}>
-              {activeTab === 'combine_scout' ? <Compass className="w-5 h-5" /> :
-               activeTab === 'scheme_fit' ? <Target className="w-5 h-5" /> :
+              {activeTab === 'scheme_fit' ? <Target className="w-5 h-5" /> :
+               activeTab === 'combine_scout' ? <Compass className="w-5 h-5" /> :
                activeTab === 'decision_matrix' ? <Activity className="w-5 h-5" /> :
+               activeTab === 'empirical_lab' ? <Layers className="w-5 h-5" /> :
+               activeTab === 'presentation_deck' ? <Award className="w-5 h-5" /> :
+               activeTab === 'research_paper' ? <FileCode className="w-5 h-5" /> :
                <Zap className="w-5 h-5" />}
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-lg sm:text-xl font-bold font-display tracking-tight text-white flex items-center gap-2">
                   <span>
-                    {activeTab === 'combine_scout' && 'NFL Scouting Combine Explorer'}
                     {activeTab === 'scheme_fit' && 'NFL Team Scheme Fit Engine'}
+                    {activeTab === 'combine_scout' && 'NFL Scouting Combine Explorer'}
                     {activeTab === 'decision_matrix' && '10 Hz Kinematic Translation Matrix'}
+                    {activeTab === 'empirical_lab' && 'Empirical Telemetry Lab & Figures'}
+                    {activeTab === 'presentation_deck' && 'Combine Finals Presentation Deck'}
+                    {activeTab === 'research_paper' && 'Big Data Bowl 2027 Research Paper'}
                     {activeTab === 'grading_arbitrage' && 'NFL Front Office Grading Arbitrage'}
                   </span>
                   <span className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded-full border ${
-                    activeTab === 'combine_scout'
-                      ? 'bg-blue-950 text-blue-400 border-blue-500/40'
-                      : activeTab === 'scheme_fit'
+                    activeTab === 'scheme_fit'
                       ? 'bg-emerald-950 text-emerald-400 border-emerald-500/40'
+                      : activeTab === 'combine_scout'
+                      ? 'bg-blue-950 text-blue-400 border-blue-500/40'
                       : activeTab === 'decision_matrix'
                       ? 'bg-indigo-950 text-indigo-400 border-indigo-500/40'
+                      : activeTab === 'empirical_lab'
+                      ? 'bg-purple-950 text-purple-400 border-purple-500/40'
+                      : activeTab === 'presentation_deck'
+                      ? 'bg-amber-950 text-amber-400 border-amber-500/40'
+                      : activeTab === 'research_paper'
+                      ? 'bg-sky-950 text-sky-400 border-sky-500/40'
                       : 'bg-cyan-950 text-cyan-400 border-cyan-500/40'
                   }`}>
-                    {activeTab === 'combine_scout' && 'BDB 2027 • BoxScoreScout'}
                     {activeTab === 'scheme_fit' && '32 Franchise Profiles'}
-                    {activeTab === 'decision_matrix' && '4-Archetype Quadrants'}
+                    {activeTab === 'combine_scout' && '517 Prospects • 10 Hz RFID'}
+                    {activeTab === 'decision_matrix' && 'Sleepers vs Bust Traps'}
+                    {activeTab === 'empirical_lab' && 'Figures 1–4 Case Studies'}
+                    {activeTab === 'presentation_deck' && 'Indianapolis 10-Min Live'}
+                    {activeTab === 'research_paper' && '1,952 Words • LRT p < 0.0001'}
                     {activeTab === 'grading_arbitrage' && 'Institutional Screener'}
                   </span>
                 </h1>
               </div>
               <p className="text-xs text-slate-400">
-                {activeTab === 'combine_scout' && 'Evaluating 510 NFL Draft prospects (2023–2025) with physical drill percentiles, 10 Hz kinematics, and similar athlete comps'}
-                {activeTab === 'scheme_fit' && 'Sifting 510 prospects by tactical coordinator fit (Shanahan Zone, Fangio Quarters, Spags Blitz-Man, Schwartz Wide-9, Power Trench)'}
+                {activeTab === 'scheme_fit' && 'Sifting 517 prospects across 32 franchise tactical schemes (Shanahan Zone, Fangio Quarters, Spags Blitz, Schwartz Wide-9, Power Trench)'}
+                {activeTab === 'combine_scout' && 'Comprehensive evaluation of 517 Combine prospects (2023–2025) with physical drill percentiles, continuous kinematics, and comps'}
                 {activeTab === 'decision_matrix' && 'Cross-referencing stopwatch speeds with continuous sensor mechanics (DEI, EBI, FI, TEI) to isolate sleepers and bust traps'}
+                {activeTab === 'empirical_lab' && 'Publication-grade 300 DPI figures submitted to NFL Big Data Bowl 2027 with ground-truth 10 Hz trajectory case studies'}
+                {activeTab === 'presentation_deck' && 'Executive 10-slide presentation deck formatted for the NFL Scouting Combine live finalist presentation in Indianapolis'}
+                {activeTab === 'research_paper' && 'Official 1,952-word competition submission writeup with statistical model tables, GNN architectures, and Jupyter notebook'}
                 {activeTab === 'grading_arbitrage' && 'Cross-referencing weekly NFL usage indicators (WOPR, Air Yards, EPA) with PSA population comps to isolate +EV spreads'}
               </p>
             </div>
@@ -329,21 +358,6 @@ export function App() {
 
           {/* Navigation Tabs */}
           <div className="flex items-center gap-1 bg-slate-900/90 p-1 rounded-xl border border-slate-800 self-start md:self-auto flex-wrap">
-            <button
-              onClick={() => setActiveTab('combine_scout')}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                activeTab === 'combine_scout'
-                  ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-              }`}
-            >
-              <Compass className="w-3.5 h-3.5" />
-              <span>Combine Scout</span>
-              <span className="text-[10px] bg-blue-950 px-1.5 py-0.2 rounded-full border border-blue-400/30 text-blue-300">
-                {combineProspects.length || 510}
-              </span>
-            </button>
-
             <button
               onClick={() => setActiveTab('scheme_fit')}
               className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
@@ -355,7 +369,22 @@ export function App() {
               <Target className="w-3.5 h-3.5" />
               <span>Scheme Fit</span>
               <span className="text-[10px] bg-emerald-950 px-1.5 py-0.2 rounded-full border border-emerald-400/30 text-emerald-300">
-                32 Teams
+                32
+              </span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('combine_scout')}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                activeTab === 'combine_scout'
+                  ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+              }`}
+            >
+              <Compass className="w-3.5 h-3.5" />
+              <span>Combine Scout</span>
+              <span className="text-[10px] bg-blue-950 px-1.5 py-0.2 rounded-full border border-blue-400/30 text-blue-300">
+                {combineProspects.length || 517}
               </span>
             </button>
 
@@ -371,6 +400,51 @@ export function App() {
               <span>Decision Matrix</span>
               <span className="text-[10px] bg-indigo-950 px-1.5 py-0.2 rounded-full border border-indigo-400/30 text-indigo-300">
                 10 Hz
+              </span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('empirical_lab')}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                activeTab === 'empirical_lab'
+                  ? 'bg-purple-600 text-white shadow-md shadow-purple-500/20'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+              }`}
+            >
+              <Layers className="w-3.5 h-3.5" />
+              <span>Empirical Figures</span>
+              <span className="text-[10px] bg-purple-950 px-1.5 py-0.2 rounded-full border border-purple-400/30 text-purple-300">
+                Figs 1–4
+              </span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('presentation_deck')}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                activeTab === 'presentation_deck'
+                  ? 'bg-amber-600 text-white shadow-md shadow-amber-500/20'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+              }`}
+            >
+              <Award className="w-3.5 h-3.5" />
+              <span>Finalist Deck</span>
+              <span className="text-[10px] bg-amber-950 px-1.5 py-0.2 rounded-full border border-amber-400/30 text-amber-300">
+                10 Slides
+              </span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('research_paper')}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                activeTab === 'research_paper'
+                  ? 'bg-sky-600 text-white shadow-md shadow-sky-500/20'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+              }`}
+            >
+              <FileCode className="w-3.5 h-3.5" />
+              <span>Research Paper</span>
+              <span className="text-[10px] bg-sky-950 px-1.5 py-0.2 rounded-full border border-sky-400/30 text-sky-300">
+                Writeup
               </span>
             </button>
 
@@ -459,6 +533,18 @@ export function App() {
             prospects={combineProspects}
             onSelectProspect={(p) => setSelectedCombineProspect(p)}
           />
+        )}
+
+        {activeTab === 'empirical_lab' && (
+          <EmpiricalLabView />
+        )}
+
+        {activeTab === 'presentation_deck' && (
+          <PresentationDeckView />
+        )}
+
+        {activeTab === 'research_paper' && (
+          <ResearchPaperView />
         )}
 
         {activeTab === 'grading_arbitrage' && (
